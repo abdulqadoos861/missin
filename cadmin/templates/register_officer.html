@@ -1,6 +1,232 @@
 {% extends 'base_admin.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Register Officer</h1>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">
+                        <i class="fas fa-user-plus me-2"></i>Register New Officer
+                    </h4>
+
+                    {% if messages %}
+                    <div class="messages mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Personal Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="mb-3">Personal Information</h5>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                <div class="invalid-feedback">Please enter first name.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                <div class="invalid-feedback">Please enter last name.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cnic" class="form-label">CNIC</label>
+                                <input type="text" class="form-control" id="cnic" name="cnic" pattern="[0-9]{5}-[0-9]{7}-[0-9]" placeholder="12345-1234567-1" required>
+                                <div class="invalid-feedback">Please enter a valid CNIC (format: 12345-1234567-1).</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="rank" class="form-label">Rank</label>
+                                <select class="form-select" id="rank" name="rank" required>
+                                    <option value="">Select Rank</option>
+                                    <option value="IGP">Inspector General of Police (IGP)</option>
+                                    <option value="DIG">Deputy Inspector General (DIG)</option>
+                                    <option value="SSP">Senior Superintendent of Police (SSP)</option>
+                                    <option value="SP">Superintendent of Police (SP)</option>
+                                    <option value="DSP">Deputy Superintendent of Police (DSP)</option>
+                                    <option value="ASP">Assistant Superintendent of Police (ASP)</option>
+                                    <option value="Inspector">Inspector</option>
+                                    <option value="SI">Sub-Inspector (SI)</option>
+                                    <option value="ASI">Assistant Sub-Inspector (ASI)</option>
+                                    <option value="HC">Head Constable (HC)</option>
+                                    <option value="Constable">Constable</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a rank.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="invalid-feedback">Please choose a username.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
+                                <div class="invalid-feedback">Please enter phone number.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                                <div class="invalid-feedback">Please enter date of birth.</div>
+                            </div>
+                        </div>
+
+                        <!-- Address Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="mb-3">Address Information</h5>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                                <div class="invalid-feedback">Please enter address.</div>
+                            </div>
+                        </div>
+
+                        <!-- Account Security -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="mb-3">Account Security</h5>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="password1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password1" name="password1" required>
+                                <div class="invalid-feedback">Please enter password.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="password2" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="password2" name="password2" required>
+                                <div class="invalid-feedback">Please confirm password.</div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="mb-3">Profile Picture</h5>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="profile_picture" class="form-label">Upload Photo</label>
+                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
+                                <div class="form-text">Upload a professional photo of the officer.</div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-2"></i>Register Officer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+    
+    .card-title {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #34495e;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        padding: 0.75rem 1rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h5 {
+        color: #2c3e50;
+        font-weight: 600;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+{% block extra_js %}
+<script>
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+// Password match validation
+document.getElementById('password2').addEventListener('input', function() {
+    if (this.value !== document.getElementById('password1').value) {
+        this.setCustomValidity('Passwords do not match');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+
+// CNIC format validation
+document.getElementById('cnic').addEventListener('input', function() {
+    const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+    if (!cnicPattern.test(this.value)) {
+        this.setCustomValidity('Please enter CNIC in format: 12345-1234567-1');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}
 {% endblock %}
 

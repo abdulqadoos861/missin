@@ -61,7 +61,84 @@ def admin_dashboard(request):
             'inactive_users': 0,
         })
 
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
 def register_officer(request):
+    if request.method == 'POST':
+        try:
+            # Get form data
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            phone_number = request.POST.get('phone_number')
+            address = request.POST.get('address')
+            date_of_birth = request.POST.get('date_of_birth')
+            cnic = request.POST.get('cnic')
+            rank = request.POST.get('rank')
+            profile_picture = request.FILES.get('profile_picture')
+
+            # Validate required fields
+            if not all([username, email, password1, password2, first_name, last_name, phone_number, address, date_of_birth, cnic, rank]):
+                messages.error(request, 'All fields are required.')
+                return redirect('register_officer')
+
+            # Validate passwords match
+            if password1 != password2:
+                messages.error(request, 'Passwords do not match.')
+                return redirect('register_officer')
+
+            # Check if username or email already exists
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists.')
+                return redirect('register_officer')
+            
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists.')
+                return redirect('register_officer')
+
+            # Check if CNIC already exists
+            if User.objects.filter(cnic=cnic).exists():
+                messages.error(request, 'CNIC already registered.')
+                return redirect('register_officer')
+
+            # Validate rank
+            valid_ranks = ['IGP', 'DIG', 'SSP', 'SP', 'DSP', 'ASP', 'Inspector', 'SI', 'ASI', 'HC', 'Constable']
+            if rank not in valid_ranks:
+                messages.error(request, 'Invalid rank selected.')
+                return redirect('register_officer')
+
+            # Create new officer
+            officer = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password1,
+                first_name=first_name,
+                last_name=last_name,
+                phone_number=phone_number,
+                address=address,
+                date_of_birth=date_of_birth,
+                cnic=cnic,
+                rank=rank,
+                user_type='officer',
+                is_active=True  # Set officer as active by default
+            )
+
+            # Handle profile picture
+            if profile_picture:
+                officer.profile_picture = profile_picture
+                officer.save()
+
+            messages.success(request, f'Officer {officer.get_full_name()} has been registered successfully.')
+            return redirect('manage_users')
+
+        except Exception as e:
+            logger.error(f"Error in register_officer view: {str(e)}", exc_info=True)
+            messages.error(request, f'An error occurred while registering the officer: {str(e)}')
+            return redirect('register_officer')
+
     return render(request, 'register_officer.html')
 
 @login_required(login_url='login')
@@ -175,37 +252,38 @@ def admin_case_details(request, case_id):
         messages.error(request, f"An error occurred while retrieving case details: {str(e)}")
         return redirect('admin_dashboard')
 
-def manage_user(request):
-    return render(request, 'manage_user.html')
+# def manage_user(request):
+#     return render(request, 'manage_user.html')
 
 @login_required(login_url='login')
 @user_passes_test(is_admin, login_url='login')
 def manage_users(request):
     try:
-        # First, let's try a simple query without any filters
-        users = User.objects.all()
-        logger.info(f"Raw query: {users.query}")
-        logger.info(f"Number of users found: {users.count()}")
+        # Get all users including officers
+        users = User.objects.all().order_by('-date_joined')
         
         # Get search query and filters
         search_query = request.GET.get('search', '')
         status_filter = request.GET.get('status', '')
+        user_type_filter = request.GET.get('user_type', '')
         date_filter = request.GET.get('date', '')
         
-        # Apply filters one by one and log the results
+        # Apply filters
         if search_query:
             users = users.filter(
                 Q(username__icontains=search_query) |
                 Q(email__icontains=search_query) |
                 Q(first_name__icontains=search_query) |
                 Q(last_name__icontains=search_query) |
-                Q(phone_number__icontains=search_query)
+                Q(phone_number__icontains=search_query) |
+                Q(cnic__icontains=search_query)
             )
-            logger.info(f"After search filter: {users.count()} users")
         
         if status_filter:
             users = users.filter(is_active=(status_filter == 'active'))
-            logger.info(f"After status filter: {users.count()} users")
+        
+        if user_type_filter:
+            users = users.filter(user_type=user_type_filter)
         
         if date_filter:
             today = timezone.now()
@@ -217,36 +295,35 @@ def manage_users(request):
             elif date_filter == 'month':
                 month_ago = today - timedelta(days=30)
                 users = users.filter(date_joined__gte=month_ago)
-            logger.info(f"After date filter: {users.count()} users")
         
-        # Order the results
-        users = users.order_by('-date_joined')
+        # Get user statistics from all users (not filtered)
+        all_users = User.objects.all()
+        total_users = all_users.count()
+        active_users = all_users.filter(is_active=True).count()
+        inactive_users = all_users.filter(is_active=False).count()
         
-        # Get user statistics
-        total_users = users.count()
-        active_users = users.filter(is_active=True).count()
-        inactive_users = users.filter(is_active=False).count()
-        
-        logger.info(f"Final statistics - Total: {total_users}, Active: {active_users}, Inactive: {inactive_users}")
+        # Get counts by user type from all users
+        regular_users = all_users.filter(user_type='user').count()
+        officers = all_users.filter(user_type='officer').count()
+        admins = all_users.filter(user_type='admin').count()
         
         # Pagination
         paginator = Paginator(users, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         
-        # Log the actual data being sent to the template
-        logger.info("Users in current page:")
-        for user in page_obj:
-            logger.info(f"User: {user.username}, Email: {user.email}, Type: {user.user_type}")
-        
         context = {
             'page_obj': page_obj,
             'search_query': search_query,
             'status_filter': status_filter,
+            'user_type_filter': user_type_filter,
             'date_filter': date_filter,
             'total_users': total_users,
             'active_users': active_users,
             'inactive_users': inactive_users,
+            'regular_users': regular_users,
+            'officers': officers,
+            'admins': admins,
         }
         
         return render(request, 'manage_user.html', context)
@@ -259,6 +336,9 @@ def manage_users(request):
             'total_users': 0,
             'active_users': 0,
             'inactive_users': 0,
+            'regular_users': 0,
+            'officers': 0,
+            'admins': 0,
         })
 
 @login_required(login_url='login')

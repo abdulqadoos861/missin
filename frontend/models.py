@@ -9,6 +9,20 @@ class User(AbstractUser):
         ('admin', 'Admin'),
     )
 
+    RANK_CHOICES = (
+        ('IGP', 'Inspector General of Police (IGP)'),
+        ('DIG', 'Deputy Inspector General (DIG)'),
+        ('SSP', 'Senior Superintendent of Police (SSP)'),
+        ('SP', 'Superintendent of Police (SP)'),
+        ('DSP', 'Deputy Superintendent of Police (DSP)'),
+        ('ASP', 'Assistant Superintendent of Police (ASP)'),
+        ('Inspector', 'Inspector'),
+        ('SI', 'Sub-Inspector (SI)'),
+        ('ASI', 'Assistant Sub-Inspector (ASI)'),
+        ('HC', 'Head Constable (HC)'),
+        ('Constable', 'Constable'),
+    )
+
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='user')
     phone_number = models.CharField(max_length=15, blank=True)
     address = models.TextField(blank=True)
@@ -17,6 +31,8 @@ class User(AbstractUser):
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    cnic = models.CharField(max_length=15, unique=True, blank=True, null=True, help_text="Format: 12345-1234567-1")
+    rank = models.CharField(max_length=20, choices=RANK_CHOICES, blank=True, null=True)
 
     # Fix related name clashes
     groups = models.ManyToManyField(

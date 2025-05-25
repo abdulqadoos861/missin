@@ -15,109 +15,177 @@
         --light-text: #ecf0f1;
     }
 
-    .card {
+    .manage-users-container .card {
         border: none;
         border-radius: 15px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
     }
 
-    .card:hover {
+    .manage-users-container .card:hover {
         transform: translateY(-5px);
     }
 
-    .badge {
+    .manage-users-container .badge {
         padding: 8px 12px;
         border-radius: 8px;
         font-weight: 500;
     }
 
-    .badge.bg-primary {
+    .manage-users-container .badge.bg-primary {
         background: linear-gradient(45deg, var(--primary-color), var(--accent-color)) !important;
     }
 
-    .badge.bg-success {
+    .manage-users-container .badge.bg-success {
         background: linear-gradient(45deg, var(--success-color), #27ae60) !important;
     }
 
-    .badge.bg-danger {
+    .manage-users-container .badge.bg-danger {
         background: linear-gradient(45deg, var(--danger-color), #c0392b) !important;
     }
 
-    .table {
+    .manage-users-container .table {
         border-radius: 10px;
         overflow: hidden;
     }
 
-    .table thead th {
+    .manage-users-container .table thead th {
         background: var(--primary-color);
         color: var(--light-text);
         font-weight: 500;
         border: none;
     }
 
-    .table tbody tr {
+    .manage-users-container .table tbody tr {
         transition: all 0.3s ease;
     }
 
-    .table tbody tr:hover {
+    .manage-users-container .table tbody tr:hover {
         background-color: rgba(52, 152, 219, 0.1);
+        transform: none !important;
     }
 
-    .btn-group .btn {
+    .manage-users-container .btn-group .btn {
         border-radius: 8px;
         margin: 0 2px;
         transition: all 0.3s ease;
     }
 
-    .btn-group .btn:hover {
+    .manage-users-container .btn-group .btn:hover {
         transform: translateY(-2px);
     }
 
-    .form-control, .form-select {
+    .manage-users-container .form-control,
+    .manage-users-container .form-select {
         border-radius: 8px;
         border: 1px solid #e0e0e0;
         padding: 10px 15px;
     }
 
-    .form-control:focus, .form-select:focus {
+    .manage-users-container .form-control:focus,
+    .manage-users-container .form-select:focus {
         border-color: var(--accent-color);
         box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
     }
 
-    .pagination .page-link {
+    .manage-users-container .pagination .page-link {
         color: var(--primary-color);
         border: none;
         margin: 0 2px;
         border-radius: 8px;
     }
 
-    .pagination .page-item.active .page-link {
+    .manage-users-container .pagination .page-item.active .page-link {
         background: var(--accent-color);
         color: white;
     }
 
-    .pagination .page-link:hover {
+    .manage-users-container .pagination .page-link:hover {
         background: rgba(52, 152, 219, 0.1);
     }
 </style>
 
-<div class="container-fluid">
+<div class="container-fluid manage-users-container">
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
-        <div class="d-flex gap-2">
-            <span class="badge bg-primary">Total Users: {{ total_users }}</span>
-            <span class="badge bg-success">Active: {{ active_users }}</span>
-            <span class="badge bg-danger">Inactive: {{ inactive_users }}</span>
+        <h1 class="h3 mb-0 text-gray-800">Manage Users</h1>
+        <a href="{% url 'register_officer' %}" class="btn btn-primary">
+            <i class="fas fa-user-plus me-2"></i>Register New Officer
+        </a>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_users }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Users</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_users }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Regular Users</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ regular_users }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Officers</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ officers }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-shield fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Search and Filter Section -->
+    <!-- Search and Filter -->
     <div class="card shadow mb-4">
         <div class="card-body">
             <form method="get" class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="input-group">
                         <input type="text" class="form-control" name="search" placeholder="Search users..." value="{{ search_query }}">
                         <button class="btn btn-primary" type="submit">
@@ -125,14 +193,22 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <select class="form-select" name="status" onchange="this.form.submit()">
                         <option value="">All Status</option>
                         <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
                         <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <select class="form-select" name="user_type" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        <option value="user" {% if user_type_filter == 'user' %}selected{% endif %}>Regular Users</option>
+                        <option value="officer" {% if user_type_filter == 'officer' %}selected{% endif %}>Officers</option>
+                        <option value="admin" {% if user_type_filter == 'admin' %}selected{% endif %}>Admins</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <select class="form-select" name="date" onchange="this.form.submit()">
                         <option value="">All Time</option>
                         <option value="today" {% if date_filter == 'today' %}selected{% endif %}>Today</option>
@@ -140,9 +216,9 @@
                         <option value="month" {% if date_filter == 'month' %}selected{% endif %}>Last 30 Days</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <a href="{% url 'manage_users' %}" class="btn btn-secondary w-100">
-                        <i class="fas fa-sync-alt"></i> Reset
+                        <i class="fas fa-sync-alt me-2"></i>Reset Filters
                     </a>
                 </div>
             </form>
@@ -160,7 +236,9 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>CNIC</th>
                             <th>User Type</th>
+                            <th>Rank</th>
                             <th>Date Joined</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -173,10 +251,18 @@
                             <td>{{ user.get_full_name|default:"-" }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.phone_number|default:"-" }}</td>
+                            <td>{{ user.cnic|default:"-" }}</td>
                             <td>
                                 <span class="badge {% if user.user_type == 'admin' %}bg-danger{% elif user.user_type == 'officer' %}bg-warning{% else %}bg-info{% endif %}">
                                     {{ user.get_user_type_display }}
                                 </span>
+                            </td>
+                            <td>
+                                {% if user.rank %}
+                                <span class="badge bg-secondary">{{ user.get_rank_display }}</span>
+                                {% else %}
+                                -
+                                {% endif %}
                             </td>
                             <td>{{ user.date_joined|date:"M d, Y" }}</td>
                             <td>
@@ -202,7 +288,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="8" class="text-center py-4">
+                            <td colspan="10" class="text-center py-4">
                                 <i class="fas fa-users fa-3x text-muted mb-3"></i>
                                 <p class="text-muted">No users found</p>
                             </td>
@@ -218,12 +304,12 @@
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="First">
+                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_type_filter %}&user_type={{ user_type_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="First">
                             <span aria-hidden="true">&laquo;&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Previous">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_type_filter %}&user_type={{ user_type_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -236,19 +322,19 @@
                         </li>
                         {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}">{{ num }}</a>
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_type_filter %}&user_type={{ user_type_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}">{{ num }}</a>
                         </li>
                         {% endif %}
                     {% endfor %}
 
                     {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Next">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_type_filter %}&user_type={{ user_type_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Last">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if user_type_filter %}&user_type={{ user_type_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Last">
                             <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
                     </li>
@@ -259,9 +345,7 @@
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Auto-submit form when status filter changes
@@ -274,15 +358,14 @@
             this.form.submit();
         });
 
-        // Add hover effect to table rows
+        // Remove the hover effect from table rows
         const tableRows = document.querySelectorAll('tbody tr');
         tableRows.forEach(row => {
             row.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.01)';
-                this.style.transition = 'transform 0.3s ease';
+                this.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
             });
             row.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
+                this.style.backgroundColor = '';
             });
         });
     });

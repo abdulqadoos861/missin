@@ -14,7 +14,6 @@ urlpatterns = [
     path('case/<int:case_id>/assign-officer/', views.assign_officer, name='assign_officer'),
     path('case/<int:case_id>/update-status/', views.update_case_status, name='update_case_status'),
     path('case/<int:case_id>/add-update/', views.add_case_update, name='add_case_update'),
-    path('manage-user/', views.manage_user, name='manage_user'),
     path('manage-users/', views.manage_users, name='manage_users'),
     path('toggle-user-status/<int:user_id>/', views.toggle_user_status, name='toggle_user_status'),
 ]
