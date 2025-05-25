@@ -1,0 +1,376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Pakistani Police Portal</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c2f7e;
+            --secondary-color: #5a4b9c;
+            --text-light: #e0e0e0;
+            --text-dark: #ffffff;
+            --glass-color: rgba(30, 30, 50, 0.2);
+            --glass-border: rgba(100, 100, 150, 0.3);
+            --bg-dark: #1a1c3b;
+            --card-bg: #25274d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .auth-bg {
+            background: url('{% static "images/police-team.jpg" %}') no-repeat center center;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-light);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .auth-card {
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .custom-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            padding: 10px 20px;
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .custom-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-control, .form-select {
+            background: #33355f;
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: #33355f;
+            border-color: var(--secondary-color);
+            color: var(--text-light);
+            box-shadow: 0 0 0 0.2rem rgba(90, 75, 156, 0.25);
+        }
+
+        .form-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .input-group-text {
+            background: #33355f;
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+        }
+
+        .toggle-password {
+            background: #33355f;
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            background: var(--secondary-color);
+            color: var(--text-light);
+        }
+
+        .form-check-input {
+            background-color: #33355f;
+            border: 1px solid var(--glass-border);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .form-check-label {
+            color: var(--text-light);
+        }
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--text-light);
+        }
+
+        .text-muted {
+            color: #a0a0c0 !important;
+        }
+
+        .form-text {
+            color: #a0a0c0;
+        }
+
+        .alert {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 2rem !important;
+            }
+        }
+
+        /* Animation for form elements */
+        .form-group {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger animation for form groups */
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="auth-bg">
+    <div class="dark-overlay"></div>
+    
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-8 col-lg-7">
+                <div class="card auth-card">
+                    <div class="card-body p-4 p-sm-5">
+                        <div class="text-center mb-4">
+                            <img src="{% static 'images/police-logo.png' %}" alt="Pakistani Police Logo" height="60">
+                            <h2 class="mt-3 text-white">Create an Account</h2>
+                            <p class="text-muted">Register to report cases or track your complaints</p>
+                        </div>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6 form-group">
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        {{ form.first_name }}
+                                    </div>
+                                    {% if form.first_name.errors %}
+                                        <div class="text-danger">{{ form.first_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        {{ form.last_name }}
+                                    </div>
+                                    {% if form.last_name.errors %}
+                                        <div class="text-danger">{{ form.last_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label for="{{ form.phone_number.id_for_label }}" class="form-label">Phone Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        {{ form.phone_number }}
+                                    </div>
+                                    {% if form.phone_number.errors %}
+                                        <div class="text-danger">{{ form.phone_number.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                        {{ form.date_of_birth }}
+                                    </div>
+                                    {% if form.date_of_birth.errors %}
+                                        <div class="text-danger">{{ form.date_of_birth.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        {{ form.email }}
+                                    </div>
+                                    {% if form.email.errors %}
+                                        <div class="text-danger">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
+                                        {{ form.username }}
+                                    </div>
+                                    {% if form.username.errors %}
+                                        <div class="text-danger">{{ form.username.errors }}</div>
+                                    {% endif %}
+                                    <div class="form-text">Choose a unique username for your account</div>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        {{ form.address }}
+                                    </div>
+                                    {% if form.address.errors %}
+                                        <div class="text-danger">{{ form.address.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label for="{{ form.profile_picture.id_for_label }}" class="form-label">Profile Picture</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-image"></i></span>
+                                        {{ form.profile_picture }}
+                                    </div>
+                                    {% if form.profile_picture.errors %}
+                                        <div class="text-danger">{{ form.profile_picture.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        {{ form.password1 }}
+                                        <button class="btn toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    {% if form.password1.errors %}
+                                        <div class="text-danger">{{ form.password1.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        {{ form.password2 }}
+                                    </div>
+                                    {% if form.password2.errors %}
+                                        <div class="text-danger">{{ form.password2.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I agree to the <a href="#" class="text-decoration-none">Terms and Conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-3">
+                                    <button type="submit" class="custom-btn w-100 py-2">
+                                        <i class="fas fa-user-plus me-2"></i>Register
+                                    </button>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-decoration-none">Login</a></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+        // Add Bootstrap classes to form fields
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.classList.add('form-control');
+        });
+
+        // Password toggle functionality
+        document.querySelector('.toggle-password').addEventListener('click', function () {
+            const passwordInput = document.querySelector('#id_password1');
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
+</body>
+</html>

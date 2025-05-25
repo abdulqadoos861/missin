@@ -1,0 +1,499 @@
+{% extends 'base_user.html' %}
+<!-- {% load static %} -->
+
+{% block title %}Report Missing Person | Pakistani Police Force{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-card {
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        background: white;
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+    }
+    .form-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    .form-header {
+        background: linear-gradient(135deg, #1a237e, #283593);
+        color: white;
+        border-radius: 20px 20px 0 0;
+        padding: 35px;
+        position: relative;
+        overflow: hidden;
+    }
+    .form-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        z-index: 1;
+    }
+    .form-header h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    .form-body {
+        padding: 40px;
+        background: #f8f9fa;
+    }
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+        font-weight: bold;
+    }
+    .image-preview {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 15px;
+        display: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+        border: 3px solid #fff;
+    }
+    .image-preview:hover {
+        transform: scale(1.05);
+    }
+    .section-title {
+        color: #1a237e;
+        font-weight: 600;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e0e0e0;
+        position: relative;
+        font-size: 1.4rem;
+    }
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #1a237e, #283593);
+        border-radius: 3px;
+    }
+    .form-control, .form-select {
+        border-radius: 12px;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #1a237e;
+        box-shadow: 0 0 0 0.25rem rgba(26, 35, 126, 0.15);
+    }
+    .btn-submit {
+        background: linear-gradient(135deg, #1a237e, #283593);
+        border: none;
+        border-radius: 12px;
+        padding: 15px 35px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+    }
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(26, 35, 126, 0.3);
+        background: linear-gradient(135deg, #283593, #1a237e);
+    }
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.05rem;
+    }
+    .upload-area {
+        border: 2px dashed #1a237e;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: rgba(26, 35, 126, 0.02);
+    }
+    .upload-area:hover {
+        background: rgba(26, 35, 126, 0.05);
+        border-color: #283593;
+    }
+    .upload-icon {
+        font-size: 2.5rem;
+        color: #1a237e;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+    .upload-area:hover .upload-icon {
+        transform: scale(1.1);
+    }
+    .form-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    .form-section:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+    .progress-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        position: relative;
+        padding: 0 20px;
+    }
+    .progress-step {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-weight: bold;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s ease;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .progress-step.active {
+        background: linear-gradient(135deg, #1a237e, #283593);
+        color: white;
+        transform: scale(1.1);
+    }
+    .progress-line {
+        position: absolute;
+        top: 22px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #e0e0e0;
+        z-index: 0;
+    }
+    .progress-step::after {
+        content: attr(data-title);
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: #666;
+        white-space: nowrap;
+    }
+    .progress-step.active::after {
+        color: #1a237e;
+        font-weight: 600;
+    }
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+    .form-control::placeholder {
+        color: #999;
+        font-size: 0.95rem;
+    }
+    .form-section i {
+        margin-right: 10px;
+        color: #1a237e;
+    }
+    @media (max-width: 768px) {
+        .form-body {
+            padding: 20px;
+        }
+        .form-header {
+            padding: 25px;
+        }
+        .form-header h3 {
+            font-size: 1.5rem;
+        }
+        .progress-step {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+        .progress-step::after {
+            font-size: 0.7rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="form-card">
+                <div class="form-header">
+                    <h3 class="mb-0"><i class="fas fa-user-search me-2"></i>Report Missing Person</h3>
+                    <p class="mb-0 mt-2 opacity-75">Help us find your loved one by providing accurate information</p>
+                </div>
+                <div class="form-body">
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-line"></div>
+                        <div class="progress-step active">1</div>
+                        <div class="progress-step">2</div>
+                        <div class="progress-step">3</div>
+                        <div class="progress-step">4</div>
+                    </div>
+
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Personal Information -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="first_name" class="form-label required-field">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="last_name" class="form-label required-field">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="date_of_birth" class="form-label required-field">Date of Birth</label>
+                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="age" class="form-label required-field">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gender" class="form-label required-field">Gender</label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+                                        <option value="O">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Physical Description -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Physical Description</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="height" class="form-label required-field">Height</label>
+                                    <input type="text" class="form-control" id="height" name="height" placeholder="e.g., 5'10" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="weight" class="form-label required-field">Weight (kg)</label>
+                                    <input type="text" class="form-control" id="weight" name="weight" placeholder="e.g., 70" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="eye_color" class="form-label required-field">Eye Color</label>
+                                    <input type="text" class="form-control" id="eye_color" name="eye_color" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="hair_color" class="form-label required-field">Hair Color</label>
+                                    <input type="text" class="form-control" id="hair_color" name="hair_color" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="skin_color" class="form-label required-field">Skin Color</label>
+                                    <input type="text" class="form-control" id="skin_color" name="skin_color" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="distinguishing_marks" class="form-label">Distinguishing Marks</label>
+                                <textarea class="form-control" id="distinguishing_marks" name="distinguishing_marks" rows="3" 
+                                        placeholder="Scars, tattoos, birthmarks, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Last Seen Information -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-map-marker-alt me-2"></i>Last Seen Information</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="last_seen_date" class="form-label required-field">Last Seen Date</label>
+                                    <input type="date" class="form-control" id="last_seen_date" name="last_seen_date" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="last_seen_location" class="form-label required-field">Last Seen Location</label>
+                                    <input type="text" class="form-control" id="last_seen_location" name="last_seen_location" 
+                                           placeholder="Address or landmark" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_seen_wearing" class="form-label required-field">Last Seen Wearing</label>
+                                <textarea class="form-control" id="last_seen_wearing" name="last_seen_wearing" rows="3"
+                                        placeholder="Description of clothes last seen wearing" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-phone-alt me-2"></i>Contact Information</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="contact_number" class="form-label required-field">Contact Number</label>
+                                    <input type="tel" class="form-control" id="contact_number" name="contact_number" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="additional_contact" class="form-label">Additional Contact Number</label>
+                                    <input type="tel" class="form-control" id="additional_contact" name="additional_contact">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Photo Upload -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-camera me-2"></i>Photo Upload</h5>
+                            <div class="mb-3">
+                                <label for="photo" class="form-label required-field">Recent Photo</label>
+                                <div class="upload-area" onclick="document.getElementById('photo').click()">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <p class="mb-0">Click to upload or drag and drop</p>
+                                    <small class="text-muted">PNG, JPG or JPEG (MAX. 2MB)</small>
+                                </div>
+                                <input type="file" class="d-none" id="photo" name="photo" accept="image/*" required 
+                                       onchange="previewImage(this)">
+                                <img id="imagePreview" class="image-preview mt-3" alt="Photo Preview">
+                            </div>
+                            <div class="mb-3">
+                                <label for="additional_photos" class="form-label">Additional Photos</label>
+                                <div class="upload-area" onclick="document.getElementById('additional_photos').click()">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <p class="mb-0">Click to upload additional photos</p>
+                                    <small class="text-muted">PNG, JPG or JPEG (MAX. 2MB each)</small>
+                                </div>
+                                <input type="file" class="d-none" id="additional_photos" name="additional_photos" accept="image/*" multiple>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-info-circle me-2"></i>Additional Information</h5>
+                            <div class="mb-3">
+                                <label for="description" class="form-label required-field">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"
+                                        placeholder="Any other relevant information that might help in finding the person" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg btn-submit">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Image preview
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Progress indicator
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.form-section');
+        const steps = document.querySelectorAll('.progress-step');
+        
+        // Add data titles to progress steps
+        steps[0].setAttribute('data-title', 'Personal Info');
+        steps[1].setAttribute('data-title', 'Physical Details');
+        steps[2].setAttribute('data-title', 'Last Seen');
+        steps[3].setAttribute('data-title', 'Contact & Photos');
+        
+        sections.forEach((section, index) => {
+            section.addEventListener('focusin', () => {
+                steps.forEach((step, stepIndex) => {
+                    if (stepIndex <= index) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Add smooth scrolling to sections
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+
+    // Add animation to form sections on scroll
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(20px)';
+        section.style.transition = 'all 0.5s ease-out';
+        observer.observe(section);
+    });
+</script>
+{% endblock %}

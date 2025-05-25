@@ -1,0 +1,394 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}User Portal | Missing Person Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c2f7e;
+            --secondary-color: #5a4b9c;
+            --accent-color: #ff6b6b;
+            --text-light: #e0e0e0;
+            --text-dark: #ffffff;
+            --glass-color: rgba(30, 30, 50, 0.2);
+            --glass-border: rgba(100, 100, 150, 0.3);
+            --bg-dark: #1a1c3b;
+            --card-bg: #25274d;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #f44336;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('{% static "images/police-pattern.png" %}') repeat;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Navigation Styles */
+        .navbar-glass {
+            background: rgba(44, 47, 126, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand img {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05) rotate(-5deg);
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::before {
+            width: 80%;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--secondary-color);
+            color: var(--text-light) !important;
+            box-shadow: 0 4px 15px rgba(90, 75, 156, 0.3);
+        }
+
+        .nav-link.active::before {
+            width: 80%;
+            background: var(--accent-color);
+        }
+
+        .custom-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-light) !important;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .custom-btn:hover::before {
+            left: 100%;
+        }
+
+        .custom-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding-top: 6rem;
+            padding-bottom: 4rem;
+            position: relative;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(90, 75, 156, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer Styles */
+        footer {
+            background: rgba(44, 47, 126, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--glass-border);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at bottom left, rgba(90, 75, 156, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        footer h5 {
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        footer h5:hover::after {
+            width: 100%;
+        }
+
+        footer a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        footer .list-unstyled li {
+            margin-bottom: 0.8rem;
+        }
+
+        footer hr {
+            border-color: var(--glass-border);
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+
+        /* Alert Styles */
+        .alert {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar-glass {
+                padding: 0.5rem 0;
+            }
+            
+            .main-content {
+                padding-top: 5rem;
+            }
+
+            .card:hover {
+                transform: translateY(-3px) scale(1.01);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-glass fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'images/police-logo.png' %}" alt="Police Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}" 
+                           href="{% url 'user_dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'report_missing_person' %}active{% endif %}" 
+                           href="{% url 'report_missing_person' %}">
+                            <i class="fas fa-user-plus me-2"></i>Report Missing Person
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'track_cases' %}active{% endif %}" 
+                           href="{% url 'track_cases' %}">
+                            <i class="fas fa-search me-2"></i>Track Cases
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-btn" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message|safe }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% block content %}{% endblock %}
+        </div>
+        <div>
+            hiiiii
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-shield-alt me-2"></i>Pakistani Police</h5>
+                    <p>Committed to ensuring public safety and maintaining law and order across Pakistan.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5><i class="fas fa-link me-2"></i>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'user_dashboard' %}"><i class="fas fa-chevron-right me-2"></i>Dashboard</a></li>
+                        <li><a href="{% url 'report_missing_person' %}"><i class="fas fa-chevron-right me-2"></i>Report Missing Person</a></li>
+                        <li><a href="{% url 'track_cases' %}"><i class="fas fa-chevron-right me-2"></i>Track Cases</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5><i class="fas fa-phone-alt me-2"></i>Emergency Contacts</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone-alt me-2"></i>15 (Police Helpline)</li>
+                        <li><i class="fas fa-phone-alt me-2"></i>1122 (Rescue)</li>
+                        <li><i class="fas fa-envelope me-2"></i>info@pakistanpolice.gov.pk</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">© 2024 Pakistani Police Force. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

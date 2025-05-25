@@ -1,0 +1,350 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .case-header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .case-photo {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 3px solid white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .info-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .status-pending { background-color: #f1c40f; color: #2c3e50; }
+    .status-investigation { background-color: #3498db; color: white; }
+    .status-found { background-color: #2ecc71; color: white; }
+    .status-closed { background-color: #95a5a6; color: white; }
+
+    .update-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #3498db;
+    }
+
+    .update-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .update-date {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-custom {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Case Header -->
+    <div class="case-header">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+                <img src="{{ case.photo.url }}" alt="{{ case.get_full_name }}" class="case-photo">
+            </div>
+            <div class="col-md-9">
+                <h1 class="mb-3">{{ case.get_full_name }}</h1>
+                <div class="d-flex gap-3 mb-3">
+                    <span class="status-badge status-{{ case.status }}">
+                        {{ case.get_status_display }}
+                    </span>
+                    <span class="text-white">Case #{{ case.case_number }}</span>
+                </div>
+                <p class="mb-0">Last seen on {{ case.last_seen_date|date:"F d, Y" }} at {{ case.last_seen_location }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Basic Information -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h4 class="mb-4">Basic Information</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Age</div>
+                        <div class="info-value">{{ case.age }} years</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Gender</div>
+                        <div class="info-value">{{ case.get_gender_display }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">{{ case.date_of_birth|date:"F d, Y" }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Height</div>
+                        <div class="info-value">{{ case.height }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Weight</div>
+                        <div class="info-value">{{ case.weight }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Physical Description -->
+            <div class="info-card">
+                <h4 class="mb-4">Physical Description</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Eye Color</div>
+                        <div class="info-value">{{ case.eye_color }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Hair Color</div>
+                        <div class="info-value">{{ case.hair_color }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Skin Color</div>
+                        <div class="info-value">{{ case.skin_color }}</div>
+                    </div>
+                    {% if case.distinguishing_marks %}
+                    <div class="col-12 mb-3">
+                        <div class="info-label">Distinguishing Marks</div>
+                        <div class="info-value">{{ case.distinguishing_marks }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Last Seen & Contact Info -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h4 class="mb-4">Last Seen Information</h4>
+                <div class="mb-3">
+                    <div class="info-label">Date</div>
+                    <div class="info-value">{{ case.last_seen_date|date:"F d, Y" }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">{{ case.last_seen_location }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="info-label">Last Seen Wearing</div>
+                    <div class="info-value">{{ case.last_seen_wearing }}</div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h4 class="mb-4">Contact Information</h4>
+                <div class="mb-3">
+                    <div class="info-label">Reporter</div>
+                    <div class="info-value">{{ case.reporter.get_full_name }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="info-label">Contact Number</div>
+                    <div class="info-value">{{ case.contact_number }}</div>
+                </div>
+                {% if case.additional_contact %}
+                <div class="mb-3">
+                    <div class="info-label">Additional Contact</div>
+                    <div class="info-value">{{ case.additional_contact }}</div>
+                </div>
+                {% endif %}
+                <div class="mb-3">
+                    <div class="info-label">Assigned Officer</div>
+                    <div class="info-value">
+                        {% if case.assigned_officer %}
+                            {{ case.assigned_officer.get_full_name }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Updates -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h4 class="mb-4">Case Updates</h4>
+                {% for update in updates %}
+                <div class="update-card">
+                    <div class="update-header">
+                        <div>
+                            <strong>{{ update.created_by.get_full_name }}</strong>
+                            <span class="update-date ms-2">{{ update.created_at|date:"F d, Y H:i" }}</span>
+                        </div>
+                    </div>
+                    <div class="update-content">
+                        {{ update.description }}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No updates available for this case.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="action-buttons">
+                <button class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#assignOfficerModal">
+                    <i class="fas fa-user-plus me-2"></i>Assign Officer
+                </button>
+                <button class="btn btn-success btn-custom" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
+                    <i class="fas fa-edit me-2"></i>Update Status
+                </button>
+                <button class="btn btn-info btn-custom" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
+                    <i class="fas fa-plus me-2"></i>Add Update
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Officer Modal -->
+<div class="modal fade" id="assignOfficerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Officer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'assign_officer' case.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Officer</label>
+                        <select name="officer_id" class="form-select">
+                            <option value="">Select an officer...</option>
+                            {% for officer in available_officers %}
+                            <option value="{{ officer.id }}" {% if case.assigned_officer.id == officer.id %}selected{% endif %}>
+                                {{ officer.get_full_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign Officer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Status Modal -->
+<div class="modal fade" id="updateStatusModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Case Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'update_case_status' case.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">New Status</label>
+                        <select name="status" class="form-select">
+                            {% for status_value, status_label in case.STATUS_CHOICES %}
+                            <option value="{{ status_value }}" {% if case.status == status_value %}selected{% endif %}>
+                                {{ status_label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Update Modal -->
+<div class="modal fade" id="addUpdateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Case Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'add_case_update' case.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Update Description</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Case Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Cases</h5>
+                    <h2 class="card-text">{{ total_cases }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Cases</h5>
+                    <h2 class="card-text">{{ pending_cases }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Under Investigation</h5>
+                    <h2 class="card-text">{{ investigation_cases }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Found Cases</h5>
+                    <h2 class="card-text">{{ found_cases }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <h2 class="card-text">{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users</h5>
+                    <h2 class="card-text">{{ active_users }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Inactive Users</h5>
+                    <h2 class="card-text">{{ inactive_users }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Quick Actions</h5>
+                    <div class="d-flex gap-3">
+                        <a href="{% url 'manage_cases' %}" class="btn btn-primary">
+                            <i class="fas fa-folder me-2"></i>Manage Cases
+                        </a>
+                        <a href="{% url 'register_officer' %}" class="btn btn-success">
+                            <i class="fas fa-user-plus me-2"></i>Register Officer
+                        </a>
+                        <a href="{% url 'manage_user' %}" class="btn btn-info">
+                            <i class="fas fa-users me-2"></i>Manage Users
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

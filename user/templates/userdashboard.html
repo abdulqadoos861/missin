@@ -1,0 +1,41 @@
+{% extends 'base_user.html' %}
+<!-- {% load static %} -->
+
+{% block title %}Dashboard | Pakistani Police Force{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+    }
+    .stat-card {
+        background: linear-gradient(45deg, #1a237e, #283593);
+        color: white;
+    }
+    .recent-activity {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-4">
+    <h2 class="mb-4">Welcome to Your Dashboard</h2>
+</div>
+    
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any dashboard-specific JavaScript here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize any dashboard components or charts here
+    });
+</script>
+{% endblock %} 

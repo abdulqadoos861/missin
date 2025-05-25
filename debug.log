@@ -1,0 +1,212 @@
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\frontend\admin.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\crime\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Track cases view accessed by user: xyz1 (Regular User)
+Raw SQL count of cases for user 5: 0
+Found 0 cases for user 5
+Statistics calculated - Total: 0, Active: 0, Resolved: 0
+Context data - Total cases: 0, Active: 0, Resolved: 0
+Number of cases in context: 0
+Track cases view accessed by user: xyz1 (Regular User)
+Raw SQL count of cases for user 5: 1
+Found 1 cases for user 5
+Case details - Number: MP-D79C60B4, Status: pending, Created: 2025-05-25 13:55:17.167054+00:00
+Case photo URL: /media/missing_persons/screencapture-127-0-0-1-1445-2025-05-18-09_44_08.png
+Statistics calculated - Total: 1, Active: 1, Resolved: 0
+Found 0 user updates for case MP-D79C60B4
+Found 0 officer updates for case MP-D79C60B4
+Total updates for case MP-D79C60B4: 1
+Context data - Total cases: 1, Active: 1, Resolved: 0
+Number of cases in context: 1
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /cadmin/admin-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py", line 21, in admin_dashboard
+    return render(request, 'admin_dashboard.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'admin_case_details' with no arguments not found. 1 pattern(s) tried: ['cadmin/case/(?P<case_id>[0-9]+)/\\Z']
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (CSRF token from POST incorrect.): /login/
+Internal Server Error: /cadmin/admin-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py", line 21, in admin_dashboard
+    return render(request, 'admin_dashboard.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'admin_case_details' with no arguments not found. 1 pattern(s) tried: ['cadmin/case/(?P<case_id>[0-9]+)/\\Z']
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Track cases view accessed by user: xyz (Regular User)
+Raw SQL count of cases for user 2: 5
+Found 5 cases for user 2
+Case details - Number: MP-E26954F1, Status: pending, Created: 2025-05-25 12:14:10.463259+00:00
+Case photo URL: /media/missing_persons/ali.jpg
+Case details - Number: MP-07FDE01A, Status: pending, Created: 2025-05-25 12:01:44.832311+00:00
+Case photo URL: /media/missing_persons/Untitled_design_7.png
+Case details - Number: MP-08567438, Status: pending, Created: 2025-05-25 09:55:37.098423+00:00
+Case photo URL: /media/missing_persons/a31484e2ea4fcf8bcc8c7b7bf6160ea8.jpg
+Case details - Number: MP-29D16945, Status: pending, Created: 2025-05-25 09:51:30.332683+00:00
+Case photo URL: /media/missing_persons/images_6.jfif
+Case details - Number: MP-77D05C4A, Status: pending, Created: 2025-05-25 09:45:55.237668+00:00
+Case photo URL: /media/missing_persons/b17b8ef13714d5908e53f279ba8b5e5b.jpg
+Statistics calculated - Total: 5, Active: 5, Resolved: 0
+Found 0 user updates for case MP-E26954F1
+Found 0 officer updates for case MP-E26954F1
+Total updates for case MP-E26954F1: 1
+Found 0 user updates for case MP-07FDE01A
+Found 0 officer updates for case MP-07FDE01A
+Total updates for case MP-07FDE01A: 1
+Found 0 user updates for case MP-08567438
+Found 0 officer updates for case MP-08567438
+Total updates for case MP-08567438: 1
+Found 0 user updates for case MP-29D16945
+Found 0 officer updates for case MP-29D16945
+Total updates for case MP-29D16945: 1
+Found 0 user updates for case MP-77D05C4A
+Found 0 officer updates for case MP-77D05C4A
+Total updates for case MP-77D05C4A: 1
+Context data - Total cases: 5, Active: 5, Resolved: 0
+Number of cases in context: 5
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\frontend\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\frontend\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\frontend\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
