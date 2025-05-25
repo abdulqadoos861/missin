@@ -720,3 +720,20 @@ Traceback (most recent call last):
   File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
     raise NoReverseMatch(msg)
 django.urls.exceptions.NoReverseMatch: Reverse for 'manage_user' not found. 'manage_user' is not a valid view function or pattern name.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in update_case_status view: MissingPerson.get_status_display() takes 1 positional argument but 2 were given
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py", line 417, in update_case_status
+    description=f"Status changed from {case.get_status_display(old_status)} to {case.get_status_display()}",
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MissingPerson.get_status_display() takes 1 positional argument but 2 were given

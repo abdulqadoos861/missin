@@ -10,6 +10,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import REDIRECT_FIELD_NAME
 import logging
+from django.core.mail import send_mail
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -384,10 +386,79 @@ def update_case_status(request, case_id):
         try:
             case = get_object_or_404(MissingPerson, id=case_id)
             new_status = request.POST.get('status')
+            update_description = request.POST.get('description', '')
+            location_found = request.POST.get('location_found', '')
+            found_date = request.POST.get('found_date', '')
             
             if new_status in dict(MissingPerson.STATUS_CHOICES):
+                old_status = case.status
                 case.status = new_status
+                
+                # Handle specific status updates
+                if new_status == 'found':
+                    if not location_found:
+                        messages.error(request, 'Location found is required when marking case as found.')
+                        return redirect('admin_case_details', case_id=case_id)
+                    if not found_date:
+                        messages.error(request, 'Found date is required when marking case as found.')
+                        return redirect('admin_case_details', case_id=case_id)
+                    
+                    case.location_found = location_found
+                    case.found_date = found_date
+                    
+                elif new_status == 'closed':
+                    if not update_description:
+                        messages.error(request, 'Closure reason is required when closing a case.')
+                        return redirect('admin_case_details', case_id=case_id)
+                
+                # Create status update record
+                status_update = CaseUpdate.objects.create(
+                    case=case,
+                    description=f"Status changed from {case.get_status_display(old_status)} to {case.get_status_display()}",
+                    created_by=request.user
+                )
+                
+                # Add additional update if description provided
+                if update_description:
+                    CaseUpdate.objects.create(
+                        case=case,
+                        description=update_description,
+                        created_by=request.user
+                    )
+                
                 case.save()
+                
+                # Send notification to reporter
+                if case.reporter and case.reporter.email:
+                    subject = f'Case Status Update - {case.case_number}'
+                    message = f"""
+                    Dear {case.reporter.get_full_name()},
+                    
+                    The status of your case (Case #{case.case_number}) has been updated.
+                    
+                    New Status: {case.get_status_display()}
+                    Previous Status: {case.get_status_display(old_status)}
+                    
+                    {f'Additional Information: {update_description}' if update_description else ''}
+                    
+                    {f'Location Found: {location_found}\nFound Date: {found_date}' if new_status == 'found' else ''}
+                    
+                    You can view the complete case details by logging into your account.
+                    
+                    Best regards,
+                    Police Department
+                    """
+                    try:
+                        send_mail(
+                            subject,
+                            message,
+                            settings.DEFAULT_FROM_EMAIL,
+                            [case.reporter.email],
+                            fail_silently=True,
+                        )
+                    except Exception as e:
+                        logger.error(f"Error sending email notification: {str(e)}")
+                
                 messages.success(request, f'Case status has been updated to {case.get_status_display()}.')
             else:
                 messages.error(request, 'Invalid status selected.')

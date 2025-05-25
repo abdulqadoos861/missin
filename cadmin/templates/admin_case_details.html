@@ -93,6 +93,52 @@
     .btn-custom:hover {
         transform: translateY(-2px);
     }
+
+    .status-update-form .form-select,
+    .status-update-form .form-control {
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .status-update-form .form-select:focus,
+    .status-update-form .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    .status-update-form .form-select option {
+        padding: 10px;
+    }
+
+    .status-update-form .btn {
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .status-update-form .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #foundFields {
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fc;
+        border-right: none;
+    }
+
+    .input-group .form-control {
+        border-left: none;
+    }
+
+    .input-group .form-control:focus {
+        border-left: none;
+        border-color: #e0e0e0;
+    }
 </style>
 
 <div class="container-fluid">
@@ -249,13 +295,101 @@
                 <button class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#assignOfficerModal">
                     <i class="fas fa-user-plus me-2"></i>Assign Officer
                 </button>
-                <button class="btn btn-success btn-custom" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
-                    <i class="fas fa-edit me-2"></i>Update Status
-                </button>
                 <button class="btn btn-info btn-custom" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
                     <i class="fas fa-plus me-2"></i>Add Update
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Status Update Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-edit me-2"></i>Update Case Status
+            </h6>
+            <span class="badge bg-primary">Current Status: {{ case.get_status_display }}</span>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{% url 'update_case_status' case.id %}" class="status-update-form">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="status" class="form-label fw-bold">New Status</label>
+                        <select class="form-select form-select-lg" id="status" name="status" required>
+                            <option value="">Select New Status</option>
+                            <option value="pending" {% if case.status == 'pending' %}selected{% endif %}>
+                                <i class="fas fa-clock"></i> Pending
+                            </option>
+                            <option value="investigation" {% if case.status == 'investigation' %}selected{% endif %}>
+                                <i class="fas fa-search"></i> Under Investigation
+                            </option>
+                            <option value="found" {% if case.status == 'found' %}selected{% endif %}>
+                                <i class="fas fa-check-circle"></i> Found
+                            </option>
+                            <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>
+                                <i class="fas fa-times-circle"></i> Closed
+                            </option>
+                        </select>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select the new status for this case
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="description" class="form-label fw-bold">Update Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" 
+                            placeholder="Enter details about the status update..."></textarea>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Provide additional information about this status change
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Found Status Fields -->
+                <div id="foundFields" class="row bg-light p-3 rounded mb-4" style="display: none;">
+                    <div class="col-12 mb-3">
+                        <h6 class="text-primary mb-3">
+                            <i class="fas fa-map-marker-alt me-2"></i>Found Information
+                        </h6>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="location_found" class="form-label fw-bold">Location Found</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            <input type="text" class="form-control" id="location_found" name="location_found" 
+                                placeholder="Enter where the person was found">
+                        </div>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Specify the exact location where the person was found
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="found_date" class="form-label fw-bold">Found Date</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            <input type="date" class="form-control" id="found_date" name="found_date">
+                        </div>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select the date when the person was found
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-2"></i>Update Status
+                        </button>
+                        <button type="reset" class="btn btn-secondary btn-lg ms-2">
+                            <i class="fas fa-undo me-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -347,4 +481,45 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status');
+    const foundFields = document.getElementById('foundFields');
+    const locationFound = document.getElementById('location_found');
+    const foundDate = document.getElementById('found_date');
+    const description = document.getElementById('description');
+
+    // Show/hide found fields based on status
+    statusSelect.addEventListener('change', function() {
+        if (this.value === 'found') {
+            foundFields.style.display = 'flex';
+            locationFound.required = true;
+            foundDate.required = true;
+            foundFields.classList.add('animate__animated', 'animate__fadeIn');
+        } else {
+            foundFields.style.display = 'none';
+            locationFound.required = false;
+            foundDate.required = false;
+        }
+    });
+
+    // Set required fields for closed status
+    statusSelect.addEventListener('change', function() {
+        if (this.value === 'closed') {
+            description.required = true;
+            description.placeholder = 'Please provide a reason for closing the case...';
+            description.classList.add('border-warning');
+        } else {
+            description.required = false;
+            description.placeholder = 'Enter details about the status update...';
+            description.classList.remove('border-warning');
+        }
+    });
+
+    // Add animation classes
+    const form = document.querySelector('.status-update-form');
+    form.classList.add('animate__animated', 'animate__fadeIn');
+});
+</script>
 {% endblock %}
