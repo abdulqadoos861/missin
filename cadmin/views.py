@@ -7,11 +7,14 @@ from frontend.models import User
 from user.models import MissingPerson, CaseUpdate
 from django.contrib.auth.models import Group
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django.contrib.auth import REDIRECT_FIELD_NAME
 import logging
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth import update_session_auth_hash
+import re
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -386,83 +389,88 @@ def update_case_status(request, case_id):
         try:
             case = get_object_or_404(MissingPerson, id=case_id)
             new_status = request.POST.get('status')
-            update_description = request.POST.get('description', '')
-            location_found = request.POST.get('location_found', '')
-            found_date = request.POST.get('found_date', '')
+            update_description = request.POST.get('description', '').strip()
+            location_found = request.POST.get('location_found', '').strip()
+            found_date = request.POST.get('found_date', '').strip()
             
-            if new_status in dict(MissingPerson.STATUS_CHOICES):
-                old_status = case.status
-                case.status = new_status
+            # Validate status
+            if not new_status or new_status not in dict(MissingPerson.STATUS_CHOICES):
+                messages.error(request, 'Invalid status selected.')
+                return redirect('admin_case_details', case_id=case_id)
+            
+            # Store old status for comparison
+            old_status = case.status
+            
+            # Validate status-specific requirements
+            if new_status == 'found':
+                if not location_found:
+                    messages.error(request, 'Location found is required when marking case as found.')
+                    return redirect('admin_case_details', case_id=case_id)
+                if not found_date:
+                    messages.error(request, 'Found date is required when marking case as found.')
+                    return redirect('admin_case_details', case_id=case_id)
                 
-                # Handle specific status updates
-                if new_status == 'found':
-                    if not location_found:
-                        messages.error(request, 'Location found is required when marking case as found.')
-                        return redirect('admin_case_details', case_id=case_id)
-                    if not found_date:
-                        messages.error(request, 'Found date is required when marking case as found.')
-                        return redirect('admin_case_details', case_id=case_id)
-                    
-                    case.location_found = location_found
-                    case.found_date = found_date
-                    
-                elif new_status == 'closed':
-                    if not update_description:
-                        messages.error(request, 'Closure reason is required when closing a case.')
-                        return redirect('admin_case_details', case_id=case_id)
+                # Update found information
+                case.location_found = location_found
+                case.found_date = found_date
                 
-                # Create status update record
-                status_update = CaseUpdate.objects.create(
+            elif new_status == 'closed':
+                if not update_description:
+                    messages.error(request, 'Closure reason is required when closing a case.')
+                    return redirect('admin_case_details', case_id=case_id)
+            
+            # Update case status
+            case.status = new_status
+            case.save()
+            
+            # Create status update record
+            status_update = CaseUpdate.objects.create(
+                case=case,
+                description=f"Status changed from {case.get_status_display(old_status)} to {case.get_status_display()}",
+                created_by=request.user
+            )
+            
+            # Add additional update if description provided
+            if update_description:
+                CaseUpdate.objects.create(
                     case=case,
-                    description=f"Status changed from {case.get_status_display(old_status)} to {case.get_status_display()}",
+                    description=update_description,
                     created_by=request.user
                 )
+            
+            # Send notification to reporter
+            if case.reporter and case.reporter.email:
+                subject = f'Case Status Update - {case.case_number}'
+                message = f"""
+                Dear {case.reporter.get_full_name()},
                 
-                # Add additional update if description provided
-                if update_description:
-                    CaseUpdate.objects.create(
-                        case=case,
-                        description=update_description,
-                        created_by=request.user
+                The status of your case (Case #{case.case_number}) has been updated.
+                
+                New Status: {case.get_status_display()}
+                Previous Status: {case.get_status_display(old_status)}
+                
+                {f'Additional Information: {update_description}' if update_description else ''}
+                
+                {f'Location Found: {location_found}\nFound Date: {found_date}' if new_status == 'found' else ''}
+                
+                You can view the complete case details by logging into your account.
+                
+                Best regards,
+                Police Department
+                """
+                try:
+                    send_mail(
+                        subject,
+                        message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [case.reporter.email],
+                        fail_silently=True,
                     )
-                
-                case.save()
-                
-                # Send notification to reporter
-                if case.reporter and case.reporter.email:
-                    subject = f'Case Status Update - {case.case_number}'
-                    message = f"""
-                    Dear {case.reporter.get_full_name()},
-                    
-                    The status of your case (Case #{case.case_number}) has been updated.
-                    
-                    New Status: {case.get_status_display()}
-                    Previous Status: {case.get_status_display(old_status)}
-                    
-                    {f'Additional Information: {update_description}' if update_description else ''}
-                    
-                    {f'Location Found: {location_found}\nFound Date: {found_date}' if new_status == 'found' else ''}
-                    
-                    You can view the complete case details by logging into your account.
-                    
-                    Best regards,
-                    Police Department
-                    """
-                    try:
-                        send_mail(
-                            subject,
-                            message,
-                            settings.DEFAULT_FROM_EMAIL,
-                            [case.reporter.email],
-                            fail_silently=True,
-                        )
-                    except Exception as e:
-                        logger.error(f"Error sending email notification: {str(e)}")
-                
-                messages.success(request, f'Case status has been updated to {case.get_status_display()}.')
-            else:
-                messages.error(request, 'Invalid status selected.')
-                
+                except Exception as e:
+                    logger.error(f"Error sending email notification: {str(e)}")
+            
+            messages.success(request, f'Case status has been updated to {case.get_status_display()}.')
+            
         except Exception as e:
             logger.error(f"Error in update_case_status view: {str(e)}", exc_info=True)
             messages.error(request, f"An error occurred while updating status: {str(e)}")
@@ -492,3 +500,140 @@ def add_case_update(request, case_id):
             messages.error(request, f"An error occurred while adding update: {str(e)}")
             
     return redirect('admin_case_details', case_id=case_id)
+
+@login_required
+def admin_settings(request):
+    """Admin settings page view"""
+    return render(request, 'admin_settings.html')
+
+@login_required
+@user_passes_test(is_admin, login_url='login')
+def update_admin_profile(request):
+    """Update admin profile information"""
+    if request.method == 'POST':
+        try:
+            user = request.user
+            
+            # Get and validate form data
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip()
+            phone_number = request.POST.get('phone_number', '').strip()
+            address = request.POST.get('address', '').strip()
+            cnic = request.POST.get('cnic', '').strip()
+            date_of_birth = request.POST.get('date_of_birth')
+            
+            # Validate required fields
+            if not all([first_name, last_name, email, phone_number, address, cnic, date_of_birth]):
+                messages.error(request, 'All fields are required.')
+                return redirect('admin_settings')
+            
+            # Validate email format
+            if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+                messages.error(request, 'Please enter a valid email address.')
+                return redirect('admin_settings')
+            
+            # Validate CNIC format
+            if not re.match(r'^\d{5}-\d{7}-\d{1}$', cnic):
+                messages.error(request, 'Please enter a valid CNIC number (e.g., 33201-0649966-2).')
+                return redirect('admin_settings')
+            
+            # Check if email is already taken by another user
+            if User.objects.exclude(id=user.id).filter(email=email).exists():
+                messages.error(request, 'This email is already registered to another user.')
+                return redirect('admin_settings')
+            
+            # Check if CNIC is already taken by another user
+            if User.objects.exclude(id=user.id).filter(cnic=cnic).exists():
+                messages.error(request, 'This CNIC is already registered to another user.')
+                return redirect('admin_settings')
+            
+            # Update user information
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.phone_number = phone_number
+            user.address = address
+            user.cnic = cnic
+            
+            # Convert date string to date object
+            try:
+                user.date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
+            except ValueError:
+                messages.error(request, 'Invalid date format.')
+                return redirect('admin_settings')
+            
+            # Handle profile picture upload
+            if 'profile_picture' in request.FILES:
+                # Delete old profile picture if exists
+                if user.profile_picture:
+                    try:
+                        os.remove(user.profile_picture.path)
+                    except:
+                        pass
+                user.profile_picture = request.FILES['profile_picture']
+            
+            # Save changes
+            try:
+                # For superuser, we need to save all fields
+                if user.is_superuser:
+                    user.save()
+                else:
+                    user.save(update_fields=[
+                        'first_name', 'last_name', 'email', 'phone_number',
+                        'address', 'cnic', 'date_of_birth', 'profile_picture'
+                    ])
+                
+                # Update session to reflect changes
+                update_session_auth_hash(request, user)
+                
+                messages.success(request, 'Profile updated successfully!')
+                logger.info(f"Admin profile updated successfully for user: {user.username}")
+            except Exception as save_error:
+                messages.error(request, f'Error saving profile: {str(save_error)}')
+                logger.error(f"Error saving admin profile: {str(save_error)}", exc_info=True)
+                return redirect('admin_settings')
+            
+        except Exception as e:
+            messages.error(request, f'Error updating profile: {str(e)}')
+            logger.error(f"Error updating admin profile: {str(e)}", exc_info=True)
+    
+    return redirect('admin_settings')
+
+@login_required
+def change_admin_password(request):
+    """Change admin password"""
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        # Validate current password
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect!')
+            return redirect('admin_settings')
+        
+        # Validate new password
+        if new_password != confirm_password:
+            messages.error(request, 'New passwords do not match!')
+            return redirect('admin_settings')
+        
+        # Validate password strength
+        if len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long!')
+            return redirect('admin_settings')
+        
+        try:
+            # Update password
+            request.user.set_password(new_password)
+            request.user.save()
+            
+            # Update session to prevent logout
+            update_session_auth_hash(request, request.user)
+            
+            messages.success(request, 'Password changed successfully!')
+            
+        except Exception as e:
+            messages.error(request, f'Error changing password: {str(e)}')
+    
+    return redirect('admin_settings')

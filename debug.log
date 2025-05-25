@@ -737,3 +737,39 @@ Traceback (most recent call last):
     description=f"Status changed from {case.get_status_display(old_status)} to {case.get_status_display()}",
                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: MissingPerson.get_status_display() takes 1 positional argument but 2 were given
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Admin profile updated successfully for user: aabb1122

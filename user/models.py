@@ -24,7 +24,7 @@ class MissingPerson(models.Model):
 
     STATUS_CHOICES = (
         ('pending', 'Pending'),
-        ('under_investigation', 'Under Investigation'),
+        ('investigation', 'Under Investigation'),
         ('found', 'Found'),
         ('closed', 'Closed'),
     )
@@ -60,6 +60,10 @@ class MissingPerson(models.Model):
     assigned_officer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, 
                                        related_name='assigned_missing_persons')
     
+    # Found Information
+    location_found = models.CharField(max_length=255, blank=True, null=True)
+    found_date = models.DateField(blank=True, null=True)
+    
     # Additional Information
     description = models.TextField(help_text="Additional details about the missing person")
     photo = models.ImageField(upload_to='missing_persons/')
@@ -75,8 +79,10 @@ class MissingPerson(models.Model):
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
     
-    def get_status_display(self):
-        return dict(self.STATUS_CHOICES).get(self.status, self.status)
+    def get_status_display(self, status=None):
+        if status is None:
+            status = self.status
+        return dict(self.STATUS_CHOICES).get(status, status)
     
     class Meta:
         ordering = ['-created_at']

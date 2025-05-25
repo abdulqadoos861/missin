@@ -306,7 +306,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}" 
-                       href="#">
+                       href="{% url 'admin_settings' %}">
                         <i class="fas fa-cog"></i>Settings
                     </a>
                 </li>

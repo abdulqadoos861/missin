@@ -1,0 +1,236 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-user-cog me-2"></i>Profile Settings
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'update_admin_profile' %}" class="needs-validation" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" 
+                                    value="{{ user.first_name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" 
+                                    value="{{ user.last_name }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                    value="{{ user.email }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" 
+                                    value="{{ user.phone_number }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required>{{ user.address }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cnic" class="form-label">CNIC</label>
+                                <input type="text" class="form-control" id="cnic" name="cnic" 
+                                    value="{{ user.cnic }}" pattern="\d{5}-\d{7}-\d{1}" 
+                                    placeholder="33201-0649966-2" required>
+                                <div class="form-text">Format: 33201-0649966-2</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
+                                    value="{{ user.date_of_birth|date:'Y-m-d' }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Profile Picture</label>
+                            <input type="file" class="form-control" id="profile_picture" name="profile_picture" 
+                                accept="image/*">
+                            {% if user.profile_picture %}
+                            <div class="mt-2">
+                                <img src="{{ user.profile_picture.url }}" alt="Current Profile Picture" 
+                                    class="img-thumbnail" style="max-width: 150px;">
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'change_admin_password' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="current_password" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="current_password" 
+                                name="current_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="new_password" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="new_password" 
+                                name="new_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirm_password" 
+                                name="confirm_password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key me-2"></i>Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-info-circle me-2"></i>Account Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Account Type</label>
+                        <input type="text" class="form-control" value="Administrator" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Member Since</label>
+                        <input type="text" class="form-control" 
+                            value="{{ user.date_joined|date:'F d, Y' }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last Login</label>
+                        <input type="text" class="form-control" 
+                            value="{{ user.last_login|date:'F d, Y H:i' }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-control:read-only {
+    background-color: #f8f9fc;
+    cursor: not-allowed;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #5a5c69;
+}
+
+.btn-primary {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.form-text {
+    color: #858796;
+    font-size: 0.875rem;
+}
+
+.img-thumbnail {
+    border: 2px solid #e3e6f0;
+    padding: 0.25rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+
+    // CNIC format validation
+    const cnicInput = document.getElementById('cnic');
+    cnicInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 0) {
+            // Format: 33201-0649966-2
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '-' + value.substring(5);
+            }
+            if (value.length > 13) {
+                value = value.substring(0, 13) + '-' + value.substring(13);
+            }
+            if (value.length > 15) {
+                value = value.substring(0, 15);
+            }
+        }
+        e.target.value = value;
+    });
+
+    // Password confirmation validation
+    const newPassword = document.getElementById('new_password');
+    const confirmPassword = document.getElementById('confirm_password');
+    
+    function validatePassword() {
+        if (newPassword.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity('Passwords do not match');
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    }
+
+    newPassword.addEventListener('change', validatePassword);
+    confirmPassword.addEventListener('keyup', validatePassword);
+});
+</script>
+{% endblock %}

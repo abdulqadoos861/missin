@@ -16,5 +16,8 @@ urlpatterns = [
     path('case/<int:case_id>/add-update/', views.add_case_update, name='add_case_update'),
     path('manage-users/', views.manage_users, name='manage_users'),
     path('toggle-user-status/<int:user_id>/', views.toggle_user_status, name='toggle_user_status'),
+    path('settings/', views.admin_settings, name='admin_settings'),
+    path('settings/update-profile/', views.update_admin_profile, name='update_admin_profile'),
+    path('settings/change-password/', views.change_admin_password, name='change_admin_password'),
 ]
 
