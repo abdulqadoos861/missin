@@ -1,171 +1,339 @@
-{% extends 'base_user.html' %}
-<!-- {% load static %} -->
+{% extends 'base_users.html' %}
+{% load static %}
 
 {% block title %}Track Cases - Missing Person Portal{% endblock %}
 
 {% block extra_css %}
 <style>
     .tracking-card {
-        border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        background: white;
-        margin-bottom: 20px;
-    }
-    .tracking-card:hover {
-        transform: translateY(-5px);
-    }
-    .case-header {
-        background: linear-gradient(135deg, #1a237e, #283593);
-        color: white;
-        border-radius: 15px 15px 0 0;
-        padding: 20px;
-    }
-    .case-body {
-        padding: 20px;
-    }
-    .status-badge {
-        padding: 8px 15px;
         border-radius: 20px;
-        font-weight: 500;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+
+    .tracking-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+    }
+
+    .case-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: var(--text-light);
+        border-radius: 20px 20px 0 0;
+        padding: 25px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .case-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: translateX(-100%);
+        transition: 0.6s;
+    }
+
+    .tracking-card:hover .case-header::before {
+        transform: translateX(100%);
+    }
+
+    .case-body {
+        padding: 25px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .status-badge {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
         font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
+
+    .status-badge:hover {
+        transform: scale(1.05);
+    }
+
     .status-pending {
-        background-color: #fff3cd;
-        color: #856404;
+        background: linear-gradient(135deg, #ffd600, #ffab00);
+        color: #000;
     }
+
     .status-under_investigation {
-        background-color: #cce5ff;
-        color: #004085;
+        background: linear-gradient(135deg, #2196f3, #1976d2);
+        color: white;
     }
+
     .status-found {
-        background-color: #d4edda;
-        color: #155724;
+        background: linear-gradient(135deg, #00c853, #009624);
+        color: white;
     }
+
     .status-closed {
-        background-color: #f8f9fa;
-        color: #6c757d;
+        background: linear-gradient(135deg, #757575, #424242);
+        color: white;
     }
+
     .timeline {
         position: relative;
-        padding: 20px 0;
+        padding: 25px 0;
     }
+
     .timeline-item {
         position: relative;
-        padding-left: 30px;
-        margin-bottom: 20px;
+        padding-left: 35px;
+        margin-bottom: 25px;
     }
+
     .timeline-item::before {
         content: '';
         position: absolute;
         left: 0;
         top: 0;
         bottom: 0;
-        width: 2px;
-        background: #e0e0e0;
+        width: 3px;
+        background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
     }
+
     .timeline-item::after {
         content: '';
         position: absolute;
-        left: -4px;
+        left: -6px;
         top: 0;
-        width: 10px;
-        height: 10px;
+        width: 15px;
+        height: 15px;
         border-radius: 50%;
-        background: #1a237e;
+        background: var(--accent-color);
+        box-shadow: 0 0 0 4px rgba(255, 64, 129, 0.2);
+        transition: all 0.3s ease;
     }
+
+    .timeline-item:hover::after {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 6px rgba(255, 64, 129, 0.3);
+    }
+
     .timeline-date {
-        font-size: 0.85rem;
-        color: #666;
-        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: var(--accent-color);
+        margin-bottom: 8px;
+        font-weight: 500;
     }
+
     .timeline-content {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 10px;
-    }
-    .filter-section {
-        background: white;
-        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.1);
         padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
     }
+
+    .timeline-content:hover {
+        transform: translateX(5px);
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .filter-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
     .case-stats {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 30px;
+        margin-bottom: 35px;
+        gap: 20px;
     }
+
     .stat-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 25px;
         text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         flex: 1;
-        margin: 0 10px;
-        transition: transform 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: translateX(-100%);
+        transition: 0.6s;
+    }
+
     .stat-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-10px);
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
     }
-    .stat-card:first-child {
-        margin-left: 0;
+
+    .stat-card:hover::before {
+        transform: translateX(100%);
     }
-    .stat-card:last-child {
-        margin-right: 0;
-    }
+
     .stat-number {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #1a237e;
-        margin-bottom: 5px;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        margin-bottom: 10px;
+        text-shadow: 0 2px 10px rgba(255, 64, 129, 0.3);
     }
+
     .stat-label {
-        color: #666;
-        font-size: 0.9rem;
+        color: var(--text-light);
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
     }
+
     .search-box {
         position: relative;
     }
+
     .search-box input {
-        padding-left: 40px;
-        border-radius: 20px;
+        padding: 15px 20px 15px 50px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-light);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
     }
+
+    .search-box input:focus {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
     .search-box i {
         position: absolute;
-        left: 15px;
+        left: 20px;
         top: 50%;
         transform: translateY(-50%);
-        color: #666;
+        color: var(--accent-color);
+        font-size: 1.2rem;
     }
+
+    .form-select {
+        padding: 15px 20px;
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-light);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .form-select:focus {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
     .case-photo {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
         object-fit: cover;
-        border-radius: 10px;
-        margin-right: 15px;
+        border-radius: 15px;
+        margin-right: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
     }
+
+    .case-photo:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
     .case-details {
         display: flex;
         align-items: center;
     }
+
     .case-info {
         flex: 1;
     }
+
     .case-title {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        margin-bottom: 5px;
-        color: #1a237e;
+        margin-bottom: 8px;
+        color: var(--text-light);
+        letter-spacing: 0.5px;
     }
+
     .case-meta {
-        font-size: 0.9rem;
-        color: #666;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 5px;
     }
+
     .case-meta i {
-        margin-right: 5px;
-        color: #1a237e;
+        margin-right: 8px;
+        color: var(--accent-color);
+    }
+
+    .no-photo-placeholder {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: var(--accent-color);
+        margin-right: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .case-stats {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-card {
+            margin: 0;
+        }
+
+        .case-photo {
+            width: 100px;
+            height: 100px;
+        }
+
+        .case-title {
+            font-size: 1.1rem;
+        }
+
+        .case-meta {
+            font-size: 0.9rem;
+        }
     }
 </style>
 {% endblock %}
@@ -175,27 +343,21 @@
     <!-- Statistics Section -->
     <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Cases</h5>
-                    <h2 class="mb-0">{{ total_cases }}</h2>
-                </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_cases }}</div>
+                <div class="stat-label">Total Cases</div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Active Cases</h5>
-                    <h2 class="mb-0">{{ active_cases }}</h2>
-                </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ active_cases }}</div>
+                <div class="stat-label">Active Cases</div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Resolved Cases</h5>
-                    <h2 class="mb-0">{{ resolved_cases }}</h2>
-                </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ resolved_cases }}</div>
+                <div class="stat-label">Resolved Cases</div>
             </div>
         </div>
     </div>
@@ -203,7 +365,10 @@
     <!-- Filter Section -->
     <div class="row mb-4">
         <div class="col-md-6">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search cases...">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search cases...">
+            </div>
         </div>
         <div class="col-md-3">
             <select id="statusFilter" class="form-select">
@@ -231,32 +396,27 @@
              data-case-number="{{ case.case_number }}"
              data-status="{{ case.status }}"
              data-date="{{ case.created_at|date:'Y-m-d' }}">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="tracking-card">
+                <div class="case-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Case #{{ case.case_number }}</h5>
-                    <span class="badge {% if case.status == 'pending' %}bg-warning
-                                     {% elif case.status == 'under_investigation' %}bg-info
-                                     {% elif case.status == 'found' %}bg-success
-                                     {% else %}bg-secondary{% endif %}">
+                    <span class="status-badge status-{{ case.status }}">
                         {{ case.status|title }}
                     </span>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            {% if case.photo %}
-                            <img src="{{ case.photo.url }}" alt="Missing Person Photo" class="img-fluid rounded mb-3">
-                            {% else %}
-                            <div class="no-photo-placeholder">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            {% endif %}
+                <div class="case-body">
+                    <div class="case-details">
+                        {% if case.photo %}
+                        <img src="{{ case.photo.url }}" alt="Missing Person Photo" class="case-photo">
+                        {% else %}
+                        <div class="no-photo-placeholder">
+                            <i class="fas fa-user"></i>
                         </div>
-                        <div class="col-md-8">
-                            <h6 class="mb-2">{{ case.name }}</h6>
-                            <p class="text-muted mb-2">Age: {{ case.age }}</p>
-                            <p class="text-muted mb-2">Last Seen: {{ case.last_seen_date|date:"F d, Y" }}</p>
-                            <p class="text-muted mb-2">Location: {{ case.last_seen_location }}</p>
+                        {% endif %}
+                        <div class="case-info">
+                            <h6 class="case-title">{{ case.name }}</h6>
+                            <p class="case-meta"><i class="fas fa-birthday-cake"></i>Age: {{ case.age }}</p>
+                            <p class="case-meta"><i class="fas fa-calendar"></i>Last Seen: {{ case.last_seen_date|date:"F d, Y" }}</p>
+                            <p class="case-meta"><i class="fas fa-map-marker-alt"></i>Location: {{ case.last_seen_location }}</p>
                         </div>
                     </div>
                     
@@ -295,27 +455,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const casesList = document.getElementById('casesList');
     const caseCards = document.querySelectorAll('.case-card');
 
-    // Search functionality
+    // Search functionality with debounce
+    let searchTimeout;
     searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        caseCards.forEach(card => {
-            const caseNumber = card.dataset.caseNumber.toLowerCase();
-            const shouldShow = caseNumber.includes(searchTerm);
-            card.style.display = shouldShow ? '' : 'none';
-        });
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const searchTerm = this.value.toLowerCase();
+            caseCards.forEach(card => {
+                const caseNumber = card.dataset.caseNumber.toLowerCase();
+                const shouldShow = caseNumber.includes(searchTerm);
+                card.style.display = shouldShow ? '' : 'none';
+            });
+        }, 300);
     });
 
-    // Status filter
+    // Status filter with animation
     statusFilter.addEventListener('change', function() {
         const selectedStatus = this.value;
         caseCards.forEach(card => {
             const status = card.dataset.status;
             const shouldShow = !selectedStatus || status === selectedStatus;
-            card.style.display = shouldShow ? '' : 'none';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.display = shouldShow ? '' : 'none';
+                if (shouldShow) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                    }, 50);
+                }
+            }, 300);
         });
     });
 
-    // Sort functionality
+    // Enhanced sort functionality with animation
     sortBy.addEventListener('change', function() {
         const sortValue = this.value;
         const cardsArray = Array.from(caseCards);
@@ -331,7 +503,28 @@ document.addEventListener('DOMContentLoaded', function() {
             return 0;
         });
 
-        cardsArray.forEach(card => casesList.appendChild(card));
+        // Animate the reordering
+        cardsArray.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                casesList.appendChild(card);
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 50);
+            }, index * 100);
+        });
+    });
+
+    // Add hover effect to timeline items
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(5px)';
+        });
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
     });
 });
 </script>

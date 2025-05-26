@@ -14,6 +14,7 @@ urlpatterns = [
     path('missing-person/<str:case_number>/', views.missing_person_detail, name='missing_person_detail'),
     path('my-reports/', views.my_reports, name='my_reports'),
     path('track-cases/', views.track_cases, name='track_cases'),
+    path('profile/', views.user_profile, name='user_profile'),
     path('logout/', login_view, name='logout'),
 ]
 

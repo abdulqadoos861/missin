@@ -7,6 +7,7 @@ from .forms import MissingPersonForm
 from .models import MissingPerson, CaseUpdate
 import logging
 from django.db import connection
+from django.contrib.auth import update_session_auth_hash
 
 logger = logging.getLogger(__name__)
 
@@ -190,3 +191,57 @@ def missing_person_detail(request, case_number):
 def my_reports(request):
     reports = MissingPerson.objects.filter(reporter=request.user).order_by('-created_at')
     return render(request, 'user/my_reports.html', {'reports': reports})
+
+@login_required
+def user_profile(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+        
+        if form_type == 'password_change':
+            current_password = request.POST.get('current_password')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            if not request.user.check_password(current_password):
+                messages.error(request, 'Current password is incorrect')
+            elif new_password != confirm_password:
+                messages.error(request, 'New passwords do not match')
+            else:
+                request.user.set_password(new_password)
+                request.user.save()
+                update_session_auth_hash(request, request.user)
+                messages.success(request, 'Password updated successfully')
+                
+        elif form_type == 'notifications':
+            # Handle notification preferences
+            email_notifications = request.POST.get('email_notifications') == 'on'
+            sms_notifications = request.POST.get('sms_notifications') == 'on'
+            case_updates = request.POST.get('case_updates') == 'on'
+            
+            # Save notification preferences
+            # Add your notification preferences saving logic here
+            messages.success(request, 'Notification preferences updated successfully')
+            
+        elif form_type == 'privacy':
+            # Handle privacy settings
+            profile_visibility = request.POST.get('profile_visibility') == 'on'
+            case_visibility = request.POST.get('case_visibility') == 'on'
+            
+            # Save privacy settings
+            # Add your privacy settings saving logic here
+            messages.success(request, 'Privacy settings updated successfully')
+            
+        else:
+            # Handle profile update
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            
+            request.user.first_name = first_name
+            request.user.last_name = last_name
+            request.user.email = email
+            request.user.save()
+            
+            messages.success(request, 'Profile updated successfully')
+            
+    return render(request, 'user_profile.html')
