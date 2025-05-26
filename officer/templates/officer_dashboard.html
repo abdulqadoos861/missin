@@ -1,7 +1,117 @@
 {% extends 'base_officer.html' %}
 
 {% block content %}
-<h1>Officer Dashboard</h1>
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Officer Dashboard</h1>
+        <div class="date">
+            <i class="fas fa-calendar-alt me-2"></i>
+            <span id="current-date"></span>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="stat-card border-left-primary">
+                <div class="stat-icon bg-primary bg-opacity-10">
+                    <i class="fas fa-folder-open text-primary"></i>
+                </div>
+                <div class="stat-number">{{ total_cases }}</div>
+                <div class="stat-label">Total Cases</div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="stat-card border-left-success">
+                <div class="stat-icon bg-success bg-opacity-10">
+                    <i class="fas fa-check-circle text-success"></i>
+                </div>
+                <div class="stat-number">{{ solved_cases }}</div>
+                <div class="stat-label">Solved Cases</div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="stat-card border-left-warning">
+                <div class="stat-icon bg-warning bg-opacity-10">
+                    <i class="fas fa-clock text-warning"></i>
+                </div>
+                <div class="stat-number">{{ pending_cases }}</div>
+                <div class="stat-label">Pending Cases</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Cases -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-list me-2"></i>Recent Cases
+            </h6>
+            <a href="{% url 'officer_view_case' %}" class="btn btn-sm btn-primary">
+                View All Cases
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Last Seen</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for case in recent_cases %}
+                        <tr>
+                            <td>{{ case.case_number }}</td>
+                            <td>{{ case.get_full_name }}</td>
+                            <td>
+                                <span class="badge {% if case.status == 'found' %}bg-success{% elif case.status == 'pending' %}bg-warning{% else %}bg-info{% endif %}">
+                                    {{ case.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ case.last_seen_date|date:"M d, Y" }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'officer_update_case' case.id %}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'officer_view_case_detail' case.id %}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No cases found</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set current date
+    document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+</script>
 {% endblock %}
 
 

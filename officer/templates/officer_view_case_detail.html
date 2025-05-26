@@ -1,0 +1,111 @@
+{% extends 'base_officer.html' %}
+
+{% block title %}Case Details | Officer Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Case Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Case #{{ case.case_number }}</h5>
+                    <div>
+                        <a href="{% url 'officer_update_case' case.id %}" class="btn btn-light btn-sm">
+                            <i class="fas fa-edit"></i> Update Case
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Case Information</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <th style="width: 150px;">Status:</th>
+                                    <td>
+                                        <span class="badge {% if case.status == 'found' %}bg-success{% elif case.status == 'pending' %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ case.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Priority:</th>
+                                    <td>
+                                        <span class="badge {% if case.priority == 'high' %}bg-danger{% elif case.priority == 'medium' %}bg-warning{% else %}bg-info{% endif %}">
+                                            {{ case.get_priority_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Last Seen:</th>
+                                    <td>{{ case.last_seen_date|date:"F d, Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Location:</th>
+                                    <td>{{ case.last_seen_location }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Missing Person Details</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <th style="width: 150px;">Name:</th>
+                                    <td>{{ case.get_full_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Age:</th>
+                                    <td>{{ case.age }} years</td>
+                                </tr>
+                                <tr>
+                                    <th>Gender:</th>
+                                    <td>{{ case.get_gender_display }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Contact:</th>
+                                    <td>{{ case.contact_number }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Description -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Case Description</h6>
+                </div>
+                <div class="card-body">
+                    <p>{{ case.description }}</p>
+                </div>
+            </div>
+
+            <!-- Case Updates -->
+            <div class="card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Case Updates</h6>
+                </div>
+                <div class="card-body">
+                    {% for update in updates %}
+                    <div class="update-card mb-3">
+                        <div class="update-header d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <strong>{{ update.updated_by.get_full_name }}</strong>
+                                <span class="text-muted ms-2">{{ update.created_at|date:"F d, Y H:i" }}</span>
+                            </div>
+                        </div>
+                        <div class="update-content">
+                            {{ update.description }}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No updates available for this case.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -11,14 +11,20 @@
     {% block extra_css %}{% endblock %}
     <style>
         :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --light-color: #f8f9fc;
+            --dark-color: #5a5c69;
             --sidebar-width: 250px;
             --header-height: 60px;
-            --primary-color: #2c3e50;
-            --secondary-color: #34495e;
         }
 
         body {
-            background-color: #f8f9fa;
+            background-color: var(--light-color);
             min-height: 100vh;
         }
 
@@ -29,7 +35,7 @@
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
-            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(180deg, var(--primary-color), #2e59d9);
             color: white;
             z-index: 1000;
             transition: all 0.3s ease;
@@ -55,6 +61,8 @@
             padding: 12px 15px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
         }
 
         .nav-link:hover, .nav-link.active {
@@ -83,7 +91,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             position: sticky;
             top: 0;
             z-index: 999;
@@ -105,6 +113,13 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .officer-profile:hover {
+            background: rgba(78, 115, 223, 0.1);
         }
 
         .officer-avatar {
@@ -117,6 +132,13 @@
             justify-content: center;
             color: white;
             font-weight: bold;
+            overflow: hidden;
+        }
+
+        .officer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Notification Badge */
@@ -140,8 +162,8 @@
         .content-wrapper {
             padding: 20px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             margin-top: 20px;
         }
 
@@ -170,7 +192,7 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: var(--light-color);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -179,16 +201,17 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-color);
+            background: #2e59d9;
         }
 
         /* Card Styles */
         .stat-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 0.35rem;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             transition: transform 0.3s ease;
+            border-left: 0.25rem solid var(--primary-color);
         }
 
         .stat-card:hover {
@@ -204,18 +227,21 @@
             justify-content: center;
             font-size: 1.5rem;
             margin-bottom: 15px;
+            color: var(--primary-color);
         }
 
         .stat-number {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--primary-color);
+            color: var(--dark-color);
             margin-bottom: 5px;
         }
 
         .stat-label {
-            color: #666;
+            color: var(--secondary-color);
             font-size: 0.9rem;
+            text-transform: uppercase;
+            font-weight: 500;
         }
 
         /* Table Styles */
@@ -226,27 +252,27 @@
         }
 
         .custom-table th {
-            background: #f8f9fa;
+            background: var(--light-color);
             padding: 12px;
             font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #dee2e6;
+            color: var(--dark-color);
+            border-bottom: 2px solid #e3e6f0;
         }
 
         .custom-table td {
             padding: 12px;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #e3e6f0;
             vertical-align: middle;
         }
 
         .custom-table tbody tr:hover {
-            background-color: #f8f9fa;
+            background-color: var(--light-color);
         }
 
         /* Action Buttons */
         .action-btn {
             padding: 6px 12px;
-            border-radius: 5px;
+            border-radius: 0.35rem;
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
@@ -269,39 +295,65 @@
             background-color: #ffebee;
             color: #d32f2f;
         }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 0.35rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <img src="{% static 'images/police-logo.png' %}" alt="Pakistani Police Logo">
+            <img src="{% static 'images/logo.png' %}" alt="Police Logo">
             <h5 class="mb-0">Officer Portal</h5>
         </div>
         <nav class="mt-4">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'officer_dashboard' %}active{% endif %}" 
-                       href="{% url 'officer_dashboard' %}">
-                        <i class="fas fa-tachometer-alt"></i>Dashboard
+                    <a href="{% url 'officer_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_dashboard' %}active{% endif %}">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'view_cases' %}active{% endif %}" 
-                       href="{% url 'view_cases' %}">
-                        <i class="fas fa-eye"></i>View Cases
+                    <a href="{% url 'officer_view_case' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_view_case' %}active{% endif %}">
+                        <i class="fas fa-folder-open"></i>
+                        View Cases
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'update_case' %}active{% endif %}" 
-                       href="{% url 'update_case' %}">
-                        <i class="fas fa-edit"></i>Update Cases
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'officer_profile' %}active{% endif %}" 
-                       href="{% url 'officer_profile' %}">
-                        <i class="fas fa-user"></i>Profile
+                    <a href="{% url 'officer_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_profile' %}active{% endif %}">
+                        <i class="fas fa-user"></i>
+                        Profile
                     </a>
                 </li>
             </ul>
@@ -316,53 +368,57 @@
                 <button class="btn btn-link d-md-none" id="sidebarToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h4 class="mb-0 ms-3">{% block page_title %}Dashboard{% endblock %}</h4>
             </div>
             <div class="header-right">
                 <div class="notification-badge">
-                    <i class="fas fa-bell fa-lg"></i>
+                    <i class="fas fa-bell"></i>
                 </div>
                 <div class="officer-profile">
                     <div class="officer-avatar">
-                        {{ request.user.username|first|upper }}
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+                        {% else %}
+                            {{ user.username|first|upper }}
+                        {% endif %}
                     </div>
-                    <div class="dropdown">
-                        <span class="dropdown-toggle" data-bs-toggle="dropdown">
-                            {{ request.user.username }}
-                        </span>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{% url 'officer_profile' %}">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
-                    </div>
+                    <span>{{ user.get_full_name }}</span>
                 </div>
             </div>
         </header>
 
         <!-- Content Wrapper -->
         <div class="content-wrapper">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% block content %}{% endblock %}
         </div>
     </div>
 
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script>
-        // Sidebar Toggle for Mobile
+        // Sidebar Toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.querySelector('.sidebar').classList.toggle('active');
             document.querySelector('.main-content').classList.toggle('sidebar-active');
         });
 
-        // Active Link Highlight
+        // Auto-hide alerts after 5 seconds
         document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname;
-            document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
         });
     </script>
     {% block extra_js %}{% endblock %}

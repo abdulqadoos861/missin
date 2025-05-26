@@ -1,0 +1,183 @@
+{% extends 'base_officer.html' %}
+
+{% block title %}Settings | Officer Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Settings Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Account Settings</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="profile-image mb-3">
+                                {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; margin: 0 auto;">
+                                        <span style="font-size: 48px;">{{ user.username|first|upper }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-camera me-2"></i>Change Photo
+                            </button>
+                        </div>
+                        <div class="col-md-8">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-muted mb-3">Personal Information</h6>
+                                        <div class="form-group mb-3">
+                                            <label for="first_name" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="last_name" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-muted mb-3">Account Settings</h6>
+                                        <div class="form-group mb-3">
+                                            <label for="username" class="form-label">Username</label>
+                                            <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly>
+                                            <small class="text-muted">Username cannot be changed</small>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="current_password" class="form-label">Current Password</label>
+                                            <input type="password" class="form-control" id="current_password" name="current_password">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="new_password" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" id="new_password" name="new_password">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Notification Settings -->
+                                <div class="card mt-4">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Notification Settings</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" checked>
+                                            <label class="form-check-label" for="email_notifications">
+                                                Email Notifications
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="case_updates" name="case_updates" checked>
+                                            <label class="form-check-label" for="case_updates">
+                                                Case Updates
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="system_notifications" name="system_notifications" checked>
+                                            <label class="form-check-label" for="system_notifications">
+                                                System Notifications
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                        <i class="fas fa-undo"></i> Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Card -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Case Statistics</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="stat-card border-left-primary">
+                                <div class="stat-icon bg-primary bg-opacity-10">
+                                    <i class="fas fa-folder-open text-primary"></i>
+                                </div>
+                                <div class="stat-number">{{ total_cases }}</div>
+                                <div class="stat-label">Total Cases</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card border-left-success">
+                                <div class="stat-icon bg-success bg-opacity-10">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                                <div class="stat-number">{{ solved_cases }}</div>
+                                <div class="stat-label">Solved Cases</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-card border-left-warning">
+                                <div class="stat-icon bg-warning bg-opacity-10">
+                                    <i class="fas fa-clock text-warning"></i>
+                                </div>
+                                <div class="stat-number">{{ pending_cases }}</div>
+                                <div class="stat-label">Pending Cases</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function resetForm() {
+        document.querySelector('form').reset();
+    }
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const newPassword = document.getElementById('new_password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        
+        if (newPassword || confirmPassword) {
+            if (newPassword !== confirmPassword) {
+                e.preventDefault();
+                alert('New passwords do not match!');
+                return;
+            }
+            
+            const currentPassword = document.getElementById('current_password').value;
+            if (!currentPassword) {
+                e.preventDefault();
+                alert('Please enter your current password to change it.');
+                return;
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+{% endblock %} 

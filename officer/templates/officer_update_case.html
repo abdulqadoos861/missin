@@ -8,46 +8,87 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <!-- Original Case Details -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Original Case Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-sm">
+                                <tr>
+                                    <th style="width: 150px;">Case Number:</th>
+                                    <td>{{ case.case_number }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Missing Person:</th>
+                                    <td>{{ case.get_full_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Age:</th>
+                                    <td>{{ case.age }} years</td>
+                                </tr>
+                                <tr>
+                                    <th>Gender:</th>
+                                    <td>{{ case.get_gender_display }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-sm">
+                                <tr>
+                                    <th style="width: 150px;">Last Seen:</th>
+                                    <td>{{ case.last_seen_date|date:"F d, Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Location:</th>
+                                    <td>{{ case.last_seen_location }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Current Status:</th>
+                                    <td>
+                                        <span class="badge {% if case.status == 'found' %}bg-success{% elif case.status == 'pending' %}bg-warning{% elif case.status == 'under_investigation' %}bg-info{% else %}bg-secondary{% endif %}">
+                                            {{ case.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Reported On:</th>
+                                    <td>{{ case.created_at|date:"F d, Y" }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Form -->
+            <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Case Information</h5>
+                    <h5 class="mb-0">Update Case</h5>
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         
-                        <!-- Case Details Section -->
+                        <!-- Status and Priority -->
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="case_number" class="form-label">Case Number</label>
-                                    <input type="text" class="form-control" id="case_number" name="case_number" value="{{ case.case_number }}" readonly>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="case_type" class="form-label">Case Type</label>
-                                    <select class="form-select" id="case_type" name="case_type" required>
-                                        <option value="">Select Case Type</option>
-                                        <option value="theft" {% if case.case_type == 'theft' %}selected{% endif %}>Theft</option>
-                                        <option value="assault" {% if case.case_type == 'assault' %}selected{% endif %}>Assault</option>
-                                        <option value="fraud" {% if case.case_type == 'fraud' %}selected{% endif %}>Fraud</option>
-                                        <option value="other" {% if case.case_type == 'other' %}selected{% endif %}>Other</option>
+                                    <label for="status" class="form-label">Case Status</label>
+                                    <select class="form-select" id="status" name="status" required>
+                                        <option value="pending" {% if case.status == 'pending' %}selected{% endif %}>Pending</option>
+                                        <option value="under_investigation" {% if case.status == 'under_investigation' %}selected{% endif %}>Under Investigation</option>
+                                        <option value="found" {% if case.status == 'found' %}selected{% endif %}>Found</option>
+                                        <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>Closed</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="status" class="form-label">Case Status</label>
-                                    <select class="form-select" id="status" name="status" required>
-                                        <option value="">Select Status</option>
-                                        <option value="open" {% if case.status == 'open' %}selected{% endif %}>Open</option>
-                                        <option value="under_investigation" {% if case.status == 'under_investigation' %}selected{% endif %}>Under Investigation</option>
-                                        <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>Closed</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3">
                                     <label for="priority" class="form-label">Priority Level</label>
                                     <select class="form-select" id="priority" name="priority" required>
-                                        <option value="">Select Priority</option>
                                         <option value="low" {% if case.priority == 'low' %}selected{% endif %}>Low</option>
                                         <option value="medium" {% if case.priority == 'medium' %}selected{% endif %}>Medium</option>
                                         <option value="high" {% if case.priority == 'high' %}selected{% endif %}>High</option>
@@ -56,55 +97,18 @@
                             </div>
                         </div>
 
-                        <!-- Description Section -->
+                        <!-- Update Description -->
                         <div class="form-group mb-4">
-                            <label for="description" class="form-label">Case Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="4" required>{{ case.description }}</textarea>
+                            <label for="update_description" class="form-label">Update Description</label>
+                            <textarea class="form-control" id="update_description" name="update_description" rows="3" required></textarea>
+                            <small class="text-muted">Describe the latest updates or findings in the case</small>
                         </div>
 
-                        <!-- Location Details -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="location" class="form-label">Incident Location</label>
-                                    <input type="text" class="form-control" id="location" name="location" value="{{ case.location }}" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="date_reported" class="form-label">Date Reported</label>
-                                    <input type="date" class="form-control" id="date_reported" name="date_reported" value="{{ case.date_reported|date:'Y-m-d' }}" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Evidence Section -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0">Evidence & Documents</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group mb-3">
-                                    <label for="evidence_files" class="form-label">Upload Evidence Files</label>
-                                    <input type="file" class="form-control" id="evidence_files" name="evidence_files" multiple>
-                                    <small class="text-muted">You can select multiple files</small>
-                                </div>
-                                {% if case.evidence_files %}
-                                <div class="mt-3">
-                                    <h6>Current Evidence Files:</h6>
-                                    <ul class="list-group">
-                                        {% for file in case.evidence_files.all %}
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            {{ file.name }}
-                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFile('{{ file.id }}')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                {% endif %}
-                            </div>
+                        <!-- Evidence Document (Required for closing) -->
+                        <div class="form-group mb-4" id="evidenceSection" style="display: none;">
+                            <label for="evidence_document" class="form-label">Evidence Document <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="evidence_document" name="evidence_document">
+                            <small class="text-muted">Upload evidence document (required when closing the case)</small>
                         </div>
 
                         <!-- Notes Section -->
@@ -116,7 +120,7 @@
 
                         <!-- Action Buttons -->
                         <div class="d-flex justify-content-end gap-2">
-                            <a href="{% url 'view_cases' %}" class="btn btn-secondary">
+                            <a href="{% url 'officer_view_case' %}" class="btn btn-secondary">
                                 <i class="fas fa-times"></i> Cancel
                             </a>
                             <button type="submit" class="btn btn-primary">
@@ -132,15 +136,31 @@
 
 {% block extra_js %}
 <script>
-    function removeFile(fileId) {
-        if (confirm('Are you sure you want to remove this file?')) {
-            // Add AJAX call to remove file
-            console.log('Removing file:', fileId);
+    // Show/hide evidence document section based on status
+    document.getElementById('status').addEventListener('change', function() {
+        const evidenceSection = document.getElementById('evidenceSection');
+        const evidenceDocument = document.getElementById('evidence_document');
+        
+        if (this.value === 'closed') {
+            evidenceSection.style.display = 'block';
+            evidenceDocument.required = true;
+        } else {
+            evidenceSection.style.display = 'none';
+            evidenceDocument.required = false;
         }
-    }
+    });
 
     // Form validation
     document.querySelector('form').addEventListener('submit', function(e) {
+        const status = document.getElementById('status').value;
+        const evidenceDocument = document.getElementById('evidence_document');
+        
+        if (status === 'closed' && !evidenceDocument.files.length) {
+            e.preventDefault();
+            alert('Evidence document is required when closing a case.');
+            return;
+        }
+
         const requiredFields = this.querySelectorAll('[required]');
         let isValid = true;
 
