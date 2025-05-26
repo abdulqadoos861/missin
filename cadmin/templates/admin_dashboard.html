@@ -2,66 +2,157 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
-    <!-- Case Statistics -->
+<div class="container-fluid py-4">
+    <!-- Page Header -->
     <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-primary text-white border-0 shadow-lg">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1 fw-bold">Admin Dashboard</h4>
+                            <p class="mb-0 opacity-75">Welcome to the Crime Management System</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-white text-primary fs-6 px-3 py-2 rounded-pill">
+                                <i class="fas fa-folder me-2"></i>Total Cases: {{ total_cases }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Statistics -->
+    <div class="row mb-4 g-4">
         <div class="col-md-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Cases</h5>
-                    <h2 class="card-text">{{ total_cases }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Total Cases</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_cases }}</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-folder text-primary fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" style="width: 100%"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Pending Cases</h5>
-                    <h2 class="card-text">{{ pending_cases }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Pending Cases</h6>
+                            <h3 class="mb-0 fw-bold">{{ pending_cases }}</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-clock text-warning fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: {{ pending_percentage }}%"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Under Investigation</h5>
-                    <h2 class="card-text">{{ investigation_cases }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Under Investigation</h6>
+                            <h3 class="mb-0 fw-bold">{{ investigation_cases }}</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-search text-info fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: {{ investigation_percentage }}%"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Found Cases</h5>
-                    <h2 class="card-text">{{ found_cases }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Found Cases</h6>
+                            <h3 class="mb-0 fw-bold">{{ found_cases }}</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-check-circle text-success fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: {{ found_percentage }}%"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- User Statistics -->
-    <div class="row mb-4">
+    <div class="row mb-4 g-4">
         <div class="col-md-4">
-            <div class="card bg-dark text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Total Users</h5>
-                    <h2 class="card-text">{{ total_users }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Total Users</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_users }}</h3>
+                        </div>
+                        <div class="bg-dark bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-users text-dark fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-dark" style="width: 100%"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Active Users</h5>
-                    <h2 class="card-text">{{ active_users }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Active Users</h6>
+                            <h3 class="mb-0 fw-bold">{{ active_users }}</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-user-check text-success fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: {{ active_percentage }}%"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-danger text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Inactive Users</h5>
-                    <h2 class="card-text">{{ inactive_users }}</h2>
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1 fw-semibold">Inactive Users</h6>
+                            <h3 class="mb-0 fw-bold">{{ inactive_users }}</h3>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                            <i class="fas fa-user-times text-danger fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-danger" style="width: {{ inactive_percentage }}%"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,17 +161,17 @@
     <!-- Quick Actions -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-4">Quick Actions</h5>
-                    <div class="d-flex gap-3">
-                        <a href="{% url 'manage_cases' %}" class="btn btn-primary">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4 fw-bold">Quick Actions</h5>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{% url 'manage_cases' %}" class="btn btn-primary btn-lg px-4 rounded-pill action-btn">
                             <i class="fas fa-folder me-2"></i>Manage Cases
                         </a>
-                        <a href="{% url 'register_officer' %}" class="btn btn-success">
+                        <a href="{% url 'register_officer' %}" class="btn btn-success btn-lg px-4 rounded-pill action-btn">
                             <i class="fas fa-user-plus me-2"></i>Register Officer
                         </a>
-                        <a href="{% url 'manage_users' %}" class="btn btn-info">
+                        <a href="{% url 'manage_users' %}" class="btn btn-info btn-lg px-4 rounded-pill action-btn">
                             <i class="fas fa-users me-2"></i>Manage Users
                         </a>
                     </div>
@@ -89,4 +180,76 @@
         </div>
     </div>
 </div>
+
+<style>
+.hover-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.action-btn {
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #f0f0f0;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+.rounded-circle {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+
+{% block extra_js %}
+<script>
+    // Add animation to numbers
+    function animateNumbers() {
+        document.querySelectorAll('h3.mb-0').forEach(element => {
+            const finalValue = parseInt(element.textContent);
+            let currentValue = 0;
+            const duration = 1000;
+            const step = finalValue / (duration / 16);
+            
+            const timer = setInterval(() => {
+                currentValue += step;
+                if (currentValue >= finalValue) {
+                    element.textContent = finalValue;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(currentValue);
+                }
+            }, 16);
+        });
+    }
+
+    // Call animation when page loads
+    document.addEventListener('DOMContentLoaded', animateNumbers);
+</script>
+{% endblock %}
+
 {% endblock %}

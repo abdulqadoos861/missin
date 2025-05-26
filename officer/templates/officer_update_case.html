@@ -2,133 +2,115 @@
 
 {% block title %}Update Case | Officer Portal{% endblock %}
 
-{% block page_title %}Update Case{% endblock %}
-
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <!-- Original Case Details -->
-            <div class="card shadow mb-4">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Original Case Details</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <table class="table table-sm">
-                                <tr>
-                                    <th style="width: 150px;">Case Number:</th>
-                                    <td>{{ case.case_number }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Missing Person:</th>
-                                    <td>{{ case.get_full_name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Age:</th>
-                                    <td>{{ case.age }} years</td>
-                                </tr>
-                                <tr>
-                                    <th>Gender:</th>
-                                    <td>{{ case.get_gender_display }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <table class="table table-sm">
-                                <tr>
-                                    <th style="width: 150px;">Last Seen:</th>
-                                    <td>{{ case.last_seen_date|date:"F d, Y" }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Location:</th>
-                                    <td>{{ case.last_seen_location }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Current Status:</th>
-                                    <td>
-                                        <span class="badge {% if case.status == 'found' %}bg-success{% elif case.status == 'pending' %}bg-warning{% elif case.status == 'under_investigation' %}bg-info{% else %}bg-secondary{% endif %}">
-                                            {{ case.get_status_display }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Reported On:</th>
-                                    <td>{{ case.created_at|date:"F d, Y" }}</td>
-                                </tr>
-                            </table>
-                        </div>
+<div class="row">
+    <!-- Page Header -->
+    <div class="col-12 mb-4">
+        <div class="card bg-gradient-primary text-white">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-1">Update Case</h4>
+                        <p class="mb-0 opacity-75">Modify case information and status</p>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-white text-primary">Case ID: {{ case.case_id }}</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Update Form -->
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Update Case</h5>
-                </div>
-                <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        <!-- Status and Priority -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="status" class="form-label">Case Status</label>
-                                    <select class="form-select" id="status" name="status" required>
-                                        <option value="pending" {% if case.status == 'pending' %}selected{% endif %}>Pending</option>
-                                        <option value="under_investigation" {% if case.status == 'under_investigation' %}selected{% endif %}>Under Investigation</option>
-                                        <option value="found" {% if case.status == 'found' %}selected{% endif %}>Found</option>
-                                        <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>Closed</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="priority" class="form-label">Priority Level</label>
-                                    <select class="form-select" id="priority" name="priority" required>
-                                        <option value="low" {% if case.priority == 'low' %}selected{% endif %}>Low</option>
-                                        <option value="medium" {% if case.priority == 'medium' %}selected{% endif %}>Medium</option>
-                                        <option value="high" {% if case.priority == 'high' %}selected{% endif %}>High</option>
-                                    </select>
+    <!-- Update Form -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 text-primary fw-bold">
+                    <i class="fas fa-edit me-2"></i>Case Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <form method="POST" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <!-- Basic Information -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="title" name="title" 
+                                       value="{{ case.title }}" required>
+                                <label for="title">Case Title</label>
+                                <div class="invalid-feedback">
+                                    Please provide a case title.
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Update Description -->
-                        <div class="form-group mb-4">
-                            <label for="update_description" class="form-label">Update Description</label>
-                            <textarea class="form-control" id="update_description" name="update_description" rows="3" required></textarea>
-                            <small class="text-muted">Describe the latest updates or findings in the case</small>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="">Select Status</option>
+                                    <option value="Pending" {% if case.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                    <option value="In Progress" {% if case.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Solved" {% if case.status == 'Solved' %}selected{% endif %}>Solved</option>
+                                </select>
+                                <label for="status">Status</label>
+                                <div class="invalid-feedback">
+                                    Please select a status.
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Evidence Document (Required for closing) -->
-                        <div class="form-group mb-4" id="evidenceSection" style="display: none;">
-                            <label for="evidence_document" class="form-label">Evidence Document <span class="text-danger">*</span></label>
-                            <input type="file" class="form-control" id="evidence_document" name="evidence_document">
-                            <small class="text-muted">Upload evidence document (required when closing the case)</small>
+                        <!-- Description -->
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <textarea class="form-control" id="description" name="description" 
+                                          style="height: 150px" required>{{ case.description }}</textarea>
+                                <label for="description">Description</label>
+                                <div class="invalid-feedback">
+                                    Please provide a case description.
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Notes Section -->
-                        <div class="form-group mb-4">
-                            <label for="notes" class="form-label">Investigation Notes</label>
-                            <textarea class="form-control" id="notes" name="notes" rows="3">{{ case.notes }}</textarea>
-                            <small class="text-muted">Add any additional notes or updates about the case</small>
+                        <!-- Additional Information -->
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="location" name="location" 
+                                       value="{{ case.location }}">
+                                <label for="location">Location</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" id="incident_date" name="incident_date" 
+                                       value="{{ case.incident_date|date:'Y-m-d' }}">
+                                <label for="incident_date">Incident Date</label>
+                            </div>
+                        </div>
+
+                        <!-- Progress -->
+                        <div class="col-12">
+                            <label for="progress" class="form-label">Case Progress</label>
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="range" class="form-range flex-grow-1" id="progress" name="progress" 
+                                       min="0" max="100" value="{{ case.progress }}">
+                                <span class="badge bg-primary" id="progressValue">{{ case.progress }}%</span>
+                            </div>
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="d-flex justify-content-end gap-2">
-                            <a href="{% url 'officer_view_case' %}" class="btn btn-secondary">
-                                <i class="fas fa-times"></i> Cancel
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Update Case
-                            </button>
+                        <div class="col-12">
+                            <hr class="my-4">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'officer_view_case_detail' case.id %}" class="btn btn-light">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -136,47 +118,34 @@
 
 {% block extra_js %}
 <script>
-    // Show/hide evidence document section based on status
-    document.getElementById('status').addEventListener('change', function() {
-        const evidenceSection = document.getElementById('evidenceSection');
-        const evidenceDocument = document.getElementById('evidence_document');
-        
-        if (this.value === 'closed') {
-            evidenceSection.style.display = 'block';
-            evidenceDocument.required = true;
-        } else {
-            evidenceSection.style.display = 'none';
-            evidenceDocument.required = false;
-        }
+    // Form validation
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                } else {
+                    document.querySelector('.loading-overlay').classList.add('active');
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Update progress value display
+    const progressInput = document.getElementById('progress');
+    const progressValue = document.getElementById('progressValue');
+    
+    progressInput.addEventListener('input', function() {
+        progressValue.textContent = this.value + '%';
     });
 
-    // Form validation
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const status = document.getElementById('status').value;
-        const evidenceDocument = document.getElementById('evidence_document');
-        
-        if (status === 'closed' && !evidenceDocument.files.length) {
-            e.preventDefault();
-            alert('Evidence document is required when closing a case.');
-            return;
-        }
-
-        const requiredFields = this.querySelectorAll('[required]');
-        let isValid = true;
-
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                isValid = false;
-                field.classList.add('is-invalid');
-            } else {
-                field.classList.remove('is-invalid');
-            }
-        });
-
-        if (!isValid) {
-            e.preventDefault();
-            alert('Please fill in all required fields');
-        }
+    // Add loading state to form
+    document.querySelector('form').addEventListener('submit', function() {
+        document.querySelector('.loading-overlay').classList.add('active');
     });
 </script>
 {% endblock %}

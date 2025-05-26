@@ -25,6 +25,9 @@ def is_admin(user):
 @login_required(login_url='login')
 @user_passes_test(is_admin, login_url='login')
 def admin_dashboard(request):
+    if not request.user.is_superuser:
+        return redirect('index')
+    
     try:
         # Get case statistics
         cases = MissingPerson.objects.all()
@@ -34,11 +37,20 @@ def admin_dashboard(request):
         found_cases = cases.filter(status='found').count()
         closed_cases = cases.filter(status='closed').count()
 
+        # Calculate percentages
+        pending_percentage = (pending_cases / total_cases * 100) if total_cases > 0 else 0
+        investigation_percentage = (investigation_cases / total_cases * 100) if total_cases > 0 else 0
+        found_percentage = (found_cases / total_cases * 100) if total_cases > 0 else 0
+
         # Get user statistics
         users = User.objects.all()
         total_users = users.count()
         active_users = users.filter(is_active=True).count()
         inactive_users = users.filter(is_active=False).count()
+
+        # Calculate user percentages
+        active_percentage = (active_users / total_users * 100) if total_users > 0 else 0
+        inactive_percentage = (inactive_users / total_users * 100) if total_users > 0 else 0
 
         context = {
             'total_cases': total_cases,
@@ -46,9 +58,14 @@ def admin_dashboard(request):
             'investigation_cases': investigation_cases,
             'found_cases': found_cases,
             'closed_cases': closed_cases,
+            'pending_percentage': pending_percentage,
+            'investigation_percentage': investigation_percentage,
+            'found_percentage': found_percentage,
             'total_users': total_users,
             'active_users': active_users,
             'inactive_users': inactive_users,
+            'active_percentage': active_percentage,
+            'inactive_percentage': inactive_percentage,
         }
         
         return render(request, 'admin_dashboard.html', context)
@@ -64,6 +81,9 @@ def admin_dashboard(request):
             'total_users': 0,
             'active_users': 0,
             'inactive_users': 0,
+            'pending_percentage': 0,
+            'investigation_percentage': 0,
+            'found_percentage': 0,
         })
 
 @login_required(login_url='login')

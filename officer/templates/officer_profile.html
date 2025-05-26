@@ -3,105 +3,423 @@
 {% block title %}Settings | Officer Portal{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #4cc9f0;
+        --warning-color: #f72585;
+        --info-color: #4895ef;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+    }
+
+    /* Enhanced Gradients */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bg-gradient-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        z-index: 1;
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, var(--success-color), #4cc9f0);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(135deg, var(--warning-color), #b5179e);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Card Animations */
+    .stat-card {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover::after {
+        opacity: 1;
+    }
+
+    /* Profile Image Styling */
+    .profile-image-container {
+        position: relative;
+        margin-bottom: 2rem;
+        padding: 1rem;
+    }
+
+    .profile-image-container::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0.1;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.1; }
+        50% { transform: scale(1.05); opacity: 0.2; }
+        100% { transform: scale(1); opacity: 0.1; }
+    }
+
+    /* Form Styling */
+    .form-floating > .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .form-floating > .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+    }
+
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+        border-radius: 2em;
+        transition: all 0.3s ease;
+    }
+
+    .form-switch .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    /* Button Styling */
+    .btn {
+        border-radius: 10px;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn:hover::after {
+        opacity: 1;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Card Styling */
+    .card {
+        border: none;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        padding: 1.25rem;
+    }
+
+    /* Stat Icon Styling */
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: scale(1.1);
+    }
+
+    /* Badge Styling */
+    .badge {
+        padding: 0.6em 1.2em;
+        border-radius: 30px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    /* Section Headers */
+    .section-header {
+        position: relative;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    /* Notification Switches */
+    .notification-item {
+        padding: 1rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .notification-item:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+
+    /* Loading Animation */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .loading-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
             <!-- Settings Header -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Account Settings</h5>
+            <div class="card shadow-lg mb-4">
+                <div class="card-header bg-gradient-primary text-white py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cog me-2"></i>Account Settings
+                        </h5>
+                        <span class="badge bg-white text-primary">Officer ID: {{ user.username }}</span>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="row">
+                        <!-- Profile Picture Section -->
                         <div class="col-md-4 text-center mb-4">
-                            <div class="profile-image mb-3">
+                            <div class="profile-image-container">
                                 {% if user.profile_picture %}
-                                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" 
+                                         class="rounded-circle shadow-lg" 
+                                         style="width: 200px; height: 200px; object-fit: cover;">
                                 {% else %}
-                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; margin: 0 auto;">
-                                        <span style="font-size: 48px;">{{ user.username|first|upper }}</span>
+                                    <div class="rounded-circle bg-gradient-primary text-white d-flex align-items-center justify-content-center shadow-lg" 
+                                         style="width: 200px; height: 200px; margin: 0 auto;">
+                                        <span style="font-size: 72px;">{{ user.username|first|upper }}</span>
                                     </div>
                                 {% endif %}
+                                <label for="profile_picture" class="position-absolute bottom-0 end-0 bg-white rounded-circle p-3 shadow-lg" 
+                                       style="cursor: pointer; transform: translate(25%, 25%);">
+                                    <i class="fas fa-camera text-primary fa-lg"></i>
+                                </label>
+                                <input type="file" id="profile_picture" name="profile_picture" class="d-none" accept="image/*">
                             </div>
-                            <button class="btn btn-outline-primary btn-sm">
-                                <i class="fas fa-camera me-2"></i>Change Photo
-                            </button>
+                            <div class="user-info">
+                                <h4 class="mb-1 fw-bold">{{ user.get_full_name }}</h4>
+                                <p class="text-muted mb-2">{{ user.email }}</p>
+                                <span class="badge bg-gradient-success">Active Officer</span>
+                            </div>
                         </div>
+
+                        <!-- Settings Form -->
                         <div class="col-md-8">
-                            <form method="POST" enctype="multipart/form-data">
+                            <form method="POST" enctype="multipart/form-data" class="settings-form">
                                 {% csrf_token %}
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h6 class="text-muted mb-3">Personal Information</h6>
-                                        <div class="form-group mb-3">
-                                            <label for="first_name" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}">
+                                
+                                <!-- Personal Information -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-light py-3">
+                                        <h6 class="mb-0 text-primary fw-bold">
+                                            <i class="fas fa-user me-2"></i>Personal Information
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                                                           value="{{ user.first_name }}" placeholder="First Name">
+                                                    <label for="first_name">First Name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                                                           value="{{ user.last_name }}" placeholder="Last Name">
+                                                    <label for="last_name">Last Name</label>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label for="last_name" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}">
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                                        <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="email" name="email" 
+                                                   value="{{ user.email }}" placeholder="Email">
+                                            <label for="email">Email Address</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <h6 class="text-muted mb-3">Account Settings</h6>
-                                        <div class="form-group mb-3">
-                                            <label for="username" class="form-label">Username</label>
-                                            <input type="text" class="form-control" id="username" value="{{ user.username }}" readonly>
+                                </div>
+
+                                <!-- Security Settings -->
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-light py-3">
+                                        <h6 class="mb-0 text-primary fw-bold">
+                                            <i class="fas fa-shield-alt me-2"></i>Security Settings
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control bg-light" id="username" 
+                                                   value="{{ user.username }}" readonly>
+                                            <label for="username">Username</label>
                                             <small class="text-muted">Username cannot be changed</small>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label for="current_password" class="form-label">Current Password</label>
-                                            <input type="password" class="form-control" id="current_password" name="current_password">
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="current_password" 
+                                                   name="current_password" placeholder="Current Password">
+                                            <label for="current_password">Current Password</label>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label for="new_password" class="form-label">New Password</label>
-                                            <input type="password" class="form-control" id="new_password" name="new_password">
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="new_password" 
+                                                   name="new_password" placeholder="New Password">
+                                            <label for="new_password">New Password</label>
                                         </div>
-                                        <div class="form-group mb-3">
-                                            <label for="confirm_password" class="form-label">Confirm New Password</label>
-                                            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                                        <div class="form-floating mb-3">
+                                            <input type="password" class="form-control" id="confirm_password" 
+                                                   name="confirm_password" placeholder="Confirm Password">
+                                            <label for="confirm_password">Confirm New Password</label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Notification Settings -->
-                                <div class="card mt-4">
-                                    <div class="card-header bg-light">
-                                        <h6 class="mb-0">Notification Settings</h6>
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header bg-light py-3">
+                                        <h6 class="mb-0 text-primary fw-bold">
+                                            <i class="fas fa-bell me-2"></i>Notification Preferences
+                                        </h6>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" checked>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="email_notifications" 
+                                                   name="email_notifications" checked>
                                             <label class="form-check-label" for="email_notifications">
                                                 Email Notifications
+                                                <small class="d-block text-muted">Receive updates via email</small>
                                             </label>
                                         </div>
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="case_updates" name="case_updates" checked>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="case_updates" 
+                                                   name="case_updates" checked>
                                             <label class="form-check-label" for="case_updates">
                                                 Case Updates
+                                                <small class="d-block text-muted">Get notified about case changes</small>
                                             </label>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="system_notifications" name="system_notifications" checked>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="system_notifications" 
+                                                   name="system_notifications" checked>
                                             <label class="form-check-label" for="system_notifications">
                                                 System Notifications
+                                                <small class="d-block text-muted">Receive system alerts and announcements</small>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Action Buttons -->
-                                <div class="d-flex justify-content-end gap-2 mt-4">
-                                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                        <i class="fas fa-undo"></i> Reset
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button type="button" class="btn btn-light px-4" onclick="resetForm()">
+                                        <i class="fas fa-undo me-2"></i>Reset
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Save Changes
+                                    <button type="submit" class="btn btn-primary px-4">
+                                        <i class="fas fa-save me-2"></i>Save Changes
                                     </button>
                                 </div>
                             </form>
@@ -110,38 +428,49 @@
                 </div>
             </div>
 
-            <!-- Statistics Card -->
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0">Case Statistics</h6>
+            <!-- Statistics Cards -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="fas fa-folder-open text-primary fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Cases</h6>
+                                    <h3 class="mb-0 fw-bold">{{ total_cases }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="stat-card border-left-primary">
-                                <div class="stat-icon bg-primary bg-opacity-10">
-                                    <i class="fas fa-folder-open text-primary"></i>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="fas fa-check-circle text-success fa-2x"></i>
                                 </div>
-                                <div class="stat-number">{{ total_cases }}</div>
-                                <div class="stat-label">Total Cases</div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Solved Cases</h6>
+                                    <h3 class="mb-0 fw-bold">{{ solved_cases }}</h3>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="stat-card border-left-success">
-                                <div class="stat-icon bg-success bg-opacity-10">
-                                    <i class="fas fa-check-circle text-success"></i>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 stat-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stat-icon bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="fas fa-clock text-warning fa-2x"></i>
                                 </div>
-                                <div class="stat-number">{{ solved_cases }}</div>
-                                <div class="stat-label">Solved Cases</div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="stat-card border-left-warning">
-                                <div class="stat-icon bg-warning bg-opacity-10">
-                                    <i class="fas fa-clock text-warning"></i>
+                                <div>
+                                    <h6 class="text-muted mb-1">Pending Cases</h6>
+                                    <h3 class="mb-0 fw-bold">{{ pending_cases }}</h3>
                                 </div>
-                                <div class="stat-number">{{ pending_cases }}</div>
-                                <div class="stat-label">Pending Cases</div>
                             </div>
                         </div>
                     </div>
@@ -153,29 +482,111 @@
 
 {% block extra_js %}
 <script>
-    function resetForm() {
-        document.querySelector('form').reset();
-    }
-
-    // Form validation
-    document.querySelector('form').addEventListener('submit', function(e) {
+    // Show loading overlay on form submit
+    document.querySelector('.settings-form').addEventListener('submit', function(e) {
         const newPassword = document.getElementById('new_password').value;
         const confirmPassword = document.getElementById('confirm_password').value;
         
         if (newPassword || confirmPassword) {
             if (newPassword !== confirmPassword) {
                 e.preventDefault();
-                alert('New passwords do not match!');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'New passwords do not match!',
+                    confirmButtonColor: '#4361ee',
+                    customClass: {
+                        popup: 'animated fadeInDown'
+                    }
+                });
                 return;
             }
             
             const currentPassword = document.getElementById('current_password').value;
             if (!currentPassword) {
                 e.preventDefault();
-                alert('Please enter your current password to change it.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Current Password Required',
+                    text: 'Please enter your current password to change it.',
+                    confirmButtonColor: '#4361ee',
+                    customClass: {
+                        popup: 'animated fadeInDown'
+                    }
+                });
                 return;
             }
         }
+
+        // Show loading overlay
+        document.querySelector('.loading-overlay').classList.add('active');
+    });
+
+    // Profile picture preview with animation
+    document.getElementById('profile_picture').addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.querySelector('.profile-image-container img') || 
+                           document.querySelector('.profile-image-container div');
+                if (img.tagName === 'IMG') {
+                    img.style.opacity = '0';
+                    setTimeout(() => {
+                        img.src = e.target.result;
+                        img.style.opacity = '1';
+                    }, 300);
+                } else {
+                    const newImg = document.createElement('img');
+                    newImg.src = e.target.result;
+                    newImg.className = 'rounded-circle shadow-lg';
+                    newImg.style = 'width: 200px; height: 200px; object-fit: cover; opacity: 0; transition: opacity 0.3s ease;';
+                    img.parentNode.replaceChild(newImg, img);
+                    setTimeout(() => {
+                        newImg.style.opacity = '1';
+                    }, 50);
+                }
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // Enhanced reset form function
+    function resetForm() {
+        Swal.fire({
+            title: 'Reset Form?',
+            text: 'Are you sure you want to reset all changes?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#4361ee',
+            cancelButtonColor: '#f72585',
+            confirmButtonText: 'Yes, reset it!',
+            customClass: {
+                popup: 'animated fadeInDown'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.querySelector('.settings-form').reset();
+                Swal.fire({
+                    title: 'Reset!',
+                    text: 'Your form has been reset.',
+                    icon: 'success',
+                    confirmButtonColor: '#4361ee',
+                    customClass: {
+                        popup: 'animated fadeInDown'
+                    }
+                });
+            }
+        });
+    }
+
+    // Add hover effect to stat cards
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
     });
 </script>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Case, CaseUpdate
+from .models import Case, CaseUpdate, CaseNote, CaseEvidence
 from user.models import MissingPerson
 
 # Create your views here.
@@ -29,7 +29,7 @@ def view_cases(request):
 @login_required
 def view_case_detail(request, case_id):
     case = get_object_or_404(MissingPerson, id=case_id, assigned_officer=request.user)
-    updates = case.officer_updates.all().order_by('-created_at')
+    updates = case.officer_updates.all().order_by('-updated_at')
     return render(request, 'officer_view_case_detail.html', {
         'case': case,
         'updates': updates
@@ -41,40 +41,27 @@ def update_case(request, case_id):
     
     if request.method == 'POST':
         try:
-            # Get the new status
-            new_status = request.POST.get('status')
+            status = request.POST.get('status')
+            progress = request.POST.get('progress')
+            description = request.POST.get('description')
             
-            # Check if evidence is required (when closing the case)
-            if new_status == 'closed' and not request.FILES.get('evidence_document'):
-                messages.error(request, 'Evidence document is required when closing a case.')
-                return render(request, 'officer_update_case.html', {'case': case})
+            if not all([status, progress, description]):
+                messages.error(request, 'All fields are required.')
+                return redirect('officer_view_case_detail', case_id=case.id)
             
-            # Update case fields
-            case.status = new_status
-            case.priority = request.POST.get('priority')
-            case.notes = request.POST.get('notes')
-            
-            # Handle evidence document if provided
-            if request.FILES.get('evidence_document'):
-                case.evidence_document = request.FILES['evidence_document']
-            
-            case.save()
-            
-            # Create case update
-            if request.POST.get('update_description'):
-                CaseUpdate.objects.create(
-                    case=case,
-                    description=request.POST.get('update_description'),
-                    updated_by=request.user
-                )
+            CaseUpdate.objects.create(
+                case=case,
+                status=status,
+                progress=progress,
+                description=description,
+                updated_by=request.user
+            )
             
             messages.success(request, 'Case updated successfully.')
-            return redirect('officer_view_case_detail', case_id=case.id)
-            
         except Exception as e:
             messages.error(request, f'Error updating case: {str(e)}')
     
-    return render(request, 'officer_update_case.html', {'case': case})
+    return redirect('officer_view_case_detail', case_id=case.id)
 
 @login_required
 def officer_profile(request):
@@ -129,3 +116,57 @@ def officer_profile(request):
         'pending_cases': pending_cases,
     }
     return render(request, 'officer_profile.html', context)
+
+@login_required
+def add_case_note(request, case_id):
+    case = get_object_or_404(MissingPerson, id=case_id, assigned_officer=request.user)
+    
+    if request.method == 'POST':
+        try:
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            
+            if not title or not content:
+                messages.error(request, 'Title and content are required.')
+                return redirect('officer_view_case_detail', case_id=case.id)
+            
+            CaseNote.objects.create(
+                case=case,
+                title=title,
+                content=content,
+                created_by=request.user
+            )
+            
+            messages.success(request, 'Note added successfully.')
+        except Exception as e:
+            messages.error(request, f'Error adding note: {str(e)}')
+    
+    return redirect('officer_view_case_detail', case_id=case.id)
+
+@login_required
+def add_case_evidence(request, case_id):
+    case = get_object_or_404(MissingPerson, id=case_id, assigned_officer=request.user)
+    
+    if request.method == 'POST':
+        try:
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            file = request.FILES.get('file')
+            
+            if not title or not description or not file:
+                messages.error(request, 'All fields are required.')
+                return redirect('officer_view_case_detail', case_id=case.id)
+            
+            CaseEvidence.objects.create(
+                case=case,
+                title=title,
+                description=description,
+                file=file,
+                uploaded_by=request.user
+            )
+            
+            messages.success(request, 'Evidence added successfully.')
+        except Exception as e:
+            messages.error(request, f'Error adding evidence: {str(e)}')
+    
+    return redirect('officer_view_case_detail', case_id=case.id)
