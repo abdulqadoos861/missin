@@ -5323,3 +5323,265 @@ User aabb1122 logged in
 User type: admin
 Is admin: True
 Redirecting to admin dashboard
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+User abc1 logged in
+User type: officer
+Is admin: False
+Redirecting to officer dashboard
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User abc1 logged in
+User type: officer
+Is admin: False
+Redirecting to officer dashboard
+User xyz logged in
+User type: user
+Is admin: False
+Redirecting to user dashboard
+Track cases view accessed by user: xyz (Regular User)
+Raw SQL count of cases for user 2: 6
+Found 6 cases for user 2
+Case details - Number: MP-8FE05B16, Status: pending, Created: 2025-05-26 06:10:54.566526+00:00
+Case photo URL: /media/missing_persons/Untitled_design_3.png
+Case details - Number: MP-E26954F1, Status: closed, Created: 2025-05-25 12:14:10.463259+00:00
+Case photo URL: /media/missing_persons/ali.jpg
+Case details - Number: MP-07FDE01A, Status: pending, Created: 2025-05-25 12:01:44.832311+00:00
+Case photo URL: /media/missing_persons/Untitled_design_7.png
+Case details - Number: MP-08567438, Status: found, Created: 2025-05-25 09:55:37.098423+00:00
+Case photo URL: /media/missing_persons/a31484e2ea4fcf8bcc8c7b7bf6160ea8.jpg
+Case details - Number: MP-29D16945, Status: pending, Created: 2025-05-25 09:51:30.332683+00:00
+Case photo URL: /media/missing_persons/images_6.jfif
+Case details - Number: MP-77D05C4A, Status: pending, Created: 2025-05-25 09:45:55.237668+00:00
+Case photo URL: /media/missing_persons/b17b8ef13714d5908e53f279ba8b5e5b.jpg
+Statistics calculated - Total: 6, Active: 4, Resolved: 2
+Found 0 user updates for case MP-8FE05B16
+Found 0 officer updates for case MP-8FE05B16
+Total updates for case MP-8FE05B16: 1
+Found 5 user updates for case MP-E26954F1
+User update for case MP-E26954F1: finally ccolsed
+User update for case MP-E26954F1: Status changed from Found to Closed
+User update for case MP-E26954F1: mill giya
+User update for case MP-E26954F1: Status changed from Pending to Found
+User update for case MP-E26954F1: mil giya ha bharwa
+Found 1 officer updates for case MP-E26954F1
+Officer update for case MP-E26954F1: wnxuhimuqhne
+Error fetching officer updates for case MP-E26954F1: 'CaseUpdate' object has no attribute 'created_at'
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\views.py", line 108, in track_cases
+    'date': update.created_at.strftime('%B %d, %Y'),
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'CaseUpdate' object has no attribute 'created_at'. Did you mean: 'updated_at'?
+Total updates for case MP-E26954F1: 6
+Found 0 user updates for case MP-07FDE01A
+Found 0 officer updates for case MP-07FDE01A
+Total updates for case MP-07FDE01A: 1
+Found 0 user updates for case MP-08567438
+Found 1 officer updates for case MP-08567438
+Officer update for case MP-08567438: your missing person is found in shorkot cantt railway station.
+Error fetching officer updates for case MP-08567438: 'CaseUpdate' object has no attribute 'created_at'
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\views.py", line 108, in track_cases
+    'date': update.created_at.strftime('%B %d, %Y'),
+            ^^^^^^^^^^^^^^^^^
+AttributeError: 'CaseUpdate' object has no attribute 'created_at'. Did you mean: 'updated_at'?
+Total updates for case MP-08567438: 1
+Found 0 user updates for case MP-29D16945
+Found 0 officer updates for case MP-29D16945
+Total updates for case MP-29D16945: 1
+Found 0 user updates for case MP-77D05C4A
+Found 0 officer updates for case MP-77D05C4A
+Total updates for case MP-77D05C4A: 1
+Context data - Total cases: 6, Active: 4, Resolved: 2
+Number of cases in context: 6
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User abc1 logged in
+User type: officer
+Is admin: False
+Redirecting to officer dashboard
+Not Found: /missing-persons.html
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\urls.py changed, reloading.
+Watching for file changes with StatReloader
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+User aabb1122 logged in
+User type: admin
+Is admin: True
+Redirecting to admin dashboard
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in admin_case_details view: Invalid block tag on line 518: 'endblock', expected 'endif'. Did you forget to register or load this tag?
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py", line 273, in admin_case_details
+    return render(request, 'admin_case_details.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 976, in do_if
+    nodelist = parser.parse(("endif",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 567, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 518: 'endblock', expected 'endif'. Did you forget to register or load this tag?
+Error in admin_case_details view: Invalid block tag on line 518: 'endblock', expected 'endif'. Did you forget to register or load this tag?
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\cadmin\views.py", line 273, in admin_case_details
+    return render(request, 'admin_case_details.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\defaulttags.py", line 976, in do_if
+    nodelist = parser.parse(("endif",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\Abdul Qadoos Bhatti\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\template\base.py", line 567, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 518: 'endblock', expected 'endif'. Did you forget to register or load this tag?

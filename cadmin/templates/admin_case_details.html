@@ -7,9 +7,10 @@
         background: linear-gradient(135deg, #2c3e50, #3498db);
         color: white;
         padding: 2rem;
-        border-radius: 15px;
+        border-radius: 12px;
         margin-bottom: 2rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .case-photo {
@@ -23,11 +24,12 @@
 
     .info-card {
         background: white;
-        border-radius: 10px;
+        border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease;
+        border: 1px solid #ecf0f1;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
     .info-card:hover {
@@ -52,10 +54,30 @@
         font-size: 0.9rem;
     }
 
-    .status-pending { background-color: #f1c40f; color: #2c3e50; }
-    .status-investigation { background-color: #3498db; color: white; }
-    .status-found { background-color: #2ecc71; color: white; }
-    .status-closed { background-color: #95a5a6; color: white; }
+    .status-pending { 
+        background: linear-gradient(135deg, #f39c12, #e67e22); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .status-investigation { 
+        background: linear-gradient(135deg, #3498db, #2980b9); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .status-found { 
+        background: linear-gradient(135deg, #2ecc71, #27ae60); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .status-closed { 
+        background: linear-gradient(135deg, #95a5a6, #7f8c8d); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
     .update-card {
         background: white;
@@ -63,6 +85,13 @@
         padding: 1rem;
         margin-bottom: 1rem;
         border-left: 4px solid #3498db;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+    }
+    
+    .update-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     }
 
     .update-header {
@@ -239,8 +268,6 @@
                 <div class="mb-3">
                     <div class="info-label">Reporter</div>
                     <div class="info-value">{{ case.reporter.get_full_name }}</div>
-                </div>
-                <div class="mb-3">
                     <div class="info-label">Contact Number</div>
                     <div class="info-value">{{ case.contact_number }}</div>
                 </div>
@@ -250,16 +277,6 @@
                     <div class="info-value">{{ case.additional_contact }}</div>
                 </div>
                 {% endif %}
-                <div class="mb-3">
-                    <div class="info-label">Assigned Officer</div>
-                    <div class="info-value">
-                        {% if case.assigned_officer %}
-                            {{ case.assigned_officer.get_full_name }}
-                        {% else %}
-                            Not Assigned
-                        {% endif %}
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -292,9 +309,6 @@
     <div class="row mt-4">
         <div class="col-12">
             <div class="action-buttons">
-                <button class="btn btn-primary btn-custom" data-bs-toggle="modal" data-bs-target="#assignOfficerModal">
-                    <i class="fas fa-user-plus me-2"></i>Assign Officer
-                </button>
                 <button class="btn btn-info btn-custom" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
                     <i class="fas fa-plus me-2"></i>Add Update
                 </button>
@@ -304,12 +318,23 @@
 
     <!-- Status Update Form -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">
-                <i class="fas fa-edit me-2"></i>Update Case Status
+        <div class="card-header py-3 d-flex justify-content-between align-items-center {% if case.status == 'closed' %}bg-light{% endif %}">
+            <h6 class="m-0 font-weight-bold {% if case.status == 'closed' %}text-muted{% else %}text-primary{% endif %}">
+                <i class="fas fa-edit me-2"></i>
+                {% if case.status == 'closed' %}Case Status (Closed){% else %}Update Case Status{% endif %}
             </h6>
-            <span class="badge bg-primary">Current Status: {{ case.get_status_display }}</span>
+            <span class="badge {% if case.status == 'closed' %}bg-secondary{% else %}bg-primary{% endif %}">
+                Current Status: {{ case.get_status_display }}
+            </span>
         </div>
+        {% if case.status == 'closed' %}
+        <div class="card-body">
+            <div class="alert alert-info mb-0">
+                <i class="fas fa-info-circle me-2"></i>
+                This case has been closed and its status cannot be modified.
+            </div>
+        </div>
+        {% else %}
         <div class="card-body">
             <form method="POST" action="{% url 'update_case_status' case.id %}" class="status-update-form">
                 {% csrf_token %}
@@ -391,38 +416,7 @@
                 </div>
             </form>
         </div>
-    </div>
-</div>
-
-<!-- Assign Officer Modal -->
-<div class="modal fade" id="assignOfficerModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Assign Officer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="post" action="{% url 'assign_officer' case.id %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Select Officer</label>
-                        <select name="officer_id" class="form-select">
-                            <option value="">Select an officer...</option>
-                            {% for officer in available_officers %}
-                            <option value="{{ officer.id }}" {% if case.assigned_officer.id == officer.id %}selected{% endif %}>
-                                {{ officer.get_full_name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Assign Officer</button>
-                </div>
-            </form>
-        </div>
+        {% endif %}
     </div>
 </div>
 

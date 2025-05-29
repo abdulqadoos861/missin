@@ -378,29 +378,7 @@ def toggle_user_status(request, user_id):
     
     return redirect('manage_users')
 
-@login_required(login_url='login')
-@user_passes_test(is_admin, login_url='login')
-def assign_officer(request, case_id):
-    if request.method == 'POST':
-        try:
-            case = get_object_or_404(MissingPerson, id=case_id)
-            officer_id = request.POST.get('officer_id')
-            
-            if officer_id:
-                officer = get_object_or_404(User, id=officer_id, user_type='officer')
-                case.assigned_officer = officer
-                case.save()
-                messages.success(request, f'Officer {officer.get_full_name} has been assigned to the case.')
-            else:
-                case.assigned_officer = None
-                case.save()
-                messages.success(request, 'Officer assignment has been removed.')
-                
-        except Exception as e:
-            logger.error(f"Error in assign_officer view: {str(e)}", exc_info=True)
-            messages.error(request, f"An error occurred while assigning officer: {str(e)}")
-            
-    return redirect('admin_case_details', case_id=case_id)
+
 
 @login_required(login_url='login')
 @user_passes_test(is_admin, login_url='login')
@@ -408,6 +386,12 @@ def update_case_status(request, case_id):
     if request.method == 'POST':
         try:
             case = get_object_or_404(MissingPerson, id=case_id)
+            
+            # Check if case is already closed
+            if case.status == 'closed':
+                messages.error(request, 'Cannot update status of a closed case.')
+                return redirect('admin_case_details', case_id=case_id)
+                
             new_status = request.POST.get('status')
             update_description = request.POST.get('description', '').strip()
             location_found = request.POST.get('location_found', '').strip()
