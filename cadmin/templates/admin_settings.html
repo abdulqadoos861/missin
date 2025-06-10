@@ -13,7 +13,7 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{% url 'update_admin_profile' %}" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <form method="POST" action="{% url 'cadmin:update_admin_profile' %}" class="needs-validation" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -90,7 +90,7 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{% url 'change_admin_password' %}" class="needs-validation" novalidate>
+                    <form method="POST" action="{% url 'cadmin:change_admin_password' %}" class="needs-validation" novalidate>
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="current_password" class="form-label">Current Password</label>

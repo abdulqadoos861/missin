@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.core.files.storage import default_storage
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from frontend.models import User
 from user.models import MissingPerson, CaseUpdate
@@ -108,32 +110,32 @@ def register_officer(request):
             # Validate required fields
             if not all([username, email, password1, password2, first_name, last_name, phone_number, address, date_of_birth, cnic, rank]):
                 messages.error(request, 'All fields are required.')
-                return redirect('register_officer')
+                return redirect('cadmin:register_officer')
 
             # Validate passwords match
             if password1 != password2:
                 messages.error(request, 'Passwords do not match.')
-                return redirect('register_officer')
+                return redirect('cadmin:register_officer')
 
             # Check if username or email already exists
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'Username already exists.')
-                return redirect('register_officer')
+                return redirect('cadmin:register_officer')
             
             if User.objects.filter(email=email).exists():
                 messages.error(request, 'Email already exists.')
-                return redirect('register_officer')
+                return redirect('cadmin:register_officer')
 
             # Check if CNIC already exists
             if User.objects.filter(cnic=cnic).exists():
                 messages.error(request, 'CNIC already registered.')
-                return redirect('register_officer')
+                return redirect('cadmin:register_officer')
 
             # Validate rank
             valid_ranks = ['IGP', 'DIG', 'SSP', 'SP', 'DSP', 'ASP', 'Inspector', 'SI', 'ASI', 'HC', 'Constable']
             if rank not in valid_ranks:
                 messages.error(request, 'Invalid rank selected.')
-                return redirect('register_officer')
+                return redirect('cadmin:register_officer')
 
             # Create new officer
             officer = User.objects.create_user(
@@ -157,14 +159,75 @@ def register_officer(request):
                 officer.save()
 
             messages.success(request, f'Officer {officer.get_full_name()} has been registered successfully.')
-            return redirect('manage_users')
+            return redirect('cadmin:manage_users')
 
         except Exception as e:
             logger.error(f"Error in register_officer view: {str(e)}", exc_info=True)
             messages.error(request, f'An error occurred while registering the officer: {str(e)}')
-            return redirect('register_officer')
+            return redirect('cadmin:register_officer')
 
-    return render(request, 'register_officer.html')
+    officers = User.objects.filter(user_type='officer').order_by('-date_joined')
+    context = {
+        'officers': officers
+    }
+    return render(request, 'register_officer.html', context)
+
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def edit_officer(request, officer_id):
+    officer = get_object_or_404(User, id=officer_id, user_type='officer')
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        address = request.POST.get('address')
+        cnic = request.POST.get('cnic')
+        rank = request.POST.get('rank')
+        profile_picture = request.FILES.get('profile_picture')
+
+        # Basic validation
+        if not all([first_name, last_name, email, phone_number, address, cnic, rank]):
+            messages.error(request, 'All fields except profile picture are required.')
+            return render(request, 'edit_officer.html', {'officer': officer})
+
+        # Check for uniqueness of email and CNIC (excluding the current officer)
+        if User.objects.filter(email=email).exclude(id=officer_id).exists():
+            messages.error(request, 'Email already exists.')
+            return render(request, 'edit_officer.html', {'officer': officer})
+
+        if User.objects.filter(cnic=cnic).exclude(id=officer_id).exists():
+            messages.error(request, 'CNIC already registered.')
+            return render(request, 'edit_officer.html', {'officer': officer})
+
+        # Update officer details
+        officer.first_name = first_name
+        officer.last_name = last_name
+        officer.email = email
+        officer.phone_number = phone_number
+        officer.address = address
+        officer.cnic = cnic
+        officer.rank = rank
+
+        if profile_picture:
+            # Delete old profile picture if it exists
+            if officer.profile_picture:
+                if default_storage.exists(officer.profile_picture.name):
+                    default_storage.delete(officer.profile_picture.name)
+            officer.profile_picture = profile_picture
+
+        officer.save()
+
+        messages.success(request, f'Officer {officer.get_full_name()}\'s profile has been updated successfully.')
+        return redirect('cadmin:register_officer')
+
+    context = {
+        'officer': officer
+    }
+    return render(request, 'edit_officer.html', context)
+
 
 @login_required(login_url='login')
 @user_passes_test(is_admin, login_url='login')
@@ -275,7 +338,7 @@ def admin_case_details(request, case_id):
     except Exception as e:
         logger.error(f"Error in admin_case_details view: {str(e)}", exc_info=True)
         messages.error(request, f"An error occurred while retrieving case details: {str(e)}")
-        return redirect('admin_dashboard')
+        return redirect('cadmin:admin_dashboard')
 
 # def manage_user(request):
 #     return render(request, 'manage_user.html')
@@ -390,7 +453,7 @@ def update_case_status(request, case_id):
             # Check if case is already closed
             if case.status == 'closed':
                 messages.error(request, 'Cannot update status of a closed case.')
-                return redirect('admin_case_details', case_id=case_id)
+                return redirect('cadmin:admin_case_details', case_id=case_id)
                 
             new_status = request.POST.get('status')
             update_description = request.POST.get('description', '').strip()
@@ -400,7 +463,7 @@ def update_case_status(request, case_id):
             # Validate status
             if not new_status or new_status not in dict(MissingPerson.STATUS_CHOICES):
                 messages.error(request, 'Invalid status selected.')
-                return redirect('admin_case_details', case_id=case_id)
+                return redirect('cadmin:admin_case_details', case_id=case_id)
             
             # Store old status for comparison
             old_status = case.status
@@ -409,19 +472,25 @@ def update_case_status(request, case_id):
             if new_status == 'found':
                 if not location_found:
                     messages.error(request, 'Location found is required when marking case as found.')
-                    return redirect('admin_case_details', case_id=case_id)
+                    return redirect('cadmin:admin_case_details', case_id=case_id)
                 if not found_date:
                     messages.error(request, 'Found date is required when marking case as found.')
-                    return redirect('admin_case_details', case_id=case_id)
+                    return redirect('cadmin:admin_case_details', case_id=case_id)
                 
                 # Update found information
                 case.location_found = location_found
                 case.found_date = found_date
                 
             elif new_status == 'closed':
+                closure_photo = request.FILES.get('closure_proof_photo')
+                if not closure_photo:
+                    messages.error(request, 'A closure proof photo is required to close the case.')
+                    return redirect('cadmin:admin_case_details', case_id=case_id)
+                case.closure_proof_photo = closure_photo
+
                 if not update_description:
                     messages.error(request, 'Closure reason is required when closing a case.')
-                    return redirect('admin_case_details', case_id=case_id)
+                    return redirect('cadmin:admin_case_details', case_id=case_id)
             
             # Update case status
             case.status = new_status
@@ -479,7 +548,7 @@ def update_case_status(request, case_id):
             logger.error(f"Error in update_case_status view: {str(e)}", exc_info=True)
             messages.error(request, f"An error occurred while updating status: {str(e)}")
             
-    return redirect('admin_case_details', case_id=case_id)
+    return redirect('cadmin:admin_case_details', case_id=case_id)
 
 @login_required(login_url='login')
 @user_passes_test(is_admin, login_url='login')
@@ -530,27 +599,27 @@ def update_admin_profile(request):
             # Validate required fields
             if not all([first_name, last_name, email, phone_number, address, cnic, date_of_birth]):
                 messages.error(request, 'All fields are required.')
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
             # Validate email format
             if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
                 messages.error(request, 'Please enter a valid email address.')
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
             # Validate CNIC format
             if not re.match(r'^\d{5}-\d{7}-\d{1}$', cnic):
                 messages.error(request, 'Please enter a valid CNIC number (e.g., 33201-0649966-2).')
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
             # Check if email is already taken by another user
             if User.objects.exclude(id=user.id).filter(email=email).exists():
                 messages.error(request, 'This email is already registered to another user.')
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
             # Check if CNIC is already taken by another user
             if User.objects.exclude(id=user.id).filter(cnic=cnic).exists():
                 messages.error(request, 'This CNIC is already registered to another user.')
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
             # Update user information
             user.first_name = first_name
@@ -565,7 +634,7 @@ def update_admin_profile(request):
                 user.date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
             except ValueError:
                 messages.error(request, 'Invalid date format.')
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
             # Handle profile picture upload
             if 'profile_picture' in request.FILES:
@@ -596,13 +665,13 @@ def update_admin_profile(request):
             except Exception as save_error:
                 messages.error(request, f'Error saving profile: {str(save_error)}')
                 logger.error(f"Error saving admin profile: {str(save_error)}", exc_info=True)
-                return redirect('admin_settings')
+                return redirect('cadmin:admin_settings')
             
         except Exception as e:
             messages.error(request, f'Error updating profile: {str(e)}')
             logger.error(f"Error updating admin profile: {str(e)}", exc_info=True)
     
-    return redirect('admin_settings')
+    return redirect('cadmin:admin_settings')
 
 @login_required
 def change_admin_password(request):

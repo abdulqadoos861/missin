@@ -208,7 +208,7 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0 text-gray-800">Manage Users</h1>
-        <a href="{% url 'register_officer' %}" class="btn btn-primary">
+        <a href="{% url 'cadmin:register_officer' %}" class="btn btn-primary">
             <i class="fas fa-user-plus me-2"></i>Register New Officer
         </a>
     </div>
@@ -316,7 +316,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <a href="{% url 'manage_users' %}" class="btn btn-secondary w-100">
+                    <a href="{% url 'cadmin:manage_users' %}" class="btn btn-secondary w-100">
                         <i class="fas fa-sync-alt me-2"></i>Reset Filters
                     </a>
                 </div>
@@ -379,7 +379,7 @@
                                             title="View Details">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <a href="{% url 'toggle_user_status' user.id %}" 
+                                    <a href="{% url 'cadmin:toggle_user_status' user.id %}" 
                                        class="btn btn-sm {% if user.is_active %}btn-warning{% else %}btn-success{% endif %}"
                                        title="{% if user.is_active %}Deactivate{% else %}Activate{% endif %} User"
                                        onclick="return confirm('Are you sure you want to {% if user.is_active %}deactivate{% else %}activate{% endif %} this user?')">

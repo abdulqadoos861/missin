@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
+from django.db import models
 from .forms import MissingPersonForm
-from .models import MissingPerson, CaseUpdate
+from .models import MissingPerson
 import logging
+import json
 from django.db import connection
 from django.contrib.auth import update_session_auth_hash
 
@@ -13,9 +15,33 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-# @login_required
+@login_required
 def user_dashboard(request):
-    return render(request, 'userdashboard.html')
+    """
+    Displays the user's dashboard with statistics and recent reports.
+    """
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    # Get all cases reported by the current user
+    user_cases = MissingPerson.objects.filter(reporter=request.user)
+
+    # Calculate statistics
+    total_reports = user_cases.count()
+    pending_reports = user_cases.filter(status__in=['pending', 'investigation']).count()
+    solved_reports = user_cases.filter(status__in=['found', 'closed']).count()
+
+    # Get the 5 most recent reports
+    recent_reports = user_cases.order_by('-created_at')[:5]
+
+    context = {
+        'total_reports': total_reports,
+        'pending_reports': pending_reports,
+        'solved_reports': solved_reports,
+        'recent_reports': recent_reports,
+    }
+
+    return render(request, 'userdashboard.html', context)
 
 def report_missing_persons(request):
     return render(request, 'report_missing_person.html')
@@ -24,109 +50,56 @@ def report_missing_persons(request):
 def track_cases(request):
     logger.info(f"Track cases view accessed by user: {request.user}")
     try:
-        # Verify user is authenticated
         if not request.user.is_authenticated:
-            logger.error("User not authenticated")
             messages.error(request, 'Please log in to view your cases.')
             return redirect('login')
 
-        # Get all cases reported by the current user using user.id
-        try:
-            # Log the SQL query
-            with connection.cursor() as cursor:
-                cursor.execute("""
-                    SELECT COUNT(*) FROM user_missingperson 
-                    WHERE reporter_id = %s
-                """, [request.user.id])
-                count = cursor.fetchone()[0]
-                logger.info(f"Raw SQL count of cases for user {request.user.id}: {count}")
+        # Use prefetch_related to efficiently fetch all related updates for all cases
+        cases = MissingPerson.objects.filter(
+            reporter_id=request.user.id
+        ).prefetch_related(
+            'updates', 'officer_updates'
+        ).order_by('-created_at')
 
-            # Use user.id to filter cases
-            cases = MissingPerson.objects.filter(reporter_id=request.user.id).order_by('-created_at')
-            logger.info(f"Found {cases.count()} cases for user {request.user.id}")
-            
-            # Log case details for debugging
-            for case in cases:
-                logger.info(f"Case details - Number: {case.case_number}, Status: {case.status}, Created: {case.created_at}")
-                logger.info(f"Case photo URL: {case.photo.url if case.photo else 'No photo'}")
-        except Exception as e:
-            logger.error(f"Database error while fetching cases: {str(e)}", exc_info=True)
-            messages.error(request, 'Database error while fetching cases.')
-            return render(request, 'user_track_cases.html', {
-                'cases': [],
-                'total_cases': 0,
-                'active_cases': 0,
-                'resolved_cases': 0,
-            })
-        
-        # Calculate statistics using user.id
-        try:
-            total_cases = cases.count()
-            active_cases = cases.filter(status__in=['pending', 'under_investigation']).count()
-            resolved_cases = cases.filter(status__in=['found', 'closed']).count()
-            logger.info(f"Statistics calculated - Total: {total_cases}, Active: {active_cases}, Resolved: {resolved_cases}")
-        except Exception as e:
-            logger.error(f"Error calculating statistics: {str(e)}", exc_info=True)
-            total_cases = 0
-            active_cases = 0
-            resolved_cases = 0
-        
-        # Process each case to include updates
+        total_cases = cases.count()
+        active_cases = cases.filter(status__in=['pending', 'under_investigation']).count()
+        resolved_cases = cases.filter(status__in=['found', 'closed']).count()
+
         processed_cases = []
         for case in cases:
-            try:
-                # Initialize updates list
-                case_updates = []
-                
-                # Add initial case creation update
-                case_updates.append({
-                    'date': case.created_at.strftime('%B %d, %Y'),
-                    'description': f'Case reported by {request.user.get_full_name()}'
+            all_updates = []
+
+            # Add initial case creation update
+            all_updates.append({
+                'datetime': case.created_at,
+                'description': f'Case reported by {request.user.get_full_name()}'
+            })
+
+            # Add user updates (already prefetched)
+            for update in case.updates.all():
+                all_updates.append({
+                    'datetime': update.created_at,
+                    'description': update.description
                 })
-                
-                # Add user updates
-                try:
-                    user_updates = CaseUpdate.objects.filter(case_id=case.id)
-                    logger.info(f"Found {user_updates.count()} user updates for case {case.case_number}")
-                    for update in user_updates:
-                        logger.info(f"User update for case {case.case_number}: {update.description}")
-                        case_updates.append({
-                            'date': update.created_at.strftime('%B %d, %Y'),
-                            'description': update.description
-                        })
-                except Exception as e:
-                    logger.error(f"Error fetching user updates for case {case.case_number}: {str(e)}", exc_info=True)
-                    messages.warning(request, f'Could not load some updates for case {case.case_number}')
-                
-                # Add officer updates
-                try:
-                    officer_updates = case.officer_updates.all()
-                    logger.info(f"Found {officer_updates.count()} officer updates for case {case.case_number}")
-                    for update in officer_updates:
-                        logger.info(f"Officer update for case {case.case_number}: {update.description}")
-                        case_updates.append({
-                            'date': update.created_at.strftime('%B %d, %Y'),
-                            'description': f'Officer Update: {update.description}'
-                        })
-                except Exception as e:
-                    logger.error(f"Error fetching officer updates for case {case.case_number}: {str(e)}", exc_info=True)
-                    messages.warning(request, f'Could not load some officer updates for case {case.case_number}')
-                
-                # Sort updates by date
-                case_updates.sort(key=lambda x: x['date'], reverse=True)
-                
-                # Create a dictionary with case data and updates
-                case_data = {
-                    'case': case,
-                    'updates': case_updates
-                }
-                processed_cases.append(case_data)
-                logger.info(f"Total updates for case {case.case_number}: {len(case_updates)}")
-            except Exception as e:
-                logger.error(f"Error processing case {case.case_number}: {str(e)}", exc_info=True)
-                messages.warning(request, f'Could not process case {case.case_number}')
-                continue
-        
+
+            # Add officer updates (already prefetched)
+            for update in case.officer_updates.all():
+                all_updates.append({
+                    'datetime': update.updated_at,
+                    'description': f'Officer Update: {update.description}'
+                })
+            
+            # Sort all updates chronologically
+            all_updates.sort(key=lambda x: x['datetime'], reverse=True)
+
+            # Format for template
+            formatted_updates = [
+                {'date': u['datetime'].strftime('%B %d, %Y'), 'description': u['description']}
+                for u in all_updates
+            ]
+
+            processed_cases.append({'case': case, 'updates': formatted_updates})
+
         context = {
             'cases': processed_cases,
             'total_cases': total_cases,
@@ -134,19 +107,12 @@ def track_cases(request):
             'resolved_cases': resolved_cases,
         }
         
-        # Log context data for debugging
-        logger.info(f"Context data - Total cases: {total_cases}, Active: {active_cases}, Resolved: {resolved_cases}")
-        logger.info(f"Number of cases in context: {len(processed_cases)}")
-        
         return render(request, 'user_track_cases.html', context)
     except Exception as e:
         logger.error(f"Unexpected error in track_cases view: {str(e)}", exc_info=True)
         messages.error(request, f'An unexpected error occurred: {str(e)}')
         return render(request, 'user_track_cases.html', {
-            'cases': [],
-            'total_cases': 0,
-            'active_cases': 0,
-            'resolved_cases': 0,
+            'cases': [], 'total_cases': 0, 'active_cases': 0, 'resolved_cases': 0,
         })
 
 @login_required
@@ -189,8 +155,8 @@ def missing_person_detail(request, case_number):
 
 @login_required
 def my_reports(request):
-    reports = MissingPerson.objects.filter(reporter=request.user).order_by('-created_at')
-    return render(request, 'user/my_reports.html', {'reports': reports})
+    # Redirect to track_cases view which shows the user's reports
+    return track_cases(request)
 
 @login_required
 def user_profile(request):

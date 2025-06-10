@@ -1,0 +1,95 @@
+{% extends 'base_users.html' %}
+{% load static %}
+
+{% block title %}My Reports - Crime Reporting System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">My Reports</h1>
+        <a href="{% url 'report_missing_person' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50"></i> New Report
+        </a>
+    </div>
+
+    <!-- Reports Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">All My Reports</h6>
+        </div>
+        <div class="card-body">
+            {% if reports %}
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="reportsTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Person Name</th>
+                                <th>Status</th>
+                                <th>Last Seen</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in reports %}
+                            <tr>
+                                <td>#{{ report.id }}</td>
+                                <td>{{ report.missing_person.first_name }} {{ report.missing_person.last_name }}</td>
+                                <td>
+                                    <span class="badge {% if report.status == 'active' %}bg-warning{% elif report.status == 'resolved' %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {{ report.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ report.last_seen_date|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'missing_person_detail' report.id %}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-list fa-4x mb-3 text-gray-400"></i>
+                    <h5>No reports found</h5>
+                    <p class="text-muted">You haven't submitted any missing person reports yet.</p>
+                    <a href="{% url 'report_missing_person' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Your First Report
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Page level plugins -->
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script>
+    // Initialize DataTables
+    $(document).ready(function() {
+        $('#reportsTable').DataTable({
+            "order": [[0, "desc"]], // Sort by report ID in descending order
+            "pageLength": 10,
+            "language": {
+                "emptyTable": "No reports found",
+                "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                "infoEmpty": "Showing 0 to 0 of 0 entries",
+                "infoFiltered": "(filtered from _MAX_ total entries)",
+                "lengthMenu": "Show _MENU_ entries",
+                "search": "Search:",
+                "zeroRecords": "No matching records found"
+            },
+            "responsive": true
+        });
+    });
+</script>
+{% endblock %}

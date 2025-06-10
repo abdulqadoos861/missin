@@ -33,6 +33,7 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
     cnic = models.CharField(max_length=15, unique=True, blank=True, null=True, help_text="Format: 12345-1234567-1")
     rank = models.CharField(max_length=20, choices=RANK_CHOICES, blank=True, null=True)
+    cases_closed = models.PositiveIntegerField(default=0, help_text="Number of cases closed by this officer")
 
     # Fix related name clashes
     groups = models.ManyToManyField(

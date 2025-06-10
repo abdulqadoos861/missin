@@ -99,7 +99,7 @@
                             </td>
                             <td>{{ case.last_seen_date|date:"M d, Y" }}</td>
                             <td>
-                                <a href="{% url 'admin_case_details' case.id %}" class="btn btn-sm btn-primary">
+                                <a href="{% url 'cadmin:admin_case_details' case.id %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-eye"></i> View
                                 </a>
                             </td>

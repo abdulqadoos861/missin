@@ -23,6 +23,6 @@ urlpatterns = [
     path('djadmin/', admin.site.urls),
     path('', include('frontend.urls')),
     path('user/', include('user.urls')),
-    path('officer/', include('officer.urls')),
-    path('cadmin/', include('cadmin.urls')),
+    path('officer/', include(('officer.urls', 'officer'), namespace='officer')),
+    path('cadmin/', include(('cadmin.urls', 'cadmin'), namespace='cadmin')),  # Added namespace
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

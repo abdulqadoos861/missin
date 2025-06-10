@@ -175,7 +175,30 @@
     <div class="case-header">
         <div class="row align-items-center">
             <div class="col-md-3 text-center">
-                <img src="{{ case.photo.url }}" alt="{{ case.get_full_name }}" class="case-photo">
+                                <img src="{{ case.photo.url }}" alt="{{ case.get_full_name }}" class="case-photo mb-3">
+                <div class="row gx-2">
+                    {% if case.additional_photo_1 %}
+                    <div class="col">
+                        <a href="{{ case.additional_photo_1.url }}" data-bs-toggle="lightbox">
+                            <img src="{{ case.additional_photo_1.url }}" class="img-fluid rounded" alt="Additional Photo 1">
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if case.additional_photo_2 %}
+                    <div class="col">
+                        <a href="{{ case.additional_photo_2.url }}" data-bs-toggle="lightbox">
+                            <img src="{{ case.additional_photo_2.url }}" class="img-fluid rounded" alt="Additional Photo 2">
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% if case.additional_photo_3 %}
+                    <div class="col">
+                        <a href="{{ case.additional_photo_3.url }}" data-bs-toggle="lightbox">
+                            <img src="{{ case.additional_photo_3.url }}" class="img-fluid rounded" alt="Additional Photo 3">
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
             <div class="col-md-9">
                 <h1 class="mb-3">{{ case.get_full_name }}</h1>
@@ -189,7 +212,16 @@
             </div>
         </div>
     </div>
-
+    {% if case.status == 'closed' and case.closure_proof_photo %}
+    <div class="card mt-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-camera me-2"></i>Closure Proof Photo</h5>
+        </div>
+        <div class="card-body text-center">
+            <img src="{{ case.closure_proof_photo.url }}" alt="Closure Proof Photo" class="img-fluid rounded" style="max-height: 400px;">
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         <!-- Basic Information -->
         <div class="col-md-6">
@@ -336,7 +368,7 @@
         </div>
         {% else %}
         <div class="card-body">
-            <form method="POST" action="{% url 'update_case_status' case.id %}" class="status-update-form">
+            <form class="status-update-form p-4 bg-white rounded shadow-sm" method="POST" action="{% url 'cadmin:update_case_status' case.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6 mb-4">
@@ -368,6 +400,23 @@
                         <div class="form-text text-muted mt-2">
                             <i class="fas fa-info-circle me-1"></i>
                             Provide additional information about this status change
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Closure Proof Photo -->
+                <div id="closureProofField" class="row bg-light p-3 rounded mb-4" style="display: none;">
+                    <div class="col-12 mb-3">
+                        <h6 class="text-danger mb-3">
+                            <i class="fas fa-file-upload me-2"></i>Closure Proof
+                        </h6>
+                    </div>
+                    <div class="col-12">
+                        <label for="closure_proof_photo" class="form-label fw-bold">Upload Proof Photo</label>
+                        <input type="file" class="form-control" id="closure_proof_photo" name="closure_proof_photo" accept="image/*">
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            A photo is required to close the case.
                         </div>
                     </div>
                 </div>
@@ -428,7 +477,7 @@
                 <h5 class="modal-title">Update Case Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'update_case_status' case.id %}">
+            <form method="post" action="{% url 'cadmin:update_case_status' case.id %}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -459,7 +508,7 @@
                 <h5 class="modal-title">Add Case Update</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="{% url 'add_case_update' case.id %}">
+            <form method="post" action="{% url 'cadmin:add_case_update' case.id %}">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
@@ -479,6 +528,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const statusSelect = document.getElementById('status');
+    const closureProofField = document.getElementById('closureProofField');
+    const closureProofInput = document.getElementById('closure_proof_photo');
     const foundFields = document.getElementById('foundFields');
     const locationFound = document.getElementById('location_found');
     const foundDate = document.getElementById('found_date');
@@ -495,6 +546,14 @@ document.addEventListener('DOMContentLoaded', function() {
             foundFields.style.display = 'none';
             locationFound.required = false;
             foundDate.required = false;
+        }
+
+        if (this.value === 'closed') {
+            closureProofField.style.display = 'flex';
+            closureProofInput.required = true;
+        } else {
+            closureProofField.style.display = 'none';
+            closureProofInput.required = false;
         }
     });
 

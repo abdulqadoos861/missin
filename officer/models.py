@@ -3,6 +3,18 @@ from django.conf import settings
 from frontend.models import User
 from user.models import MissingPerson
 
+class CaseUpdate(models.Model):
+    case = models.ForeignKey(MissingPerson, on_delete=models.CASCADE, related_name='officer_updates')
+    description = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+    officer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='officer_case_updates')
+
+    class Meta:
+        ordering = ['-updated_at']
+
+    def __str__(self):
+        return f"Update for {self.case.case_number} by {self.officer.username} - {self.updated_at.strftime('%Y-%m-%d')}"
+
 # Create your models here.
 
 class Case(models.Model):

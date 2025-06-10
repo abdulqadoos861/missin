@@ -374,18 +374,38 @@
                                     <small class="text-muted">PNG, JPG or JPEG (MAX. 2MB)</small>
                                 </div>
                                 <input type="file" class="d-none" id="photo" name="photo" accept="image/*" required 
-                                       onchange="previewImage(this)">
+                                       onchange="previewImage(this, 'imagePreview')">
                                 <img id="imagePreview" class="image-preview mt-3" alt="Photo Preview">
                             </div>
-                            <div class="mb-3">
-                                <label for="additional_photos" class="form-label">Additional Photos</label>
-                                <div class="upload-area" onclick="document.getElementById('additional_photos').click()">
-                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                    <p class="mb-0">Click to upload additional photos</p>
-                                    <small class="text-muted">PNG, JPG or JPEG (MAX. 2MB each)</small>
+                            <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="additional_photo_1" class="form-label">Additional Photo 1</label>
+                                        <div class="upload-area" onclick="document.getElementById('additional_photo_1').click()">
+                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                            <p class="mb-0">Upload Photo</p>
+                                        </div>
+                                        <input type="file" class="d-none" id="additional_photo_1" name="additional_photo_1" accept="image/*" onchange="previewImage(this, 'additional_photo_1_preview')">
+                                        <img id="additional_photo_1_preview" class="image-preview mt-3" alt="Additional Photo 1 Preview">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="additional_photo_2" class="form-label">Additional Photo 2</label>
+                                        <div class="upload-area" onclick="document.getElementById('additional_photo_2').click()">
+                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                            <p class="mb-0">Upload Photo</p>
+                                        </div>
+                                        <input type="file" class="d-none" id="additional_photo_2" name="additional_photo_2" accept="image/*" onchange="previewImage(this, 'additional_photo_2_preview')">
+                                        <img id="additional_photo_2_preview" class="image-preview mt-3" alt="Additional Photo 2 Preview">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="additional_photo_3" class="form-label">Additional Photo 3</label>
+                                        <div class="upload-area" onclick="document.getElementById('additional_photo_3').click()">
+                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                            <p class="mb-0">Upload Photo</p>
+                                        </div>
+                                        <input type="file" class="d-none" id="additional_photo_3" name="additional_photo_3" accept="image/*" onchange="previewImage(this, 'additional_photo_3_preview')">
+                                        <img id="additional_photo_3_preview" class="image-preview mt-3" alt="Additional Photo 3 Preview">
+                                    </div>
                                 </div>
-                                <input type="file" class="d-none" id="additional_photos" name="additional_photos" accept="image/*" multiple>
-                            </div>
                         </div>
 
                         <!-- Additional Information -->
@@ -429,8 +449,8 @@
     })()
 
     // Image preview
-    function previewImage(input) {
-        const preview = document.getElementById('imagePreview');
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {

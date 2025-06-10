@@ -1,313 +1,659 @@
 {% extends 'base_officer.html' %}
-
-{% block title %}Case Details | Officer Portal{% endblock %}
+{% load static %}
 
 {% block content %}
-<div class="row">
-    <!-- Page Header -->
-    <div class="col-12 mb-4">
-        <div class="card bg-gradient-primary text-white">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="mb-1">Case Details</h4>
-                        <p class="mb-0 opacity-75">View and manage case information</p>
+<style>
+    .case-header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .case-photo {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 3px solid white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border: 1px solid #ecf0f1;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .info-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .status-pending { 
+        background: linear-gradient(135deg, #f39c12, #e67e22); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .status-investigation { 
+        background: linear-gradient(135deg, #3498db, #2980b9); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .status-found { 
+        background: linear-gradient(135deg, #2ecc71, #27ae60); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .status-closed { 
+        background: linear-gradient(135deg, #95a5a6, #7f8c8d); 
+        color: white; 
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .update-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #3498db;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+    }
+    
+    .update-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .update-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .update-date {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .btn-custom {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover {
+        transform: translateY(-2px);
+    }
+
+    .status-update-form .form-select,
+    .status-update-form .form-control {
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .status-update-form .form-select:focus,
+    .status-update-form .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    .status-update-form .form-select option {
+        padding: 10px;
+    }
+
+    .status-update-form .btn {
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .status-update-form .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #foundFields {
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fc;
+        border-right: none;
+    }
+
+    .input-group .form-control {
+        border-left: none;
+    }
+
+    .input-group .form-control:focus {
+        border-left: none;
+        border-color: #e0e0e0;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Case Header -->
+    <div class="case-header">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+                                <img src="{{ case.photo.url }}" alt="{{ case.get_full_name }}" class="case-photo mb-3">
+                <div class="row gx-2">
+                    {% if case.additional_photo_1 %}
+                    <div class="col">
+                        <a href="{{ case.additional_photo_1.url }}" data-bs-toggle="lightbox">
+                            <img src="{{ case.additional_photo_1.url }}" class="img-fluid rounded" alt="Additional Photo 1">
+                        </a>
                     </div>
-                    <div class="text-end">
-                        <span class="badge bg-white text-primary">Case ID: {{ case.case_id }}</span>
+                    {% endif %}
+                    {% if case.additional_photo_2 %}
+                    <div class="col">
+                        <a href="{{ case.additional_photo_2.url }}" data-bs-toggle="lightbox">
+                            <img src="{{ case.additional_photo_2.url }}" class="img-fluid rounded" alt="Additional Photo 2">
+                        </a>
                     </div>
+                    {% endif %}
+                    {% if case.additional_photo_3 %}
+                    <div class="col">
+                        <a href="{{ case.additional_photo_3.url }}" data-bs-toggle="lightbox">
+                            <img src="{{ case.additional_photo_3.url }}" class="img-fluid rounded" alt="Additional Photo 3">
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
+            </div>
+            <div class="col-md-9">
+                <h1 class="mb-3">{{ case.get_full_name }}</h1>
+                <div class="d-flex gap-3 mb-3">
+                    <span class="status-badge status-{{ case.status }}">
+                        {{ case.get_status_display }}
+                    </span>
+                    <span class="text-white">Case #{{ case.case_number }}</span>
+                </div>
+                <p class="mb-0">Last seen on {{ case.last_seen_date|date:"F d, Y" }} at {{ case.last_seen_location }}</p>
             </div>
         </div>
     </div>
 
-    <!-- Case Information -->
-    <div class="col-md-8 mb-4">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-info-circle me-2"></i>Case Information
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control bg-light" value="{{ case.status }}" readonly>
-                            <label>Status</label>
-                        </div>
+    <div class="row">
+        <!-- Basic Information -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h4 class="mb-4">Basic Information</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Age</div>
+                        <div class="info-value">{{ case.age }} years</div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control bg-light" value="{{ case.created_at|date:'M d, Y' }}" readonly>
-                            <label>Created Date</label>
-                        </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Gender</div>
+                        <div class="info-value">{{ case.get_gender_display }}</div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control bg-light" value="{{ case.updated_at|date:'M d, Y' }}" readonly>
-                            <label>Last Updated</label>
-                        </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">{{ case.date_of_birth|date:"F d, Y" }}</div>
                     </div>
-                    <div class="col-12">
-                        <div class="form-floating">
-                            <textarea class="form-control bg-light" style="height: 100px" readonly>{{ case.description }}</textarea>
-                            <label>Description</label>
-                        </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Height</div>
+                        <div class="info-value">{{ case.height }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Weight</div>
+                        <div class="info-value">{{ case.weight }}</div>
                     </div>
                 </div>
+            </div>
+
+            {% if case.status == 'closed' and case.closure_proof_photo %}
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-camera me-2"></i>Closure Proof Photo</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ case.closure_proof_photo.url }}" alt="Closure Proof Photo" class="img-fluid rounded" style="max-height: 400px;">
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Physical Description -->
+            <div class="info-card">
+                <h4 class="mb-4">Physical Description</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Eye Color</div>
+                        <div class="info-value">{{ case.eye_color }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Hair Color</div>
+                        <div class="info-value">{{ case.hair_color }}</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="info-label">Skin Color</div>
+                        <div class="info-value">{{ case.skin_color }}</div>
+                    </div>
+                    {% if case.distinguishing_marks %}
+                    <div class="col-12 mb-3">
+                        <div class="info-label">Distinguishing Marks</div>
+                        <div class="info-value">{{ case.distinguishing_marks }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Last Seen & Contact Info -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h4 class="mb-4">Last Seen Information</h4>
+                <div class="mb-3">
+                    <div class="info-label">Date</div>
+                    <div class="info-value">{{ case.last_seen_date|date:"F d, Y" }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">{{ case.last_seen_location }}</div>
+                </div>
+                <div class="mb-3">
+                    <div class="info-label">Last Seen Wearing</div>
+                    <div class="info-value">{{ case.last_seen_wearing }}</div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h4 class="mb-4">Contact Information</h4>
+                <div class="mb-3">
+                    <div class="info-label">Reporter</div>
+                    <div class="info-value">{{ case.reporter.get_full_name }}</div>
+                    <div class="info-label">Contact Number</div>
+                    <div class="info-value">{{ case.contact_number }}</div>
+                </div>
+                {% if case.additional_contact %}
+                <div class="mb-3">
+                    <div class="info-label">Additional Contact</div>
+                    <div class="info-value">{{ case.additional_contact }}</div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
-    <!-- Case Actions -->
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-cog me-2"></i>Actions
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCaseModal">
-                        <i class="fas fa-edit me-2"></i>Update Case
+    <!-- Case Evidence Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Case Evidence</h4>
+                    {% if case.status != 'closed' %}
+                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addEvidenceCollapse" aria-expanded="false" aria-controls="addEvidenceCollapse">
+                        <i class="fas fa-plus me-2"></i>Add Evidence
                     </button>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNoteModal">
-                        <i class="fas fa-plus me-2"></i>Add Note
-                    </button>
-                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addEvidenceModal">
-                        <i class="fas fa-file-alt me-2"></i>Add Evidence
-                    </button>
+                    {% endif %}
                 </div>
+
+                <!-- Collapsible Form for Adding Evidence -->
+                {% if case.status != 'closed' %}
+                <div class="collapse" id="addEvidenceCollapse">
+                    <div class="card card-body mb-4" style="background-color: #f8f9fa;">
+                        <form action="{% url 'officer:add_case_evidence' case.id %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="evidence_file" class="form-label">Upload File</label>
+                                <input class="form-control" type="file" id="evidence_file" name="evidence_file" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description (Optional)</label>
+                                <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Image Gallery -->
+                {% if evidence_photos %}
+                    <div class="row">
+                        {% for photo in evidence_photos %}
+                            <div class="col-md-4 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <a href="{{ photo.file.url }}" data-bs-toggle="lightbox" data-gallery="case-gallery" data-title="{{ photo.title|default:'' }} - {{ photo.description|default:'No description' }}">
+                                        <img src="{{ photo.file.url }}" class="card-img-top" alt="{{ photo.title }}" style="height: 200px; object-fit: cover;">
+                                    </a>
+                                    <div class="card-body">
+                                        <p class="card-text small">{{ photo.description|default:"No description" }}</p>
+                                    </div>
+                                    <div class="card-footer text-muted small">
+                                        Uploaded on {{ photo.created_at|date:"M d, Y" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-light text-center" role="alert">
+                        No images have been uploaded for this case yet.
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
     <!-- Case Updates -->
-    <div class="col-12 mb-4">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-history me-2"></i>Case Updates
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="timeline">
-                    {% for update in updates %}
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <h6 class="mb-0">Status: {{ update.get_status_display }}</h6>
-                                </div>
-                                <small class="text-muted">{{ update.updated_at|date:"M d, Y H:i" }}</small>
-                            </div>
-                            <p class="mb-0">{{ update.description }}</p>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="info-card">
+                <h4 class="mb-4">Case Updates</h4>
+                {% for update in updates %}
+                <div class="update-card">
+                    <div class="update-header">
+                        <div>
+                            <strong>{{ update.created_by.get_full_name }}</strong>
+                            <span class="update-date ms-2">{{ update.created_at|date:"F d, Y H:i" }}</span>
                         </div>
                     </div>
-                    {% empty %}
-                    <div class="text-center text-muted py-4">
-                        <i class="fas fa-history fa-2x mb-3"></i>
-                        <p class="mb-0">No updates yet</p>
+                    <div class="update-content">
+                        {{ update.description }}
                     </div>
-                    {% endfor %}
                 </div>
+                {% empty %}
+                <p class="text-muted">No updates available for this case.</p>
+                {% endfor %}
             </div>
         </div>
     </div>
 
-    <!-- Case Notes -->
-    <div class="col-12 mb-4">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-sticky-note me-2"></i>Case Notes
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="timeline">
-                    {% for note in case.notes.all %}
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="mb-0">{{ note.title }}</h6>
-                                <small class="text-muted">{{ note.created_at|date:"M d, Y H:i" }}</small>
-                            </div>
-                            <p class="mb-0">{{ note.content }}</p>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="text-center text-muted py-4">
-                        <i class="fas fa-sticky-note fa-2x mb-3"></i>
-                        <p class="mb-0">No notes added yet</p>
-                    </div>
-                    {% endfor %}
-                </div>
+    <!-- Action Buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="action-buttons">
+                <button class="btn btn-info btn-custom" data-bs-toggle="modal" data-bs-target="#addUpdateModal">
+                    <i class="fas fa-plus me-2"></i>Add Update
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Case Evidence -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-file-alt me-2"></i>Case Evidence
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    {% for evidence in case.evidence.all %}
-                    <div class="col-md-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <div>
-                                        <h6 class="mb-1">{{ evidence.title }}</h6>
-                                        <small class="text-muted">{{ evidence.created_at|date:"M d, Y" }}</small>
-                                    </div>
-                                    <a href="{{ evidence.file.url }}" class="btn btn-sm btn-light" target="_blank">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                </div>
-                                <p class="mb-0">{{ evidence.description }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="col-12">
-                        <div class="text-center text-muted py-4">
-                            <i class="fas fa-file-alt fa-2x mb-3"></i>
-                            <p class="mb-0">No evidence added yet</p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
+    <!-- Status Update Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center {% if case.status == 'closed' %}bg-light{% endif %}">
+            <h6 class="m-0 font-weight-bold {% if case.status == 'closed' %}text-muted{% else %}text-primary{% endif %}">
+                <i class="fas fa-edit me-2"></i>
+                {% if case.status == 'closed' %}Case Status (Closed){% else %}Update Case Status{% endif %}
+            </h6>
+            <span class="badge {% if case.status == 'closed' %}bg-secondary{% else %}bg-primary{% endif %}">
+                Current Status: {{ case.get_status_display }}
+            </span>
+        </div>
+        {% if case.status == 'closed' %}
+        <div class="card-body">
+            <div class="alert alert-info mb-0">
+                <i class="fas fa-info-circle me-2"></i>
+                This case has been closed and its status cannot be modified.
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Update Case Modal -->
-<div class="modal fade" id="updateCaseModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Update Case</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="{% url 'officer_update_case' case.id %}">
+        {% else %}
+                <form class="status-update-form p-4 bg-white rounded shadow-sm" method="POST" action="{% url 'officer:update_case_status' case.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="modal-body">
-                    <div class="form-floating mb-3">
-                        <select class="form-select" id="status" name="status" required>
-                            <option value="pending" {% if case.status == 'pending' %}selected{% endif %}>Pending</option>
-                            <option value="under_investigation" {% if case.status == 'under_investigation' %}selected{% endif %}>Under Investigation</option>
-                            <option value="resolved" {% if case.status == 'resolved' %}selected{% endif %}>Resolved</option>
-                            <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>Closed</option>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="status" class="form-label fw-bold">New Status</label>
+                        <select class="form-select form-select-lg" id="status" name="status" required>
+                            <option value="">Select New Status</option>
+                            <option value="pending" {% if case.status == 'pending' %}selected{% endif %}>
+                                <i class="fas fa-clock"></i> Pending
+                            </option>
+                            <option value="investigation" {% if case.status == 'investigation' %}selected{% endif %}>
+                                <i class="fas fa-search"></i> Under Investigation
+                            </option>
+                            <option value="found" {% if case.status == 'found' %}selected{% endif %}>
+                                <i class="fas fa-check-circle"></i> Found
+                            </option>
+                            <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>
+                                <i class="fas fa-times-circle"></i> Closed
+                            </option>
                         </select>
-                        <label for="status">Status</label>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select the new status for this case
+                        </div>
                     </div>
-                    <div class="form-floating">
-                        <textarea class="form-control" id="description" name="description" style="height: 100px" required></textarea>
-                        <label for="description">Update Description</label>
+                    <div class="col-md-6 mb-4">
+                        <label for="description" class="form-label fw-bold">Update Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" 
+                            placeholder="Enter details about the status update..."></textarea>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Provide additional information about this status change
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Case</button>
+
+                <!-- Closure Proof Photo -->
+                <div id="closureProofField" class="row bg-light p-3 rounded mb-4" style="display: none;">
+                    <div class="col-12 mb-3">
+                        <h6 class="text-danger mb-3">
+                            <i class="fas fa-file-upload me-2"></i>Closure Proof
+                        </h6>
+                    </div>
+                    <div class="col-12">
+                        <label for="closure_proof_photo" class="form-label fw-bold">Upload Proof Photo</label>
+                        <input type="file" class="form-control" id="closure_proof_photo" name="closure_proof_photo" accept="image/*">
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            A photo is required to close the case.
+                        </div>
+                    </div>
                 </div>
-            </form>
+
+                <!-- Found Status Fields -->
+                <div id="foundFields" class="row bg-light p-3 rounded mb-4" style="display: none;">
+                    <div class="col-12 mb-3">
+                        <h6 class="text-primary mb-3">
+                            <i class="fas fa-map-marker-alt me-2"></i>Found Information
+                        </h6>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="location_found" class="form-label fw-bold">Location Found</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            <input type="text" class="form-control" id="location_found" name="location_found" 
+                                placeholder="Enter where the person was found">
+                        </div>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Specify the exact location where the person was found
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="found_date" class="form-label fw-bold">Found Date</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            <input type="date" class="form-control" id="found_date" name="found_date">
+                        </div>
+                        <div class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Select the date when the person was found
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-2"></i>Update Status
+                        </button>
+                        <button type="reset" class="btn btn-secondary btn-lg ms-2">
+                            <i class="fas fa-undo me-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- Additional Photos -->
+    <div class="info-card mt-4">
+        <h4 class="mb-4">Additional Photos</h4>
+        {% if evidence_photos %}
+            <div class="row">
+                {% for photo in evidence_photos %}
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ photo.file.url }}" data-lightbox="case-photos" data-title="{{ photo.title }}">
+                            <img src="{{ photo.file.url }}" class="img-fluid rounded" alt="{{ photo.title }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No additional photos found for this case.</p>
+        {% endif %}
     </div>
 </div>
 
-<!-- Add Note Modal -->
-<div class="modal fade" id="addNoteModal" tabindex="-1">
+<!-- Update Status Modal -->
+<div class="modal fade" id="updateStatusModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Note</h5>
+                <h5 class="modal-title">Update Case Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="{% url 'add_case_note' case.id %}">
+            <form method="post" action="{% url 'officer:update_case_status' case.id %}">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="noteTitle" name="title" required>
-                        <label for="noteTitle">Note Title</label>
-                    </div>
-                    <div class="form-floating">
-                        <textarea class="form-control" id="noteContent" name="content" style="height: 100px" required></textarea>
-                        <label for="noteContent">Note Content</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Note</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Add Evidence Modal -->
-<div class="modal fade" id="addEvidenceModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Evidence</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form method="POST" action="{% url 'add_case_evidence' case.id %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="evidenceTitle" name="title" required>
-                        <label for="evidenceTitle">Evidence Title</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control" id="evidenceDescription" name="description" style="height: 100px" required></textarea>
-                        <label for="evidenceDescription">Description</label>
-                    </div>
                     <div class="mb-3">
-                        <label for="evidenceFile" class="form-label">File</label>
-                        <input type="file" class="form-control" id="evidenceFile" name="file" required>
+                        <label class="form-label">New Status</label>
+                        <select name="status" class="form-select">
+                            {% for status_value, status_label in case.STATUS_CHOICES %}
+                            <option value="{{ status_value }}" {% if case.status == status_value %}selected{% endif %}>
+                                {{ status_label }}
+                            </option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Evidence</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-{% block extra_js %}
+<!-- Add Update Modal -->
+<div class="modal fade" id="addUpdateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Case Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'officer:add_case_update' case.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Update Description</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
-    // Add hover effect to evidence cards
-    document.querySelectorAll('.card.h-100').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
-        });
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = 'none';
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status');
+    const foundFields = document.getElementById('foundFields');
+    const locationFound = document.getElementById('location_found');
+    const foundDate = document.getElementById('found_date');
+    const description = document.getElementById('description');
+    const closureProofField = document.getElementById('closureProofField');
+    const closureProofInput = document.getElementById('closure_proof_photo');
+
+    // Show/hide found fields based on status
+    statusSelect.addEventListener('change', function() {
+        if (this.value === 'found') {
+            foundFields.style.display = 'flex';
+            locationFound.required = true;
+            foundDate.required = true;
+            foundFields.classList.add('animate__animated', 'animate__fadeIn');
+        } else {
+            foundFields.style.display = 'none';
+            locationFound.required = false;
+            foundDate.required = false;
+        }
+
+        if (this.value === 'closed') {
+            closureProofField.style.display = 'flex';
+            closureProofInput.required = true;
+        } else {
+            closureProofField.style.display = 'none';
+            closureProofInput.required = false;
+        }
     });
 
-    // Add loading state to forms
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', function() {
-            document.querySelector('.loading-overlay').classList.add('active');
-        });
+    // Set required fields for closed status
+    statusSelect.addEventListener('change', function() {
+        if (this.value === 'closed') {
+            description.required = true;
+            description.placeholder = 'Please provide a reason for closing the case...';
+            description.classList.add('border-warning');
+        } else {
+            description.required = false;
+            description.placeholder = 'Enter details about the status update...';
+            description.classList.remove('border-warning');
+        }
     });
+
+    // Add animation classes
+    const form = document.querySelector('.status-update-form');
+    form.classList.add('animate__animated', 'animate__fadeIn');
+});
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script>
 {% endblock %}
 
-{% endblock %} 

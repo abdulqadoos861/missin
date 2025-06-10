@@ -1,116 +1,52 @@
 {% extends 'base_officer.html' %}
 
-{% block title %}Update Case | Officer Portal{% endblock %}
+{% block title %}Update Case Status | Officer Portal{% endblock %}
 
 {% block content %}
-<div class="row">
-    <!-- Page Header -->
-    <div class="col-12 mb-4">
-        <div class="card bg-gradient-primary text-white">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="mb-1">Update Case</h4>
-                        <p class="mb-0 opacity-75">Modify case information and status</p>
-                    </div>
-                    <div class="text-end">
-                        <span class="badge bg-white text-primary">Case ID: {{ case.case_id }}</span>
-                    </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Update Case Status
+                    </h5>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Update Form -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-edit me-2"></i>Case Information
-                </h6>
-            </div>
-            <div class="card-body">
-                <form method="POST" class="needs-validation" novalidate>
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <!-- Basic Information -->
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="title" name="title" 
-                                       value="{{ case.title }}" required>
-                                <label for="title">Case Title</label>
-                                <div class="invalid-feedback">
-                                    Please provide a case title.
-                                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="">Select Status</option>
+                                <option value="Pending" {% if case.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Under Progress" {% if case.status == 'Under Progress' %}selected{% endif %}>Under Progress</option>
+                                <option value="Found" {% if case.status == 'Found' %}selected{% endif %}>Found</option>
+                                <option value="Closed" {% if case.status == 'Closed' %}selected{% endif %}>Closed</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a status.
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <select class="form-select" id="status" name="status" required>
-                                    <option value="">Select Status</option>
-                                    <option value="Pending" {% if case.status == 'Pending' %}selected{% endif %}>Pending</option>
-                                    <option value="In Progress" {% if case.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-                                    <option value="Solved" {% if case.status == 'Solved' %}selected{% endif %}>Solved</option>
-                                </select>
-                                <label for="status">Status</label>
-                                <div class="invalid-feedback">
-                                    Please select a status.
-                                </div>
+                        
+                        <div class="mb-3">
+                            <label for="note" class="form-label">Note</label>
+                            <textarea class="form-control" id="note" name="note" rows="3" required></textarea>
+                            <div class="invalid-feedback">
+                                Please add a note about this update.
                             </div>
                         </div>
-
-                        <!-- Description -->
-                        <div class="col-12">
-                            <div class="form-floating">
-                                <textarea class="form-control" id="description" name="description" 
-                                          style="height: 150px" required>{{ case.description }}</textarea>
-                                <label for="description">Description</label>
-                                <div class="invalid-feedback">
-                                    Please provide a case description.
-                                </div>
-                            </div>
+                        
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{% url 'officer:officer_view_case_detail' case.id %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Status
+                            </button>
                         </div>
-
-                        <!-- Additional Information -->
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="location" name="location" 
-                                       value="{{ case.location }}">
-                                <label for="location">Location</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" id="incident_date" name="incident_date" 
-                                       value="{{ case.incident_date|date:'Y-m-d' }}">
-                                <label for="incident_date">Incident Date</label>
-                            </div>
-                        </div>
-
-                        <!-- Progress -->
-                        <div class="col-12">
-                            <label for="progress" class="form-label">Case Progress</label>
-                            <div class="d-flex align-items-center gap-3">
-                                <input type="range" class="form-range flex-grow-1" id="progress" name="progress" 
-                                       min="0" max="100" value="{{ case.progress }}">
-                                <span class="badge bg-primary" id="progressValue">{{ case.progress }}%</span>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="col-12">
-                            <hr class="my-4">
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{% url 'officer_view_case_detail' case.id %}" class="btn btn-light">
-                                    <i class="fas fa-times me-2"></i>Cancel
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-2"></i>Save Changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -118,35 +54,39 @@
 
 {% block extra_js %}
 <script>
-    // Form validation
+    // Form validation and submission
     (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms).forEach(function (form) {
+        'use strict';
+        
+        // Get the form element
+        const form = document.querySelector('.needs-validation');
+        
+        if (form) {
             form.addEventListener('submit', function (event) {
+                // Prevent default form submission
+                event.preventDefault();
+                
+                // Check form validity
                 if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                } else {
-                    document.querySelector('.loading-overlay').classList.add('active');
+                    event.stopPropagation();
+                    form.classList.add('was-validated');
+                    return false;
                 }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-
-    // Update progress value display
-    const progressInput = document.getElementById('progress');
-    const progressValue = document.getElementById('progressValue');
-    
-    progressInput.addEventListener('input', function() {
-        progressValue.textContent = this.value + '%';
-    });
-
-    // Add loading state to form
-    document.querySelector('form').addEventListener('submit', function() {
-        document.querySelector('.loading-overlay').classList.add('active');
-    });
+                
+                // Add loading state if needed
+                const submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+                }
+                
+                // Submit the form
+                form.submit();
+                
+                return false;
+            }, false);
+        }
+    })();
 </script>
 {% endblock %}
 

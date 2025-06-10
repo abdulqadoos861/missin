@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.conf import settings
 from .forms import UserRegistrationForm
 import logging
 
@@ -14,38 +15,101 @@ def index(request):
 
 @ensure_csrf_cookie
 def login_view(request):
+    # Ensure CSRF token is set in cookie
+    if request.method == 'GET':
+        response = render(request, 'login.html')
+        # Set CSRF token in cookie if not present
+        if not request.COOKIES.get('csrftoken'):
+            response.set_cookie(
+                'csrftoken',
+                request.META.get('CSRF_COOKIE', ''),
+                max_age=60 * 60 * 24 * 7 * 52,  # 1 year
+                secure=settings.CSRF_COOKIE_SECURE,
+                httponly=False,  # Allow JavaScript to read it
+                samesite='Lax'
+            )
+        return response
+        
     if request.method == 'POST':
+        # Get CSRF token from cookie and form data for debugging
+        csrf_token_cookie = request.COOKIES.get('csrftoken', 'No CSRF token in cookie')
+        csrf_token_post = request.POST.get('csrfmiddlewaretoken', 'No CSRF token in POST')
+        
+        logger.info(f"Login attempt - CSRF Cookie: {csrf_token_cookie}")
+        logger.info(f"Login attempt - CSRF POST: {csrf_token_post}")
+        
         try:
             username = request.POST.get('username')
             password = request.POST.get('password')
+            
+            if not username or not password:
+                messages.error(request, 'Please provide both username and password.')
+                response = render(request, 'login.html')
+                response.set_cookie('csrftoken', request.META.get('CSRF_COOKIE', ''))
+                return response
+                
             user = authenticate(request, username=username, password=password)
             
             if user is not None:
-                auth_login(request, user)
-                messages.success(request, f'Welcome back, {user.get_full_name() or user.username}!')
-                
-                # Debug logging
-                logger.info(f"User {user.username} logged in")
-                logger.info(f"User type: {user.user_type}")
-                logger.info(f"Is admin: {user.is_admin()}")
-                
-                # Redirect based on user type
-                if user.is_admin():
-                    logger.info("Redirecting to admin dashboard")
-                    return redirect('admin_dashboard')
-                elif user.is_officer():
-                    logger.info("Redirecting to officer dashboard")
-                    return redirect('officer_dashboard')
-                else:  # regular user
-                    logger.info("Redirecting to user dashboard")
-                    return redirect('user_dashboard')
+                try:
+                    # Log the user in first to establish the session
+                    auth_login(request, user)
+                    logger.info(f"User {user.username} authenticated successfully")
+                    
+                    # Create a new session to prevent session fixation
+                    request.session.cycle_key()
+                    logger.info(f"New session created: {request.session.session_key}")
+                    
+                    # Set the CSRF token in the response
+                    if user.is_admin():
+                        logger.info("User is admin, redirecting to admin dashboard")
+                        response = redirect('cadmin:admin_dashboard')
+                    elif user.is_officer():
+                        logger.info("User is officer, redirecting to officer dashboard")
+                        response = redirect('officer:officer_dashboard')
+                    else:
+                        logger.info("User is regular user, redirecting to user dashboard")
+                        response = redirect('user_dashboard')
+                    
+                    # Set CSRF cookie
+                    csrf_token = request.META.get('CSRF_COOKIE', '')
+                    logger.info(f"Setting CSRF token: {csrf_token}")
+                    
+                    response.set_cookie(
+                        'csrftoken',
+                        csrf_token,
+                        max_age=60 * 60 * 24 * 7 * 52,  # 1 year
+                        secure=settings.CSRF_COOKIE_SECURE if hasattr(settings, 'CSRF_COOKIE_SECURE') else False,
+                        httponly=False,
+                        samesite='Lax'
+                    )
+                    
+                    messages.success(request, f'Welcome back, {user.get_full_name() or user.username}!')
+                    logger.info("Login successful, redirecting...")
+                    return response
+                    
+                except Exception as e:
+                    logger.error(f"Error during login process: {str(e)}", exc_info=True)
+                    messages.error(request, f'An error occurred during login: {str(e)}')
+                    return render(request, 'login.html')
             else:
                 messages.error(request, 'Invalid username or password. Please try again.')
+                logger.warning(f"Failed login attempt for username: {username}")
+                
         except Exception as e:
             logger.error(f"Login error: {str(e)}", exc_info=True)
-            messages.error(request, 'An error occurred during login. Please try again.')
+            messages.error(request, f'Login error: {str(e)}. Please try again.')
     
-    return render(request, 'login.html')
+    # If we get here, there was an error or it's a GET request
+    response = render(request, 'login.html')
+    # Ensure CSRF cookie is set in the response
+    response.set_cookie('csrftoken', request.META.get('CSRF_COOKIE', ''), 
+                      max_age=60 * 60 * 24 * 7 * 52,  # 1 year
+                      domain=settings.SESSION_COOKIE_DOMAIN,
+                      secure=settings.CSRF_COOKIE_SECURE,
+                      httponly=False,  # Allow JavaScript to read it
+                      samesite='Lax')
+    return response
 
 @ensure_csrf_cookie
 def register(request):

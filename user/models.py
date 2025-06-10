@@ -67,7 +67,10 @@ class MissingPerson(models.Model):
     # Additional Information
     description = models.TextField(help_text="Additional details about the missing person")
     photo = models.ImageField(upload_to='missing_persons/')
-    additional_photos = models.ImageField(upload_to='missing_persons/additional/', blank=True, null=True)
+    additional_photo_1 = models.ImageField(upload_to='missing_persons/additional/', blank=True, null=True)
+    additional_photo_2 = models.ImageField(upload_to='missing_persons/additional/', blank=True, null=True)
+    additional_photo_3 = models.ImageField(upload_to='missing_persons/additional/', blank=True, null=True)
+    closure_proof_photo = models.ImageField(upload_to='missing_persons/closure_proofs/', blank=True, null=True)
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)

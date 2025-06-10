@@ -1,158 +1,228 @@
 {% extends 'base_officer.html' %}
+{% load static %}
 
 {% block title %}View Cases | Officer Portal{% endblock %}
 
 {% block content %}
-<div class="row">
+<div class="container-fluid px-4">
     <!-- Page Header -->
-    <div class="col-12 mb-4">
-        <div class="card bg-gradient-primary text-white">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="mb-1">Case Management</h4>
-                        <p class="mb-0 opacity-75">View and manage all your assigned cases</p>
-                    </div>
-                    <div class="text-end">
-                        <span class="badge bg-white text-primary">Total Cases: {{ cases|length }}</span>
-                    </div>
-                </div>
-            </div>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Assigned Cases</h1>
+        <div class="d-flex">
+            <span class="badge bg-primary text-white px-3 py-2 me-3">
+                <i class="fas fa-folder-open me-2"></i>Total Cases: {{ cases|length }}
+            </span>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+            </a>
         </div>
     </div>
 
-    <!-- Filters -->
-    <div class="col-12 mb-4">
-        <div class="card">
-            <div class="card-body">
-                <form method="GET" class="row g-3">
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="search" name="search" 
-                                   placeholder="Search cases..." value="{{ request.GET.search }}">
-                            <label for="search">Search Cases</label>
-                        </div>
+    <!-- Filters Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Filter Cases</h6>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" name="search" placeholder="Search by name or case ID..." 
+                               value="{{ request.GET.search }}">
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <select class="form-select" id="status" name="status">
-                                <option value="">All Status</option>
-                                <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending</option>
-                                <option value="In Progress" {% if request.GET.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-                                <option value="Solved" {% if request.GET.status == 'Solved' %}selected{% endif %}>Solved</option>
-                            </select>
-                            <label for="status">Status</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="date" class="form-control" id="date" name="date" 
-                                   value="{{ request.GET.date }}">
-                            <label for="date">Date</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="d-flex gap-2 h-100 align-items-end">
-                            <button type="submit" class="btn btn-primary flex-grow-1">
-                                <i class="fas fa-search me-2"></i>Filter
-                            </button>
-                            <a href="{% url 'officer_view_case' %}" class="btn btn-light">
-                                <i class="fas fa-redo"></i>
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="status">
+                        <option value="">All Active Cases</option>
+                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="investigation" {% if request.GET.status == 'investigation' %}selected{% endif %}>Under Investigation</option>
+                        <option value="found" {% if request.GET.status == 'found' %}selected{% endif %}>Found</option>
+                        <option value="closed" {% if request.GET.status == 'closed' %}selected{% endif %}>Closed Cases Only</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="date" class="form-control" name="date" value="{{ request.GET.date }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i>Filter
+                    </button>
+                </div>
+                {% if request.GET %}
+                <div class="col-12">
+                    <a href="{% url 'officer:officer_view_case' %}" class="text-primary">
+                        <i class="fas fa-times me-1"></i> Clear filters
+                    </a>
+                </div>
+                {% endif %}
+            </form>
         </div>
     </div>
 
-    <!-- Cases Table -->
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="border-0">Case ID</th>
-                                <th class="border-0">Title</th>
-                                <th class="border-0">Status</th>
-                                <th class="border-0">Date</th>
-                                <th class="border-0">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for case in cases %}
-                            <tr>
-                                <td>{{ case.case_id }}</td>
-                                <td>{{ case.title }}</td>
-                                <td>
-                                    <span class="badge {% if case.status == 'Solved' %}bg-success{% elif case.status == 'Pending' %}bg-warning{% else %}bg-info{% endif %}">
-                                        {{ case.status }}
-                                    </span>
-                                </td>
-                                <td>{{ case.created_at|date:"M d, Y" }}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <a href="{% url 'officer_view_case_detail' case.id %}" class="btn btn-sm btn-light" 
-                                           data-bs-toggle="tooltip" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{% url 'officer_update_case' case.id %}" class="btn btn-sm btn-primary" 
-                                           data-bs-toggle="tooltip" title="Update Case">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center py-5">
-                                    <div class="text-muted">
-                                        <i class="fas fa-folder-open fa-3x mb-3"></i>
-                                        <p class="mb-0">No cases found</p>
-                                        {% if request.GET %}
-                                            <small class="d-block mt-2">
-                                                Try adjusting your search or filter criteria
-                                            </small>
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <!-- All Cases Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Cases</h6>
+            <div>
+                <span class="me-3">
+                    <i class="fas fa-circle text-warning me-1"></i> Pending: {{ pending_count }}
+                </span>
+                <span class="me-3">
+                    <i class="fas fa-circle text-info me-1"></i> Investigation: {{ investigation_count }}
+                </span>
+                <span class="me-3">
+                    <i class="fas fa-circle text-success me-1"></i> Found: {{ found_count }}
+                </span>
+                <span>
+                    <i class="fas fa-circle text-secondary me-1"></i> Closed: {{ closed_count }}
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if cases %}
+            <div class="row g-4">
+                {% for case in cases %}
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="position-relative">
+                            <img src="{{ case.photo.url }}" class="card-img-top" alt="{{ case.name }}" style="height: 200px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                {% if case.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock me-1"></i> Pending
+                                </span>
+                                {% elif case.status == 'investigation' %}
+                                <span class="badge bg-info text-white">
+                                    <i class="fas fa-search me-1"></i> Investigation
+                                </span>
+                                {% elif case.status == 'found' %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i> Found
+                                </span>
+                                {% else %}
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-times-circle me-1"></i> Closed
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title mb-0">{{ case.first_name }} {{ case.last_name }}</h5>
+                                <span class="badge bg-light text-dark">{{ case.get_gender_display }}, {{ case.age }} years</span>
+                            </div>
+                            <p class="small text-muted mb-2">
+                                <i class="far fa-calendar-alt me-1"></i> 
+                                Last Seen: {{ case.last_seen_date|date:"M d, Y" }}
+                            </p>
+                            <p class="small text-muted mb-2">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                {{ case.last_seen_location|truncatechars:30 }}
+                            </p>
+                            <p class="small text-muted mb-2">
+                                <i class="fas fa-user-tag me-1"></i>
+                                Reported by: {{ case.reporter.get_full_name|default:case.reporter.username }}
+                            </p>
+                            <div class="d-grid gap-2 mt-3">
+                                <a href="{% url 'officer:officer_view_case_detail' case.id %}" class="btn btn-primary">
+                                    <i class="fas fa-eye me-1"></i> View Case
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <div class="text-muted">
+                    <i class="fas fa-folder-open fa-4x mb-4" style="opacity: 0.5;"></i>
+                    <h4 class="mb-2">No cases found</h4>
+                    {% if request.GET %}
+                        <p class="mb-0">Try adjusting your search or filter criteria</p>
+                    {% else %}
+                        <p class="mb-0">No cases have been registered yet</p>
+                    {% endif %}
                 </div>
             </div>
+            {% endif %}
+            
+            <!-- Pagination -->
+            {% if cases.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if cases.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cases.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">First</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    {% endif %}
+                    
+                    {% for i in cases.paginator.page_range %}
+                        {% if cases.number == i %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ i }}</span>
+                        </li>
+                        {% elif i > cases.number|add:'-3' and i < cases.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">{{ i }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if cases.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cases.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cases.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">Last</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">Last</span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         </div>
     </div>
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
     // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
-    // Add hover effect to table rows
-    document.querySelectorAll('tbody tr').forEach(row => {
-        row.addEventListener('mouseenter', function() {
-            this.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+    // Initialize DataTable
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": true,
+            "order": [[5, 'desc']], // Sort by date reported by default
+            "columnDefs": [
+                { "orderable": false, "targets": [6] } // Disable sorting on actions column
+            ]
         });
-        row.addEventListener('mouseleave', function() {
-            this.style.backgroundColor = '';
-        });
-    });
-
-    // Add loading state to filter form
-    document.querySelector('form').addEventListener('submit', function() {
-        document.querySelector('.loading-overlay').classList.add('active');
     });
 </script>
 {% endblock %}
-
-{% endblock %}
-
-

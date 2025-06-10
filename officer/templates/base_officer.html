@@ -22,6 +22,7 @@
             --success-color: #4cc9f0;
             --warning-color: #f72585;
             --info-color: #4895ef;
+            --purple-color: #6f42c1;
             --light-color: #f8f9fa;
             --dark-color: #212529;
         }
@@ -213,6 +214,15 @@
             border: none;
         }
 
+        /* Purple color utilities */
+        .text-purple {
+            color: var(--purple-color) !important;
+        }
+        
+        .bg-purple {
+            background-color: var(--purple-color) !important;
+        }
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
@@ -287,32 +297,32 @@
     <!-- Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
-            <a href="{% url 'officer_dashboard' %}" class="sidebar-brand">
+            <a href="{% url 'officer:officer_home' %}" class="sidebar-brand">
                 <i class="fas fa-shield-alt"></i>
                 <span>Officer Portal</span>
             </a>
         </div>
         <ul class="nav flex-column mt-4">
             <li class="nav-item">
-                <a href="{% url 'officer_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_dashboard' %}active{% endif %}">
+                <a href="{% url 'officer:officer_home' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_dashboard' or request.resolver_match.url_name == 'officer_home' %}active{% endif %}">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'officer_view_case' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_view_case' %}active{% endif %}">
+                <a href="{% url 'officer:officer_view_case' %}" class="nav-link {% if 'view-case' in request.resolver_match.url_name or 'officer_view_case' in request.resolver_match.url_name %}active{% endif %}">
                     <i class="fas fa-folder-open"></i>
                     <span>View Cases</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'officer_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_profile' %}active{% endif %}">
+                <a href="{% url 'officer:officer_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_profile' %}active{% endif %}">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'logout' %}" class="nav-link">
+                <a href="{% url 'officer:logout' %}" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -332,21 +342,23 @@
                     </div>
                     <div class="user-dropdown">
                         <button class="btn btn-link user-dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" alt="Profile" class="user-avatar">
-                            {% else %}
-                                <div class="user-avatar bg-primary text-white d-flex align-items-center justify-content-center">
-                                    {{ user.username|first|upper }}
-                                </div>
-                            {% endif %}
-                            <span class="d-none d-md-inline">{{ user.get_full_name }}</span>
-                            <i class="fas fa-chevron-down"></i>
+                            <div class="user-avatar bg-primary text-white d-flex align-items-center justify-content-center">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="d-none d-md-inline ms-2">
+                                {% if request.user.is_authenticated %}
+                                    {% firstof request.user.get_full_name request.user.username 'User' %}
+                                {% else %}
+                                    Guest
+                                {% endif %}
+                            </span>
+                            <i class="fas fa-chevron-down ms-1"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{% url 'officer_profile' %}"><i class="fas fa-user me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'officer_profile' %}#settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'officer:officer_profile' %}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'officer:officer_profile' %}#settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'officer:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </div>
                 </div>
