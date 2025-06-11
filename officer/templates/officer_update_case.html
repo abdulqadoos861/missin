@@ -13,16 +13,16 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" class="needs-validation" novalidate>
+                    <form method="POST" action="{% url 'officer:update_case' case.id %}" class="needs-validation" novalidate>
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-select" id="status" name="status" required>
                                 <option value="">Select Status</option>
-                                <option value="Pending" {% if case.status == 'Pending' %}selected{% endif %}>Pending</option>
-                                <option value="Under Progress" {% if case.status == 'Under Progress' %}selected{% endif %}>Under Progress</option>
-                                <option value="Found" {% if case.status == 'Found' %}selected{% endif %}>Found</option>
-                                <option value="Closed" {% if case.status == 'Closed' %}selected{% endif %}>Closed</option>
+                                <option value="pending" {% if case.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="under_progress" {% if case.status == 'under_progress' %}selected{% endif %}>Under Progress</option>
+                                <option value="found" {% if case.status == 'found' %}selected{% endif %}>Found</option>
+                                <option value="closed" {% if case.status == 'closed' %}selected{% endif %}>Closed</option>
                             </select>
                             <div class="invalid-feedback">
                                 Please select a status.
@@ -51,45 +51,67 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
 {% block extra_js %}
 <script>
-    // Form validation and submission
     (function () {
         'use strict';
         
-        // Get the form element
         const form = document.querySelector('.needs-validation');
         
         if (form) {
             form.addEventListener('submit', function (event) {
-                // Prevent default form submission
                 event.preventDefault();
+                event.stopPropagation();
                 
-                // Check form validity
                 if (!form.checkValidity()) {
-                    event.stopPropagation();
                     form.classList.add('was-validated');
-                    return false;
+                    return;
                 }
                 
-                // Add loading state if needed
                 const submitButton = form.querySelector('button[type="submit"]');
                 if (submitButton) {
                     submitButton.disabled = true;
                     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
                 }
                 
-                // Submit the form
-                form.submit();
+                const formData = new FormData(form);
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
                 
-                return false;
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log('Redirecting to:', data.redirect_url);
+                        window.location.href = data.redirect_url;
+                    } else {
+                        throw new Error(data.message || 'Failed to update case status');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Error: ${error.message}`);
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = '<i class="fas fa-save me-2"></i>Update Status';
+                    }
+                });
             }, false);
         }
     })();
 </script>
 {% endblock %}
-
-{% endblock %}
-
-

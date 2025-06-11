@@ -158,6 +158,39 @@
 </div>
 
 <style>
+/* Set default text color to white for the entire settings page */
+.card, .card * {
+    color: white !important;
+}
+
+/* Style form labels and text */
+.form-label, .form-text, .text-primary {
+    color: white !important;
+}
+
+/* Style form inputs */
+.form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white !important;
+}
+
+/* Style input placeholders */
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Style the file input button */
+.form-control[type="file"] {
+    background-color: transparent !important;
+}
+
+/* Style the profile picture thumbnail */
+.img-thumbnail {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .form-control:read-only {
     background-color: #f8f9fc;
     cursor: not-allowed;

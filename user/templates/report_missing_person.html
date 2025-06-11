@@ -1,431 +1,221 @@
 {% extends 'base_users.html' %}
-<!-- {% load static %} -->
 
-{% block title %}Report Missing Person | Pakistani Police Force{% endblock %}
+{% block title %}Report Missing Person | Public Safety Portal{% endblock %}
 
 {% block extra_css %}
 <style>
-    .form-card {
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        background: white;
-        transition: all 0.3s ease;
-        border: none;
-        overflow: hidden;
+    /* Hide the default file input and style the custom button */
+    .custom-file-input {
+        display: none;
     }
-    .form-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-    .form-header {
-        background: linear-gradient(135deg, #1a237e, #283593);
-        color: white;
-        border-radius: 20px 20px 0 0;
-        padding: 35px;
+    .image-preview-container {
         position: relative;
-        overflow: hidden;
-    }
-    .form-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-        z-index: 1;
-    }
-    .form-header h3 {
-        font-size: 2rem;
-        font-weight: 700;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-    .form-body {
-        padding: 40px;
-        background: #f8f9fa;
-    }
-    .required-field::after {
-        content: " *";
-        color: #dc3545;
-        font-weight: bold;
+        width: 150px;
+        height: 150px;
     }
     .image-preview {
-        max-width: 200px;
-        max-height: 200px;
-        border-radius: 15px;
-        display: none;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-        border: 3px solid #fff;
-    }
-    .image-preview:hover {
-        transform: scale(1.05);
-    }
-    .section-title {
-        color: #1a237e;
-        font-weight: 600;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #e0e0e0;
-        position: relative;
-        font-size: 1.4rem;
-    }
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #1a237e, #283593);
-        border-radius: 3px;
-    }
-    .form-control, .form-select {
-        border-radius: 12px;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        transition: all 0.3s ease;
-        font-size: 1rem;
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: #1a237e;
-        box-shadow: 0 0 0 0.25rem rgba(26, 35, 126, 0.15);
-    }
-    .btn-submit {
-        background: linear-gradient(135deg, #1a237e, #283593);
-        border: none;
-        border-radius: 12px;
-        padding: 15px 35px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
-        font-size: 1.1rem;
-        text-transform: uppercase;
-    }
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(26, 35, 126, 0.3);
-        background: linear-gradient(135deg, #283593, #1a237e);
-    }
-    .form-label {
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 10px;
-        font-size: 1.05rem;
-    }
-    .upload-area {
-        border: 2px dashed #1a237e;
-        border-radius: 15px;
-        padding: 25px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background: rgba(26, 35, 126, 0.02);
-    }
-    .upload-area:hover {
-        background: rgba(26, 35, 126, 0.05);
-        border-color: #283593;
-    }
-    .upload-icon {
-        font-size: 2.5rem;
-        color: #1a237e;
-        margin-bottom: 15px;
-        transition: all 0.3s ease;
-    }
-    .upload-area:hover .upload-icon {
-        transform: scale(1.1);
-    }
-    .form-section {
-        background: white;
-        border-radius: 15px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    .form-section:hover {
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
-    }
-    .progress-indicator {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 40px;
-        position: relative;
-        padding: 0 20px;
-    }
-    .progress-step {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: #e0e0e0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #666;
-        font-weight: bold;
-        position: relative;
-        z-index: 1;
-        transition: all 0.3s ease;
-        border: 3px solid #fff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .progress-step.active {
-        background: linear-gradient(135deg, #1a237e, #283593);
-        color: white;
-        transform: scale(1.1);
-    }
-    .progress-line {
-        position: absolute;
-        top: 22px;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: #e0e0e0;
-        z-index: 0;
-    }
-    .progress-step::after {
-        content: attr(data-title);
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        margin-top: 8px;
-        font-size: 0.85rem;
-        color: #666;
-        white-space: nowrap;
-    }
-    .progress-step.active::after {
-        color: #1a237e;
-        font-weight: 600;
-    }
-    textarea.form-control {
-        min-height: 100px;
-        resize: vertical;
-    }
-    .form-control::placeholder {
-        color: #999;
-        font-size: 0.95rem;
-    }
-    .form-section i {
-        margin-right: 10px;
-        color: #1a237e;
-    }
-    @media (max-width: 768px) {
-        .form-body {
-            padding: 20px;
-        }
-        .form-header {
-            padding: 25px;
-        }
-        .form-header h3 {
-            font-size: 1.5rem;
-        }
-        .progress-step {
-            width: 35px;
-            height: 35px;
-            font-size: 0.9rem;
-        }
-        .progress-step::after {
-            font-size: 0.7rem;
-        }
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0.375rem;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-4">
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Report a Missing Person</h1>
+        <p class="lead text-muted">Submit the details below. Fields marked with <span class="text-danger">*</span> are required.</p>
+    </div>
+
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="form-card">
-                <div class="form-header">
-                    <h3 class="mb-0"><i class="fas fa-user-search me-2"></i>Report Missing Person</h3>
-                    <p class="mb-0 mt-2 opacity-75">Help us find your loved one by providing accurate information</p>
-                </div>
-                <div class="form-body">
-                    <!-- Progress Indicator -->
-                    <div class="progress-indicator">
-                        <div class="progress-line"></div>
-                        <div class="progress-step active">1</div>
-                        <div class="progress-step">2</div>
-                        <div class="progress-step">3</div>
-                        <div class="progress-step">4</div>
+        <div class="col-lg-10 col-xl-8">
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <!-- Personal Details -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-user me-2"></i>Personal Details</h5>
                     </div>
-
-                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-                        {% csrf_token %}
-                        
-                        <!-- Personal Information -->
-                        <div class="form-section">
-                            <h5 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h5>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="first_name" class="form-label required-field">First Name</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="last_name" class="form-label required-field">Last Name</label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
-                                </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name <span class="text-danger">*</span></label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}<div class="invalid-feedback d-block">{{ form.first_name.errors.0 }}</div>{% endif %}
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="date_of_birth" class="form-label required-field">Date of Birth</label>
-                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="age" class="form-label required-field">Age</label>
-                                    <input type="number" class="form-control" id="age" name="age" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="gender" class="form-label required-field">Gender</label>
-                                    <select class="form-select" id="gender" name="gender" required>
-                                        <option value="">Select Gender</option>
-                                        <option value="M">Male</option>
-                                        <option value="F">Female</option>
-                                        <option value="O">Other</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}<div class="invalid-feedback d-block">{{ form.last_name.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                                {{ form.date_of_birth }}
+                                {% if form.date_of_birth.errors %}<div class="invalid-feedback d-block">{{ form.date_of_birth.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.age.id_for_label }}" class="form-label">Age <span class="text-danger">*</span></label>
+                                {{ form.age }}
+                                {% if form.age.errors %}<div class="invalid-feedback d-block">{{ form.age.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.gender.id_for_label }}" class="form-label">Gender <span class="text-danger">*</span></label>
+                                {{ form.gender }}
+                                {% if form.gender.errors %}<div class="invalid-feedback d-block">{{ form.gender.errors.0 }}</div>{% endif %}
                             </div>
                         </div>
-
-                        <!-- Physical Description -->
-                        <div class="form-section">
-                            <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Physical Description</h5>
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="height" class="form-label required-field">Height</label>
-                                    <input type="text" class="form-control" id="height" name="height" placeholder="e.g., 5'10" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="weight" class="form-label required-field">Weight (kg)</label>
-                                    <input type="text" class="form-control" id="weight" name="weight" placeholder="e.g., 70" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="eye_color" class="form-label required-field">Eye Color</label>
-                                    <input type="text" class="form-control" id="eye_color" name="eye_color" required>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="hair_color" class="form-label required-field">Hair Color</label>
-                                    <input type="text" class="form-control" id="hair_color" name="hair_color" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="skin_color" class="form-label required-field">Skin Color</label>
-                                    <input type="text" class="form-control" id="skin_color" name="skin_color" required>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="distinguishing_marks" class="form-label">Distinguishing Marks</label>
-                                <textarea class="form-control" id="distinguishing_marks" name="distinguishing_marks" rows="3" 
-                                        placeholder="Scars, tattoos, birthmarks, etc."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Last Seen Information -->
-                        <div class="form-section">
-                            <h5 class="section-title"><i class="fas fa-map-marker-alt me-2"></i>Last Seen Information</h5>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="last_seen_date" class="form-label required-field">Last Seen Date</label>
-                                    <input type="date" class="form-control" id="last_seen_date" name="last_seen_date" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="last_seen_location" class="form-label required-field">Last Seen Location</label>
-                                    <input type="text" class="form-control" id="last_seen_location" name="last_seen_location" 
-                                           placeholder="Address or landmark" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="last_seen_wearing" class="form-label required-field">Last Seen Wearing</label>
-                                <textarea class="form-control" id="last_seen_wearing" name="last_seen_wearing" rows="3"
-                                        placeholder="Description of clothes last seen wearing" required></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Contact Information -->
-                        <div class="form-section">
-                            <h5 class="section-title"><i class="fas fa-phone-alt me-2"></i>Contact Information</h5>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="contact_number" class="form-label required-field">Contact Number</label>
-                                    <input type="tel" class="form-control" id="contact_number" name="contact_number" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="additional_contact" class="form-label">Additional Contact Number</label>
-                                    <input type="tel" class="form-control" id="additional_contact" name="additional_contact">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Photo Upload -->
-                        <div class="form-section">
-                            <h5 class="section-title"><i class="fas fa-camera me-2"></i>Photo Upload</h5>
-                            <div class="mb-3">
-                                <label for="photo" class="form-label required-field">Recent Photo</label>
-                                <div class="upload-area" onclick="document.getElementById('photo').click()">
-                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                    <p class="mb-0">Click to upload or drag and drop</p>
-                                    <small class="text-muted">PNG, JPG or JPEG (MAX. 2MB)</small>
-                                </div>
-                                <input type="file" class="d-none" id="photo" name="photo" accept="image/*" required 
-                                       onchange="previewImage(this, 'imagePreview')">
-                                <img id="imagePreview" class="image-preview mt-3" alt="Photo Preview">
-                            </div>
-                            <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label for="additional_photo_1" class="form-label">Additional Photo 1</label>
-                                        <div class="upload-area" onclick="document.getElementById('additional_photo_1').click()">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <p class="mb-0">Upload Photo</p>
-                                        </div>
-                                        <input type="file" class="d-none" id="additional_photo_1" name="additional_photo_1" accept="image/*" onchange="previewImage(this, 'additional_photo_1_preview')">
-                                        <img id="additional_photo_1_preview" class="image-preview mt-3" alt="Additional Photo 1 Preview">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="additional_photo_2" class="form-label">Additional Photo 2</label>
-                                        <div class="upload-area" onclick="document.getElementById('additional_photo_2').click()">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <p class="mb-0">Upload Photo</p>
-                                        </div>
-                                        <input type="file" class="d-none" id="additional_photo_2" name="additional_photo_2" accept="image/*" onchange="previewImage(this, 'additional_photo_2_preview')">
-                                        <img id="additional_photo_2_preview" class="image-preview mt-3" alt="Additional Photo 2 Preview">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="additional_photo_3" class="form-label">Additional Photo 3</label>
-                                        <div class="upload-area" onclick="document.getElementById('additional_photo_3').click()">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <p class="mb-0">Upload Photo</p>
-                                        </div>
-                                        <input type="file" class="d-none" id="additional_photo_3" name="additional_photo_3" accept="image/*" onchange="previewImage(this, 'additional_photo_3_preview')">
-                                        <img id="additional_photo_3_preview" class="image-preview mt-3" alt="Additional Photo 3 Preview">
-                                    </div>
-                                </div>
-                        </div>
-
-                        <!-- Additional Information -->
-                        <div class="form-section">
-                            <h5 class="section-title"><i class="fas fa-info-circle me-2"></i>Additional Information</h5>
-                            <div class="mb-3">
-                                <label for="description" class="form-label required-field">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"
-                                        placeholder="Any other relevant information that might help in finding the person" required></textarea>
-                            </div>
-                        </div>
-
-                        <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg btn-submit">
-                                <i class="fas fa-paper-plane me-2"></i>Submit Report
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Physical Description -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-ruler-combined me-2"></i>Physical Description</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="{{ form.height.id_for_label }}" class="form-label">Height <span class="text-danger">*</span></label>
+                                {{ form.height }}
+                                {% if form.height.errors %}<div class="invalid-feedback d-block">{{ form.height.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.weight.id_for_label }}" class="form-label">Weight</label>
+                                {{ form.weight }}
+                                {% if form.weight.errors %}<div class="invalid-feedback d-block">{{ form.weight.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.skin_color.id_for_label }}" class="form-label">Skin Color</label>
+                                {{ form.skin_color }}
+                                {% if form.skin_color.errors %}<div class="invalid-feedback d-block">{{ form.skin_color.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.eye_color.id_for_label }}" class="form-label">Eye Color <span class="text-danger">*</span></label>
+                                {{ form.eye_color }}
+                                {% if form.eye_color.errors %}<div class="invalid-feedback d-block">{{ form.eye_color.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.hair_color.id_for_label }}" class="form-label">Hair Color <span class="text-danger">*</span></label>
+                                {{ form.hair_color }}
+                                {% if form.hair_color.errors %}<div class="invalid-feedback d-block">{{ form.hair_color.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-12">
+                                <label for="{{ form.distinguishing_marks.id_for_label }}" class="form-label">Distinguishing Marks</label>
+                                {{ form.distinguishing_marks }}
+                                {% if form.distinguishing_marks.errors %}<div class="invalid-feedback d-block">{{ form.distinguishing_marks.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Last Seen Details -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Last Seen Details</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="{{ form.last_seen_date.id_for_label }}" class="form-label">Date <span class="text-danger">*</span></label>
+                                {{ form.last_seen_date }}
+                                {% if form.last_seen_date.errors %}<div class="invalid-feedback d-block">{{ form.last_seen_date.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <label for="{{ form.last_seen_location.id_for_label }}" class="form-label">Place <span class="text-danger">*</span></label>
+                                {{ form.last_seen_location }}
+                                {% if form.last_seen_location.errors %}<div class="invalid-feedback d-block">{{ form.last_seen_location.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-12">
+                                <label for="{{ form.last_seen_wearing.id_for_label }}" class="form-label">Last Wearing <span class="text-danger">*</span></label>
+                                {{ form.last_seen_wearing }}
+                                {% if form.last_seen_wearing.errors %}<div class="invalid-feedback d-block">{{ form.last_seen_wearing.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photos -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-images me-2"></i>Photos</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label for="{{ form.photo.id_for_label }}" class="form-label">Main Photo <span class="text-danger">*</span></label>
+                            <label for="{{ form.photo.id_for_label }}" class="btn btn-outline-primary"><i class="fas fa-upload me-2"></i>Upload Main Photo</label>
+                            {{ form.photo }}
+                            <img id="photo-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e9ecef' width='150' height='150'/%3E%3Ctext fill='%236c757d' font-family='sans-serif' font-size='1rem' dy='.3em' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3EPreview%3C/text%3E%3C/svg%3E" alt="Main photo preview" class="ms-3 image-preview">
+                            {% if form.photo.errors %}<div class="invalid-feedback d-block">{{ form.photo.errors.0 }}</div>{% endif %}
+                        </div>
+                        <hr>
+                        <p class="mb-2">Additional Photos (Optional)</p>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="{{ form.additional_photo_1.id_for_label }}" class="btn btn-outline-secondary w-100"><i class="fas fa-plus me-2"></i>Add Photo 1</label>
+                                {{ form.additional_photo_1 }}
+                                <img id="additional_photo_1-preview" src="..." class="d-none mt-2 image-preview">
+                                {% if form.additional_photo_1.errors %}<div class="invalid-feedback d-block">{{ form.additional_photo_1.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.additional_photo_2.id_for_label }}" class="btn btn-outline-secondary w-100"><i class="fas fa-plus me-2"></i>Add Photo 2</label>
+                                {{ form.additional_photo_2 }}
+                                <img id="additional_photo_2-preview" src="..." class="d-none mt-2 image-preview">
+                                {% if form.additional_photo_2.errors %}<div class="invalid-feedback d-block">{{ form.additional_photo_2.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="{{ form.additional_photo_3.id_for_label }}" class="btn btn-outline-secondary w-100"><i class="fas fa-plus me-2"></i>Add Photo 3</label>
+                                {{ form.additional_photo_3 }}
+                                <img id="additional_photo_3-preview" src="..." class="d-none mt-2 image-preview">
+                                {% if form.additional_photo_3.errors %}<div class="invalid-feedback d-block">{{ form.additional_photo_3.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="fas fa-address-book me-2"></i>Contact Information</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.contact_number.id_for_label }}" class="form-label">Your Contact Number <span class="text-danger">*</span></label>
+                                {{ form.contact_number }}
+                                {% if form.contact_number.errors %}<div class="invalid-feedback d-block">{{ form.contact_number.errors.0 }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.additional_contact.id_for_label }}" class="form-label">Additional Contact</label>
+                                {{ form.additional_contact }}
+                                {% if form.additional_contact.errors %}<div class="invalid-feedback d-block">{{ form.additional_contact.errors.0 }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Note -->
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-sticky-note me-2"></i>Special Note</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Please provide any other relevant information.</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}<div class="invalid-feedback d-block">{{ form.description.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-success btn-lg"><i class="fas fa-paper-plane me-2"></i>Submit Report</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -433,87 +223,37 @@
 
 {% block extra_js %}
 <script>
-    // Form validation
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms).forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-
-    // Image preview
-    function previewImage(input, previewId) {
+document.addEventListener('DOMContentLoaded', function() {
+    function setupImagePreview(inputId, previewId) {
+        const input = document.getElementById(inputId);
         const preview = document.getElementById(previewId);
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
+        if (!input || !preview) return;
+
+        const defaultSrc = preview.src;
+        const previewContainer = preview.parentElement;
+
+        input.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = defaultSrc;
+                if(previewId !== 'photo-preview') {
+                    preview.classList.add('d-none');
+                }
             }
-            reader.readAsDataURL(input.files[0]);
-        }
+        });
     }
 
-    // Progress indicator
-    document.addEventListener('DOMContentLoaded', function() {
-        const sections = document.querySelectorAll('.form-section');
-        const steps = document.querySelectorAll('.progress-step');
-        
-        // Add data titles to progress steps
-        steps[0].setAttribute('data-title', 'Personal Info');
-        steps[1].setAttribute('data-title', 'Physical Details');
-        steps[2].setAttribute('data-title', 'Last Seen');
-        steps[3].setAttribute('data-title', 'Contact & Photos');
-        
-        sections.forEach((section, index) => {
-            section.addEventListener('focusin', () => {
-                steps.forEach((step, stepIndex) => {
-                    if (stepIndex <= index) {
-                        step.classList.add('active');
-                    } else {
-                        step.classList.remove('active');
-                    }
-                });
-            });
-        });
-
-        // Add smooth scrolling to sections
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    });
-
-    // Add animation to form sections on scroll
-    const observerOptions = {
-        threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.form-section').forEach(section => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(20px)';
-        section.style.transition = 'all 0.5s ease-out';
-        observer.observe(section);
-    });
+    setupImagePreview('{{ form.photo.id_for_label }}', 'photo-preview');
+    setupImagePreview('{{ form.additional_photo_1.id_for_label }}', 'additional_photo_1-preview');
+    setupImagePreview('{{ form.additional_photo_2.id_for_label }}', 'additional_photo_2-preview');
+    setupImagePreview('{{ form.additional_photo_3.id_for_label }}', 'additional_photo_3-preview');
+});
 </script>
 {% endblock %}

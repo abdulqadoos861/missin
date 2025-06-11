@@ -36,4 +36,38 @@ class UserRegistrationForm(UserCreationForm):
             user.profile_picture = self.cleaned_data['profile_picture']
         if commit:
             user.save()
-        return user 
+        return user
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'name'
+        })
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'id': 'email'
+        })
+    )
+    subject = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'subject'
+        })
+    )
+    message = forms.CharField(
+        required=True,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'id': 'message',
+            'rows': 5
+        })
+    )

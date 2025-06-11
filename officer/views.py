@@ -10,6 +10,9 @@ from django.contrib.auth import logout as auth_logout
 from django.template import RequestContext
 from .models import Case, CaseUpdate, CaseNote, CaseEvidence
 from user.models import MissingPerson
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 @login_required
@@ -35,8 +38,6 @@ def officer_dashboard(request):
         'current_date': timezone.now(),
     }
     return render(request, 'officer_dashboard.html', context)
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def view_cases(request):
@@ -93,8 +94,6 @@ def view_cases(request):
     }
     
     return render(request, 'officer_view_case.html', context)
-
-
 
 @login_required
 def officer_view_case_detail(request, case_id):
@@ -168,57 +167,70 @@ def update_case(request, case_id):
         
         # Check if case is already closed
         if case.status == 'closed':
-            messages.error(request, 'This case is closed and cannot be modified.')
-            return redirect('officer:officer_view_case_detail', case_id=case.id)
+            return JsonResponse({
+                'success': False,
+                'message': 'This case is closed and cannot be modified.'
+            })
         
         if request.method == 'POST':
-            try:
-                status = request.POST.get('status')
-                note = request.POST.get('note')
-                
-                if not status or not note:
-                    messages.error(request, 'Both status and note are required.')
-                    return redirect('officer:officer_update_case', case_id=case.id)
-                
-                # Check if status is being changed to 'closed'
-                if status == 'closed' and case.status != 'closed':
-                    # Increment cases_closed counter for the officer
-                    if case.assigned_officer:
-                        case.assigned_officer.cases_closed += 1
-                        case.assigned_officer.save()
-                
-                # Update case status
-                case.status = status
-                case.save()
-                
-                # Create case update
-                CaseUpdate.objects.create(
-                    case=case,
-                    status=status,
-                    description=note,
-                    updated_by=request.user
-                )
-                
-                messages.success(request, 'Case status updated successfully.')
-                return redirect('officer:officer_view_case_detail', case_id=case.id)
-                
-            except Exception as e:
-                messages.error(request, f'Error updating case: {str(e)}')
-                return redirect('officer:officer_update_case', case_id=case.id)
-        
-        return render(request, 'officer_update_case.html', {
-            'case': case
-        })
-        
+            status = request.POST.get('status')
+            note = request.POST.get('note')
+            
+            # Validate inputs
+            if not status or not note:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Both status and note are required.'
+                })
+            
+            # Validate status value
+            valid_statuses = ['pending', 'under_progress', 'found', 'closed']
+            if status.lower() not in valid_statuses:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Invalid status value.'
+                })
+            
+            # Check if status is being changed to 'closed'
+            if status.lower() == 'closed' and case.status.lower() != 'closed':
+                # Increment cases_closed counter for the officer
+                if case.assigned_officer:
+                    case.assigned_officer.cases_closed += 1
+                    case.assigned_officer.save()
+            
+            # Update case status
+            case.status = status
+            case.save()
+            
+            # Create case update
+            CaseUpdate.objects.create(
+                case=case,
+                status=status,
+                description=note,
+                updated_by=request.user
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Case status updated successfully.',
+                'redirect_url': reverse('officer:officer_view_case_detail', args=[case.id])
+            })
+            
     except MissingPerson.DoesNotExist:
-        messages.error(request, 'The requested case does not exist.')
-        return redirect('officer:officer_view_case')
+        return JsonResponse({
+            'success': False,
+            'message': 'Case not found.'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'An error occurred: {str(e)}'
+        })
 
 @login_required
 def officer_profile(request):
-
-    if request.method == 'POST':
-        try:
+    try:
+        if request.method == 'POST':
             # Update user information
             user = request.user
             user.first_name = request.POST.get('first_name', user.first_name)
@@ -253,21 +265,21 @@ def officer_profile(request):
             
             messages.success(request, 'Settings updated successfully.')
             return redirect('officer_profile')
-            
-        except Exception as e:
-            messages.error(request, f'Error updating settings: {str(e)}')
-    
-    # Get case statistics
-    total_cases = MissingPerson.objects.filter(assigned_officer=request.user).count()
-    solved_cases = MissingPerson.objects.filter(assigned_officer=request.user, status='found').count()
-    pending_cases = MissingPerson.objects.filter(assigned_officer=request.user, status='pending').count()
-    
-    context = {
-        'total_cases': total_cases,
-        'solved_cases': solved_cases,
-        'pending_cases': pending_cases,
-    }
-    return render(request, 'officer_profile.html', context)
+        
+        # Get case statistics
+        total_cases = MissingPerson.objects.filter(assigned_officer=request.user).count()
+        solved_cases = MissingPerson.objects.filter(assigned_officer=request.user, status='found').count()
+        pending_cases = MissingPerson.objects.filter(assigned_officer=request.user, status='pending').count()
+        
+        context = {
+            'total_cases': total_cases,
+            'solved_cases': solved_cases,
+            'pending_cases': pending_cases,
+        }
+        return render(request, 'officer_profile.html', context)
+    except Exception as e:
+        messages.error(request, f'Error updating profile: {str(e)}')
+        return redirect('officer_profile')
 
 @login_required
 def add_case_note(request, case_id):
@@ -342,9 +354,6 @@ def add_case_evidence(request, case_id):
             messages.error(request, f'Error adding evidence: {str(e)}')
     
     return redirect('officer:officer_view_case_detail', case_id=case.id)
-
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])

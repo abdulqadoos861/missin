@@ -36,12 +36,12 @@ class MissingPerson(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     date_of_birth = models.DateField()
     height = models.CharField(max_length=50, help_text="Height in feet and inches")
-    weight = models.CharField(max_length=50, help_text="Weight in kg")
+    weight = models.CharField(max_length=50, help_text="Weight in kg", blank=True)
     
     # Physical Description
     eye_color = models.CharField(max_length=50)
     hair_color = models.CharField(max_length=50)
-    skin_color = models.CharField(max_length=50)
+    skin_color = models.CharField(max_length=50, blank=True)
     distinguishing_marks = models.TextField(blank=True, help_text="Scars, tattoos, or other identifying marks")
     
     # Last Seen Information

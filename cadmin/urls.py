@@ -22,6 +22,8 @@ urlpatterns = [
     path('settings/', views.admin_settings, name='admin_settings'),
     path('settings/update-profile/', views.update_admin_profile, name='update_admin_profile'),
     path('settings/change-password/', views.change_admin_password, name='change_admin_password'),
+    path('contact-messages/', views.view_contact_messages, name='view_contact_messages'),
+    path('reply-to-message/<int:message_id>/', views.reply_to_message, name='reply_to_message'),
     # Logout URL - Updated to use namespaced URL
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 ]

@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.conf import settings
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, ContactForm
+from .models import ContactMessage
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,6 +16,45 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
+
+def about(request):
+    return render(request, 'about.html')
+
+def services(request):
+    return render(request, 'services.html')
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+
+            send_mail(
+                f'Contact Form Submission: {subject}',
+                f'You have received a new message from {name} ({email}).\n\nMessage:\n{message}',
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.DEFAULT_FROM_EMAIL],
+                fail_silently=False,
+            )
+
+            ContactMessage.objects.create(
+                name=name,
+                email=email,
+                subject=subject,
+                message=message
+            )
+
+            messages.success(request, 'Thank you for your message! We will get back to you shortly.')
+            return redirect('contact')
+        else:
+            messages.error(request, 'There was an error in your form. Please check the fields and try again.')
+    else:
+        form = ContactForm()
+    
+    return render(request, 'contact.html', {'form': form})
 
 @ensure_csrf_cookie
 def login_view(request):
@@ -142,4 +185,13 @@ def register(request):
         form = UserRegistrationForm()
     
     return render(request, 'register.html', {'form': form})
+
+
+@login_required(login_url='login')
+def report_incident_redirect(request):
+    """
+    Redirects authenticated users to the report_missing_person page.
+    Unauthenticated users are redirected to the login page first.
+    """
+    return redirect('report_missing_person')
 

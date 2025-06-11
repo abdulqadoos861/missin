@@ -1,0 +1,32 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Reply to Message | Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Reply to Message</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Replying to: {{ message.subject }}</h6>
+        </div>
+        <div class="card-body">
+            <p><strong>From:</strong> {{ message.name }} ({{ message.email }})</p>
+            <p><strong>Received:</strong> {{ message.received_at|date:"Y-m-d H:i" }}</p>
+            <hr>
+            <p><strong>Message:</strong></p>
+            <p>{{ message.message }}</p>
+            <hr>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="reply_text">Your Reply:</label>
+                    <textarea class="form-control" id="reply_text" name="reply_text" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reply</button>
+                <a href="{% url 'cadmin:view_contact_messages' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

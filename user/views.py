@@ -26,19 +26,19 @@ def user_dashboard(request):
     # Get all cases reported by the current user
     user_cases = MissingPerson.objects.filter(reporter=request.user)
 
-    # Calculate statistics
-    total_reports = user_cases.count()
-    pending_reports = user_cases.filter(status__in=['pending', 'investigation']).count()
-    solved_reports = user_cases.filter(status__in=['found', 'closed']).count()
+    # Calculate statistics - matching template variable names
+    total_cases = user_cases.count()
+    active_cases = user_cases.filter(status__in=['pending', 'investigation']).count()
+    resolved_cases = user_cases.filter(status__in=['found', 'closed']).count()
 
     # Get the 5 most recent reports
-    recent_reports = user_cases.order_by('-created_at')[:5]
+    recent_cases = user_cases.order_by('-created_at')[:5]
 
     context = {
-        'total_reports': total_reports,
-        'pending_reports': pending_reports,
-        'solved_reports': solved_reports,
-        'recent_reports': recent_reports,
+        'total_cases': total_cases,
+        'active_cases': active_cases,
+        'resolved_cases': resolved_cases,
+        'recent_cases': recent_cases,
     }
 
     return render(request, 'userdashboard.html', context)

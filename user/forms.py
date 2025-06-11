@@ -18,7 +18,13 @@ class MissingPersonForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Add Bootstrap classes to all fields
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            # For file inputs, use a custom class to hide them, as they have custom styling.
+            if isinstance(field.widget, forms.ClearableFileInput):
+                field.widget.attrs['class'] = 'custom-file-input'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+            
+            # Mark required fields
             if field.required:
                 field.widget.attrs['required'] = 'required'
 

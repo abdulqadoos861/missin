@@ -1,412 +1,78 @@
+{% extends 'base.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pakistani Police Force | Public Safety Portal</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    {% comment %} <link rel="stylesheet" href="static/css/style.css"> {% endcomment %}
-    {% comment %} <link rel="stylesheet" href="../static/css/all.min.css"> {% endcomment %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-glass fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="{% url "index" %}">
-                <img src="../static/images/police-logo.png" alt="Pakistani Police Logo" height="40">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#OurServices">Our Services</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#initiatives">Initiatives</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url "login" %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link custom-btn" href="{% url "register" %}">Register</a></li>
-                </ul>
+{% block title %}Home | Public Safety Portal{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<header class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto text-center" data-aos="fade-up">
+                <h1 class="display-4 fw-bold">A Safer Community, Together</h1>
+                <p class="lead mb-4">Your trusted platform for public safety and assistance. Report missing persons and help us reunite families.</p>
+                <a href="{% url 'report_incident' %}" class="custom-btn btn-lg">Get Started</a>
             </div>
         </div>
-    </nav>
+    </div>
+</header>
 
-    <!-- Hero Section -->
-    <header class="hero-section">
-        <div class="dark-overlay"></div>
-        <div class="container hero-content">
-            <div class="row">
-                <div class="col-lg-8">
-                    <h1 class="display-4 text-white">Serving & Protecting the People of Pakistan</h1>
-                    <p class="lead text-white">24/7 emergency services and public safety initiatives</p>
-                    <div class="d-flex gap-3 mt-4">
-                        <a href="missing-persons.html" class="custom-btn btn-lg">Report Missing Person</a>
-                        <!-- <a href="crime-reporting.html" class="custom-btn btn-lg">Report Crime</a> -->
+<!-- Featured Services Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Our Core Service</h2>
+            <p class="lead text-muted">Committed to ensuring your safety and security.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="card service-card h-100 text-center">
+                    <div class="card-body">
+                        <div class="feature-icon-box"><i class="fas fa-user-slash fa-2x"></i></div>
+                        <h3 class="h5 mt-3">Missing Persons</h3>
+                        <p>Report and search for missing individuals to help reunite families.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</section>
 
-    <!-- Services Section -->
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-5 text-white" id="OurServices">Our Services</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card service-card h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-user fa-3x mb-3 text-primary"></i>
-                            <h3>Missing Persons</h3>
-                            <p>Report missing individuals or view current missing persons cases across Pakistan.</p>
-                            <!-- <a href="missing-persons.html" class="custom-btn">Learn More</a> -->
-                        </div>
+<!-- Why Choose Us Section -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold">Why Trust Our Platform?</h2>
+            <p class="lead text-muted">A secure and reliable system for public safety.</p>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <img src="{% static 'images/why-us.png' %}" alt="Secure Platform" class="img-fluid rounded-3">
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="d-flex align-items-start mb-4 feature-item" data-aos="fade-left" data-aos-delay="100">
+                    <div class="feature-icon-box me-3"><i class="fas fa-lock"></i></div>
+                    <div>
+                        <h5>Secure & Confidential</h5>
+                        <p class="text-white-50">Your data is protected with end-to-end encryption, ensuring privacy and security.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card service-card h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-shield-alt fa-3x mb-3 text-danger"></i>
-                            <h3>Crime Reporting</h3>
-                            <p>File complaints or report criminal activities anonymously or with your details.</p>
-                            <!-- <a href="crime-reporting.html" class="custom-btn">Learn More</a> -->
-                        </div>
+                <div class="d-flex align-items-start mb-4 feature-item" data-aos="fade-left" data-aos-delay="200">
+                    <div class="feature-icon-box me-3"><i class="fas fa-rocket"></i></div>
+                    <div>
+                        <h5>Fast & Efficient</h5>
+                        <p class="text-white-50">Our streamlined process ensures your reports are handled promptly by the right authorities.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card service-card h-100">
-                        <div class="card-body text-center">
-                            <i class="fas fa-phone-alt fa-3x mb-3 text-success"></i>
-                            <h3>Emergency Contacts</h3>
-                            <p>Direct access to emergency services and local police station contacts.</p>
-                            <!-- <a href="#" class="custom-btn">View Contacts</a> -->
-                        </div>
+                <div class="d-flex align-items-start feature-item" data-aos="fade-left" data-aos-delay="300">
+                    <div class="feature-icon-box me-3"><i class="fas fa-users"></i></div>
+                    <div>
+                        <h5>Community Focused</h5>
+                        <p class="text-white-50">We are dedicated to building a safer community by connecting citizens with law enforcement.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <h2 class="display-4 text-primary">15</h2>
-                    <p class="lead">Police Departments</p>
-                </div>
-                <div class="col-md-3">
-                    <h2 class="display-4 text-danger">1,200+</h2>
-                    <p class="lead">Cases Resolved</p>
-                </div>
-                <div class="col-md-3">
-                    <h2 class="display-4 text-success">500+</h2>
-                    <p class="lead">Missing Persons Found</p>
-                </div>
-                <div class="col-md-3">
-                    <h2 class="display-4 text-warning">24/7</h2>
-                    <p class="lead">Emergency Service</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section id="about" class="about-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="../static/images/police-team.jpg" alt="Pakistani Police Team" class="img-fluid about-img">
-                </div>
-                <div class="col-lg-6">
-                    <h2 class="mb-4">About Pakistani Police</h2>
-                    <p>The Pakistani Police Force is dedicated to maintaining law and order, preventing and detecting crime, and ensuring the safety and security of all citizens across the nation.</p>
-                    <p>With a rich history of service, our force comprises trained professionals committed to upholding justice and protecting the rights of every individual in Pakistan.</p>
-                    <div class="row mt-4">
-                        <div class="col-md-6 mb-3">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-shield-alt fa-2x text-primary me-3"></i>
-                                <div>
-                                    <h5 class="mb-0">Mission</h5>
-                                    <p class="mb-0">To serve and protect with integrity</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-eye fa-2x text-primary me-3"></i>
-                                <div>
-                                    <h5 class="mb-0">Vision</h5>
-                                    <p class="mb-0">A safer Pakistan for all</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <a href="#" class="custom-btn mt-3">Learn More About Us</a> -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Us Section -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <h2 class="text-center mb-5">Contact Pakistani Police</h2>
-            <div class="row">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    <div class="contact-info-card">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-headset contact-icon"></i>
-                            <h3>Get In Touch</h3>
-                            <p>We're here to help and answer any questions you might have.</p>
-                        </div>
-                        <div class="mb-4">
-                            <h5><i class="fas fa-map-marker-alt me-2"></i> Headquarters</h5>
-                            <p>Police Headquarters, Islamabad, Pakistan</p>
-                        </div>
-                        <div class="mb-4">
-                            <h5><i class="fas fa-phone-alt me-2"></i> Emergency Numbers</h5>
-                            <p>15 (Police Helpline)<br>1122 (Rescue)</p>
-                        </div>
-                        <div class="mb-4">
-                            <h5><i class="fas fa-envelope me-2"></i> Email</h5>
-                            <p>info@pakistanpolice.gov.pk</p>
-                        </div>
-                        <div>
-                            <h5><i class="fas fa-clock me-2"></i> Working Hours</h5>
-                            <p>24/7 Emergency Services<br>Monday-Friday: 8:00 AM - 4:00 PM</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="card p-4">
-                        <h3 class="mb-4">Send Us a Message</h3>
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="name" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="subject" class="form-label">Subject</label>
-                                <input type="text" class="form-control" id="subject" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="custom-btn">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-
-   <section id="initiatives" class="initiatives-section">
-        <div class="container">
-            <h2 class="text-center mb-5">Community Initiatives</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="initiative-card">
-                        <!-- <img src="images/neighborhood-watch.jpg" alt="Neighborhood Watch Program" class="initiative-img"> -->
-                        <div class="initiative-body">
-                            <span class="initiative-date">Ongoing Program</span>
-                            <h3 class="mt-2">Neighborhood Watch</h3>
-                            <p>Join our community policing program to help prevent crime in your area through vigilance and cooperation.</p>
-                            <!-- <a href="#" class="custom-btn btn-sm">Learn More</a> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="initiative-card">
-                        <!-- <img src="images/youth-program.jpg" alt="Youth Awareness Program" class="initiative-img"> -->
-                        <div class="initiative-body">
-                            <span class="initiative-date">Starting June 15</span>
-                            <h3 class="mt-2">Youth Awareness</h3>
-                            <p>Educational programs for young people about drug prevention, cyber safety, and responsible citizenship.</p>
-                            <!-- <a href="#" class="custom-btn btn-sm">Learn More</a> -->
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="initiative-card">
-                        <!-- <img src="images/women-safety.jpg" alt="Women's Safety Initiative" class="initiative-img"> -->
-                        <div class="initiative-body">
-                            <span class="initiative-date">Every Saturday</span>
-                            <h3 class="mt-2">Women's Safety</h3>
-                            <p>Self-defense workshops and safety awareness programs specifically designed for women and girls.</p>
-                            <!-- <a href="#" class="custom-btn btn-sm">Learn More</a> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-5">
-                <!-- <a href="#" class="custom-btn">View All Initiatives</a> -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials-section">
-        <div class="container">
-            <h2 class="text-center mb-5">What People Say About Us</h2>
-            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="testimonial-card">
-                                    <p class="testimonial-text">The Pakistani Police responded immediately when I reported a burglary in progress. Their quick action prevented significant loss and they kept me informed throughout the process. I'm grateful for their professionalism.</p>
-                                    <div class="testimonial-author">
-                                        <img src="../static/images/pic1.jpg" alt="Ahmed Khan" class="author-img">
-                                        <div class="author-info">
-                                            <h5>Ahmed Khan</h5>
-                                            <p>Business Owner, Lahore</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="testimonial-card">
-                                    <p class="testimonial-text">As a foreign visitor, I was impressed by the helpfulness of the Tourist Police in Islamabad. They guided me safely around the city and even helped me recover my lost wallet within hours. Excellent service!</p>
-                                    <div class="testimonial-author">
-                                        <img src="../static/images/pic2.jpg" alt="Sarah Johnson" class="author-img">
-                                        <div class="author-info">
-                                            <h5>Sarah Johnson</h5>
-                                            <p>Tourist from Canada</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row justify-content-center">  
-                            <div class="col-lg-8">
-                                <div class="testimonial-card">
-                                    <p class="testimonial-text">The community policing initiative in our neighborhood has made a significant difference. We now have regular meetings with our local officers, and crime rates have dropped noticeably. Thank you for making us feel safer.</p>
-                                    <div class="testimonial-author">
-                                        <img src="../static/images/pic3.jpg" alt="Fatima Ahmed" class="author-img">
-                                        <div class="author-info">
-                                            <h5>Fatima Ahmed</h5>
-                                            <p>Resident, Karachi</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-4">
-                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <div class="carousel-indicators position-static mx-2">
-                        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
-                        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
-                        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
-                    </div>
-                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Footer -->
-    <footer class="py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Pakistani Police</h5>
-                    <p>Committed to ensuring public safety and maintaining law and order across Pakistan.</p>
-                </div>
-                <div class="col-md-2">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{% url "index" %}">Home</a></li>
-                        <li><a href="{% url "login" %}">Login</a></li>
-                        <li><a href="{% url "register" %}">Register</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <h5>About</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#">Careers</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Emergency Contacts</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-phone-alt me-2"></i> 15 (Police Helpline)</li>
-                        <li><i class="fas fa-phone-alt me-2"></i> 1122 (Rescue)</li>
-                        <li><i class="fas fa-envelope me-2"></i> info@pakistanpolice.gov.pk</li>
-                    </ul>
-                </div>
-            </div>
-            <hr>
-            <div class="text-center">
-                <p>© 2023 Pakistani Police Force. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="static/js/bootstrap.min.js"></script>
-    <script>
-
-                // Initialize carousel with auto-cycling disabled after user interaction
-        document.addEventListener('DOMContentLoaded', function() {
-            const testimonialCarousel = document.getElementById('testimonialCarousel');
-            const carousel = new bootstrap.Carousel(testimonialCarousel, {
-                interval: 5000,
-                wrap: true,
-                pause: 'hover'
-            });
-            
-            // Pause cycling when user manually changes slide
-            testimonialCarousel.addEventListener('slid.bs.carousel', function() {
-                carousel.pause();
-            });
-            
-            // Resume cycling after 8 seconds if user hasn't interacted
-            testimonialCarousel.addEventListener('slide.bs.carousel', function() {
-                setTimeout(() => {
-                    if (!document.querySelector('.carousel:hover')) {
-                        carousel.cycle();
-                    }
-                }, 8000);
-            });
-        });
-        
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar-glass');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    </script>
-</body>
-</html>
+    </div>
+</section>
+{% endblock %}

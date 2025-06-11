@@ -78,3 +78,24 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         db_table = 'frontend_user'
+
+
+class ContactMessage(models.Model):
+    """
+    Model to store messages submitted through the contact form.
+    """
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    is_replied = models.BooleanField(default=False)
+    received_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Message from {self.name} re: "{self.subject}"'
+
+    class Meta:
+        verbose_name = "Contact Message"
+        verbose_name_plural = "Contact Messages"
+        ordering = ['-received_at']

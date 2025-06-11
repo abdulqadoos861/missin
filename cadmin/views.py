@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from frontend.models import User
 from user.models import MissingPerson, CaseUpdate
+from frontend.models import ContactMessage
+from .models import MessageReply
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from datetime import timedelta, datetime
@@ -20,8 +22,42 @@ import os
 
 logger = logging.getLogger(__name__)
 
+
 def is_admin(user):
     return user.is_admin()
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def reply_to_message(request, message_id):
+    message = get_object_or_404(ContactMessage, id=message_id)
+    if request.method == 'POST':
+        reply_text = request.POST.get('reply_text')
+        if reply_text:
+            # Save the reply
+            MessageReply.objects.create(message=message, reply_text=reply_text)
+            
+            # Send email
+            send_mail(
+                f'Re: {message.subject}',
+                reply_text,
+                settings.DEFAULT_FROM_EMAIL,
+                [message.email],
+                fail_silently=False,
+            )
+            
+            # Mark message as read
+            message.is_read = True
+            message.is_replied = True
+            message.save()
+            
+            messages.success(request, 'Your reply has been sent successfully.')
+            return redirect('cadmin:view_contact_messages')
+        else:
+            messages.error(request, 'Reply cannot be empty.')
+
+    return render(request, 'reply_to_message.html', {'message': message})
+
+
 
 # Create your views here.
 @login_required(login_url='login')
@@ -439,7 +475,7 @@ def toggle_user_status(request, user_id):
     status = "activated" if user.is_active else "deactivated"
     messages.success(request, f'User {user.username} has been {status}.')
     
-    return redirect('manage_users')
+    return redirect('cadmin:manage_users')
 
 
 
@@ -578,6 +614,27 @@ def add_case_update(request, case_id):
 def admin_settings(request):
     """Admin settings page view"""
     return render(request, 'admin_settings.html')
+
+
+@login_required
+@user_passes_test(is_admin, login_url='login')
+def view_contact_messages(request):
+    """Display all contact messages in the admin dashboard."""
+    messages_list = ContactMessage.objects.all()
+    paginator = Paginator(messages_list, 15)  # Show 15 messages per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Mark messages as read when they are viewed
+    for msg in page_obj:
+        if not msg.is_read:
+            msg.is_read = True
+            msg.save(update_fields=['is_read'])
+
+    context = {
+        'page_obj': page_obj,
+    }
+    return render(request, 'contact_messages.html', context)
 
 @login_required
 @user_passes_test(is_admin, login_url='login')

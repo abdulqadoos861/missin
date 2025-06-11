@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Service | Public Safety Portal{% endblock %}
+
+{% block content %}
+<!-- Services Section -->
+<section id="OurServices" class="py-5" style="padding-top: 100px !important;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Our Core Service</h2>
+            <p class="lead text-muted">Committed to ensuring your safety and security.</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-slash fa-3x mb-3 text-primary"></i>
+                        <h3 class="h5">Missing Persons</h3>
+                        <p>Report and search for missing individuals to help reunite families.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

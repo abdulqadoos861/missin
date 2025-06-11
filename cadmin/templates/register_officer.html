@@ -2,49 +2,135 @@
 
 {% block extra_css %}
 <style>
-    /* Flat design: make card containers transparent */
+    /* Modern color palette aligned with base_admin.html */
+    :root {
+        --primary-color: #1a73e8; /* Vibrant blue for primary actions */
+        --secondary-color: #34c759; /* Green for success states */
+        --background-color: #f4f6f8; /* Matches page background */
+        --text-dark: #1a202c; /* Dark text for readability */
+        --border-color: #e2e8f0; /* Subtle border color */
+        --input-bg: #e8ecef; /* Slightly darker input background */
+        --shadow-color: rgba(0, 0, 0, 0.1); /* Soft shadow */
+        --table-header-bg: #edf2f7; /* Light gray for table headers */
+        --success-bg: #e6ffed; /* Light green for success alerts */
+        --error-bg: #fee2e2; /* Light red for error alerts */
+    }
+
+    /* Card styling: transparent background */
     .card {
         background-color: transparent !important;
         border: none !important;
-        box-shadow: none !important;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px var(--shadow-color) !important;
     }
 
-    /* Ensure text is dark and readable on the light page background */
+    /* Text and headings */
     .card, .card .card-title, .card h5, .form-label, .table {
         color: var(--text-dark);
     }
 
-    /* Reset form inputs to a standard light theme style */
+    /* Form inputs */
     .form-control, .form-select {
-        background-color: #ffffff;
+        background-color: var(--input-bg);
         color: var(--text-dark);
         border: 1px solid var(--border-color);
+        border-radius: 8px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-control::placeholder {
-        color: #6c757d;
+        color: #a0aec0; /* Softer placeholder color */
     }
 
     .form-control:focus, .form-select:focus {
-        background-color: #ffffff;
+        background-color: var(--input-bg);
         color: var(--text-dark);
-        border-color: var(--secondary-color);
-        box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.2);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
     }
 
-    /* Reset table styles for light theme */
+    /* Table styles */
     .table thead {
+        background-color: var(--table-header-bg);
         color: var(--text-dark);
-        background-color: #f8f9fa;
     }
 
     .table td, .table th {
         border-color: var(--border-color);
     }
 
-    /* Reset close button for alerts */
+    /* Alerts */
+    .alert-success {
+        background-color: var(--success-bg);
+        color: var(--text-dark);
+        border: 1px solid var(--secondary-color);
+    }
+
+    .alert-danger {
+        background-color: var(--error-bg);
+        color: var(--text-dark);
+        border: 1px solid #f56565;
+    }
+
     .btn-close {
         filter: none;
+        opacity: 0.6;
+    }
+
+    .btn-close:hover {
+        opacity: 1;
+    }
+
+    /* Button styling */
+    .btn-primary {
+        background: linear-gradient(45deg, var(--primary-color), #60a5fa);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-outline-primary {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: #ffffff;
+    }
+
+    /* Headings */
+    h5 {
+        color: var(--text-dark);
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Badge styling */
+    .badge.bg-success {
+        background-color: var(--secondary-color) !important;
+        color: #ffffff;
+    }
+
+    .badge.bg-danger {
+        background-color: #f56565 !important;
+        color: #ffffff;
+    }
+
+    /* Table hover effect */
+    .table-hover tbody tr:hover {
+        background-color: rgba(26, 115, 232, 0.05);
     }
 </style>
 {% endblock %}
@@ -253,56 +339,6 @@
     </div>
 </div>
 
-<style>
-    .card {
-        border: none;
-        border-radius: 15px;
-    }
-    
-    .card-title {
-        color: #2c3e50;
-        font-weight: 600;
-    }
-    
-    .form-label {
-        font-weight: 500;
-        color: #34495e;
-    }
-    
-    .form-control, .form-select {
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-        padding: 0.75rem 1rem;
-    }
-    
-    .form-control:focus, .form-select:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-    }
-    
-    .btn-primary {
-        background: linear-gradient(45deg, #3498db, #2980b9);
-        border: none;
-        padding: 0.75rem 2rem;
-        border-radius: 8px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    h5 {
-        color: #2c3e50;
-        font-weight: 600;
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
-</style>
-
 {% block extra_js %}
 <script>
 // Form validation
@@ -341,4 +377,3 @@ document.getElementById('cnic').addEventListener('input', function() {
 </script>
 {% endblock %}
 {% endblock %}
-

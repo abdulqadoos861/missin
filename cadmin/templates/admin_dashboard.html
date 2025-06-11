@@ -1,379 +1,227 @@
 {% extends 'base_admin.html' %}
-
-{% block extra_css %}
-<style>
-    /* Modern color palette */
-    :root {
-        --primary-color: #1a73e8; /* Vibrant blue for primary actions */
-        --secondary-color: #34c759; /* Green accent for success states */
-        --background-color: #f4f6f8; /* Light gray page background */
-        --text-dark: #1a202c; /* Dark text for readability */
-        --border-color: #e2e8f0; /* Subtle border color */
-        --input-bg: #e8ecef; /* Slightly darker background for inputs */
-        --shadow-color: rgba(0, 0, 0, 0.1); /* Soft shadow */
-        --table-header-bg: #edf2f7; /* Light gray for table headers */
-        --success-bg: #e6ffed; /* Light green for success alerts */
-        --error-bg: #fee2e2; /* Light red for error alerts */
-    }
-
-    /* Card styling: transparent background */
-    .card {
-        background-color: transparent !important;
-        border: none !important;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px var(--shadow-color) !important;
-    }
-
-    /* Text and headings */
-    .card, .card .card-title, .card h5, .form-label, .table {
-        color: var(--text-dark);
-    }
-
-    /* Form inputs */
-    .form-control, .form-select {
-        background-color: var(--input-bg);
-        color: var(--text-dark);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .form-control::placeholder {
-        color: #a0aec0; /* Softer placeholder color */
-    }
-
-    .form-control:focus, .form-select:focus {
-        background-color: var(--input-bg);
-        color: var(--text-dark);
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-    }
-
-    /* Table styles */
-    .table thead {
-        background-color: var(--table-header-bg);
-        color: var(--text-dark);
-    }
-
-    .table td, .table th {
-        border-color: var(--border-color);
-    }
-
-    /* Alerts */
-    .alert-success {
-        background-color: var(--success-bg);
-        color: #1a202c;
-        border: 1px solid var(--secondary-color);
-    }
-
-    .alert-danger {
-        background-color: var(--error-bg);
-        color: #1a202c;
-        border: 1px solid #f56565;
-    }
-
-    .btn-close {
-        filter: none;
-        opacity: 0.6;
-    }
-
-    .btn-close:hover {
-        opacity: 1;
-    }
-
-    /* Button styling */
-    .btn-primary {
-        background: linear-gradient(45deg, var(--primary-color), #60a5fa);
-        border: none;
-        border-radius: 8px;
-        padding: 0.75rem 2rem;
-        font-weight: 500;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .btn-outline-primary {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        border-radius: 8px;
-        transition: all 0.2s ease;
-    }
-
-    .btn-outline-primary:hover {
-        background-color: var(--primary-color);
-        color: #ffffff;
-    }
-
-    /* Headings */
-    h5 {
-        color: var(--text-dark);
-        font-weight: 600;
-        border-bottom: 2px solid var(--primary-color);
-        padding-bottom: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    /* Badge styling */
-    .badge.bg-success {
-        background-color: var(--secondary-color) !important;
-        color: #ffffff;
-    }
-
-    .badge.bg-danger {
-        background-color: #f56565 !important;
-        color: #ffffff;
-    }
-
-    /* Table hover effect */
-    .table-hover tbody tr:hover {
-        background-color: rgba(26, 115, 232, 0.05);
-    }
-</style>
-{% endblock %}
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">
-                        <i class="fas fa-user-plus me-2"></i>Register New Officer
-                    </h4>
-
-                    {% if messages %}
-                    <div class="messages mb-4">
-                        {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container-fluid py-4" style="background-color: #f5f7fa; min-height: calc(100vh - var(--header-height)); padding: 2rem;">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card text-white border-0 shadow-lg" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1 fw-bold">Admin Dashboard</h4>
+                            <p class="mb-0 opacity-75">Welcome to the Crime Management System</p>
                         </div>
-                        {% endfor %}
+                        <div class="text-end">
+                            <span class="badge bg-white text-primary fs-6 px-3 py-2 rounded-pill">
+                                <i class="fas fa-folder me-2"></i>Total Cases: {{ total_cases }}
+                            </span>
+                        </div>
                     </div>
-                    {% endif %}
-
-                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-                        {% csrf_token %}
-                        
-                        <!-- Personal Information -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h5 class="mb-3">Personal Information</h5>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" required>
-                                <div class="invalid-feedback">Please enter first name.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="last_name" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" required>
-                                <div class="invalid-feedback">Please enter last name.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="cnic" class="form-label">CNIC</label>
-                                <input type="text" class="form-control" id="cnic" name="cnic" pattern="[0-9]{5}-[0-9]{7}-[0-9]" placeholder="12345-1234567-1" required>
-                                <div class="invalid-feedback">Please enter a valid CNIC (format: 12345-1234567-1).</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="rank" class="form-label">Rank</label>
-                                <select class="form-select" id="rank" name="rank" required>
-                                    <option value="">Select Rank</option>
-                                    <option value="IGP">Inspector General of Police (IGP)</option>
-                                    <option value="DIG">Deputy Inspector General (DIG)</option>
-                                    <option value="SSP">Senior Superintendent of Police (SSP)</option>
-                                    <option value="SP">Superintendent of Police (SP)</option>
-                                    <option value="DSP">Deputy Superintendent of Police (DSP)</option>
-                                    <option value="ASP">Assistant Superintendent of Police (ASP)</option>
-                                    <option value="Inspector">Inspector</option>
-                                    <option value="SI">Sub-Inspector (SI)</option>
-                                    <option value="ASI">Assistant Sub-Inspector (ASI)</option>
-                                    <option value="HC">Head Constable (HC)</option>
-                                    <option value="Constable">Constable</option>
-                                </select>
-                                <div class="invalid-feedback">Please select a rank.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                                <div class="invalid-feedback">Please choose a username.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="invalid-feedback">Please enter a valid email address.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="phone_number" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
-                                <div class="invalid-feedback">Please enter phone number.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
-                                <div class="invalid-feedback">Please enter date of birth.</div>
-                            </div>
-                        </div>
-
-                        <!-- Address Information -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h5 class="mb-3">Address Information</h5>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                                <div class="invalid-feedback">Please enter address.</div>
-                            </div>
-                        </div>
-
-                        <!-- Account Security -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h5 class="mb-3">Account Security</h5>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="password1" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password1" name="password1" required>
-                                <div class="invalid-feedback">Please enter password.</div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="password2" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="password2" name="password2" required>
-                                <div class="invalid-feedback">Please confirm password.</div>
-                            </div>
-                        </div>
-
-                        <!-- Profile Picture -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h5 class="mb-3">Profile Picture</h5>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label for="profile_picture" class="form-label">Upload Photo</label>
-                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
-                                <div class="form-text">Upload a professional photo of the officer.</div>
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="row">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-user-plus me-2"></i>Register Officer
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Officer List Table -->
-<div class="container-fluid mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">
-                        <i class="fas fa-users me-2"></i>Registered Officers
-                    </h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Rank</th>
-                                    <th>CNIC</th>
-                                    <th>Email</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for officer in officers %}
-                                <tr>
-                                    <td>
-                                        {% if officer.profile_picture %}
-                                            <img src="{{ officer.profile_picture.url }}" alt="{{ officer.get_full_name }}" class="rounded-circle" width="40" height="40">
-                                        {% else %}
-                                            <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle" width="40" height="40">
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ officer.get_full_name }}</td>
-                                    <td>{{ officer.rank }}</td>
-                                    <td>{{ officer.cnic }}</td>
-                                    <td>{{ officer.email }}</td>
-                                    <td>
-                                        {% if officer.is_active %}
-                                            <span class="badge bg-success">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">Inactive</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="{% url 'cadmin:edit_officer' officer.id %}" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-edit me-1"></i>Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="7" class="text-center">No officers registered yet.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+    <!-- Case Statistics -->
+    <div class="row mb-4 g-4">
+        <div class="col-md-3">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #2980b9, #3498db);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Total Cases</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ total_cases }}</h2>
+                        </div>
+                        <i class="fas fa-folder fa-3x opacity-50"></i>
+                    </div>
+                    <a href="{% url 'cadmin:manage_cases' %}" class="text-white stretched-link text-end">View All <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #f39c12, #f1c40f);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Pending</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ pending_cases }}</h2>
+                        </div>
+                        <i class="fas fa-clock fa-3x opacity-50"></i>
+                    </div>
+                    <div class="text-end text-white-50">{{ pending_percentage }}% of total</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #8e44ad, #9b59b6);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Investigation</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ investigation_cases }}</h2>
+                        </div>
+                        <i class="fas fa-search fa-3x opacity-50"></i>
+                    </div>
+                    <div class="text-end text-white-50">{{ investigation_percentage }}% of total</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #27ae60, #2ecc71);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Found</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ found_cases }}</h2>
+                        </div>
+                        <i class="fas fa-check-circle fa-3x opacity-50"></i>
+                    </div>
+                    <div class="text-end text-white-50">{{ found_percentage }}% of total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Statistics -->
+    <div class="row mb-4 g-4">
+        <div class="col-md-4">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #34495e, #2c3e50);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Total Users</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ total_users }}</h2>
+                        </div>
+                        <i class="fas fa-users fa-3x opacity-50"></i>
+                    </div>
+                    <a href="{% url 'cadmin:manage_users' %}" class="text-white stretched-link text-end">Manage <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #16a085, #1abc9c);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Active</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ active_users }}</h2>
+                        </div>
+                        <i class="fas fa-user-check fa-3x opacity-50"></i>
+                    </div>
+                    <div class="text-end text-white-50">{{ active_percentage }}% of total</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #c0392b, #e74c3c);">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1 fw-semibold opacity-75">Inactive</h6>
+                            <h2 class="mb-0 fw-bold display-5">{{ inactive_users }}</h2>
+                        </div>
+                        <i class="fas fa-user-times fa-3x opacity-50"></i>
+                    </div>
+                    <div class="text-end text-white-50">{{ inactive_percentage }}% of total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4 fw-bold">Quick Actions</h5>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{% url 'cadmin:manage_cases' %}" class="btn btn-primary btn-lg px-4 rounded-pill action-btn">
+                            <i class="fas fa-folder me-2"></i>Manage Cases
+                        </a>
+                        <a href="{% url 'cadmin:register_officer' %}" class="btn btn-secondary btn-lg px-4 rounded-pill action-btn">
+                            <i class="fas fa-user-plus me-2"></i>Register Officer
+                        </a>
+                        <a href="{% url 'cadmin:manage_users' %}" class="btn btn-warning text-dark btn-lg px-4 rounded-pill action-btn">
+                            <i class="fas fa-users me-2"></i>Manage Users
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.hover-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hover-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2) !important;
+}
+
+.action-btn {
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #f0f0f0;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+.rounded-circle {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
 
 {% block extra_js %}
 <script>
-// Form validation
-(function () {
-    'use strict'
-    var forms = document.querySelectorAll('.needs-validation')
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
-
-// Password match validation
-document.getElementById('password2').addEventListener('input', function() {
-    if (this.value !== document.getElementById('password1').value) {
-        this.setCustomValidity('Passwords do not match');
-    } else {
-        this.setCustomValidity('');
+    // Add animation to numbers
+    function animateNumbers() {
+        document.querySelectorAll('h3.mb-0').forEach(element => {
+            const finalValue = parseInt(element.textContent);
+            let currentValue = 0;
+            const duration = 1000;
+            const step = finalValue / (duration / 16);
+            
+            const timer = setInterval(() => {
+                currentValue += step;
+                if (currentValue >= finalValue) {
+                    element.textContent = finalValue;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(currentValue);
+                }
+            }, 16);
+        });
     }
-});
 
-// CNIC format validation
-document.getElementById('cnic').addEventListener('input', function() {
-    const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
-    if (!cnicPattern.test(this.value)) {
-        this.setCustomValidity('Please enter CNIC in format: 12345-1234567-1');
-    } else {
-        this.setCustomValidity('');
-    }
-});
+    // Call animation when page loads
+    document.addEventListener('DOMContentLoaded', animateNumbers);
 </script>
 {% endblock %}
+
 {% endblock %}

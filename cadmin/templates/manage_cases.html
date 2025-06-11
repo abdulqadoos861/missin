@@ -86,7 +86,7 @@
                     </thead>
                     <tbody>
                         {% for case in page_obj %}
-                        <tr>
+                        <tr style="background-color: #f5f7fa;">
                             <td>{{ case.case_number }}</td>
                             <td>{{ case.get_full_name }}</td>
                             <td>
@@ -105,7 +105,7 @@
                             </td>
                         </tr>
                         {% empty %}
-                        <tr>
+                        <tr style="background-color: #f5f7fa;">
                             <td colspan="6" class="text-center">No cases found.</td>
                         </tr>
                         {% endfor %}

@@ -1,4 +1,4 @@
-{% load static %}
+<!-- {% load static %} -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -353,6 +353,37 @@
             border-bottom: 1px solid #dee2e6;
             vertical-align: middle;
         }
+        
+        /* Search input styling */
+        input[type="text"].form-control,
+        input[type="search"].form-control {
+            color: white !important;
+        }
+        
+        /* Placeholder text color */
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* For WebKit browsers */
+        ::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* For Firefox */
+        ::-moz-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* For Microsoft Edge */
+        :-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* For Internet Explorer 10-11 */
+        :-moz-placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
 
         .custom-table tbody tr:hover {
             background-color: #f8f9fa;
@@ -402,9 +433,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'manage_cases' %}active{% endif %}" 
+                    <a class="nav-link {% if 'case' in request.resolver_match.url_name %}active{% endif %}" 
                        href="{% url 'cadmin:manage_cases' %}">
-                        <i class="fas fa-folder"></i>Manage Cases
+                        <i class="fas fa-briefcase"></i>Manage Cases
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'view_contact_messages' %}active{% endif %}" 
+                       href="{% url 'cadmin:view_contact_messages' %}">
+                        <i class="fas fa-envelope"></i>Contact Messages
                     </a>
                 </li>
                 <li class="nav-item">
