@@ -48,7 +48,7 @@
 
     .case-body {
         padding: 25px;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(32, 21, 254, 0.53);
     }
 
     .status-badge {
@@ -220,7 +220,7 @@
     .search-box input {
         padding: 15px 20px 15px 50px;
         border-radius: 25px;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(9, 0, 103, 0.292);
         border: 1px solid rgba(255, 255, 255, 0.1);
         color: var(--text-light);
         backdrop-filter: blur(10px);
@@ -228,7 +228,7 @@
     }
 
     .search-box input:focus {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(18, 6, 249, 0);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
@@ -244,7 +244,7 @@
     .form-select {
         padding: 15px 20px;
         border-radius: 25px;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(9, 0, 103, 0.292);
         border: 1px solid rgba(255, 255, 255, 0.1);
         color: var(--text-light);
         backdrop-filter: blur(10px);
@@ -339,39 +339,39 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-5" style="background: linear-gradient(to bottom, #f5f7fa, #e9ecef); border-radius: 15px; padding: 30px;">
     <!-- Statistics Section -->
-    <div class="row mb-4">
+    <div class="row mb-5">
         <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-number">{{ total_cases }}</div>
-                <div class="stat-label">Total Cases</div>
+            <div class="stat-card" style="background: linear-gradient(to bottom, #ffffff, #f5f7fa); border-left: .3rem solid #006d5b;">
+                <div class="stat-number" style="color: #006d5b;">{{ total_cases }}</div>
+                <div class="stat-label" style="color: #495057;">Total Cases</div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-number">{{ active_cases }}</div>
-                <div class="stat-label">Active Cases</div>
+            <div class="stat-card" style="background: linear-gradient(to bottom, #ffffff, #f5f7fa); border-left: .3rem solid #009688;">
+                <div class="stat-number" style="color: #009688;">{{ active_cases }}</div>
+                <div class="stat-label" style="color: #495057;">Active Cases</div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-number">{{ resolved_cases }}</div>
-                <div class="stat-label">Resolved Cases</div>
+            <div class="stat-card" style="background: linear-gradient(to bottom, #ffffff, #f5f7fa); border-left: .3rem solid #00bfa5;">
+                <div class="stat-number" style="color: #00bfa5;">{{ resolved_cases }}</div>
+                <div class="stat-label" style="color: #495057;">Resolved Cases</div>
             </div>
         </div>
     </div>
 
     <!-- Filter Section -->
-    <div class="row mb-4">
+    <div class="row mb-5">
         <div class="col-md-6">
             <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" class="form-control" placeholder="Search cases...">
+                <i class="fas fa-search" style="color: #009688;"></i>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search cases..." style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2); color: #495057; padding: 15px 20px 15px 50px; border-radius: 25px; transition: background 0.3s ease;">
             </div>
         </div>
         <div class="col-md-3">
-            <select id="statusFilter" class="form-select">
+            <select id="statusFilter" class="form-select" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2); color: #495057; padding: 15px 20px; border-radius: 25px; transition: background 0.3s ease;">
                 <option value="">All Status</option>
                 <option value="pending">Pending</option>
                 <option value="under_investigation">Under Investigation</option>
@@ -380,7 +380,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <select id="sortBy" class="form-select">
+            <select id="sortBy" class="form-select" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2); color: #495057; padding: 15px 20px; border-radius: 25px; transition: background 0.3s ease;">
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
                 <option value="status">By Status</option>
@@ -396,10 +396,10 @@
              data-case-number="{{ case.case_number }}"
              data-status="{{ case.status }}"
              data-date="{{ case.created_at|date:'Y-m-d' }}">
-            <div class="tracking-card">
-                <div class="case-header d-flex justify-content-between align-items-center">
+            <div class="tracking-card" style="background: linear-gradient(to bottom, #ffffff, #f5f7fa); border: 1px solid rgba(0, 109, 91, 0.1);">
+                <div class="case-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #006d5b, #009688); color: white;">
                     <h5 class="mb-0">Case #{{ case.case_number }}</h5>
-                    <span class="status-badge status-{{ case.status }}">
+                    <span class="status-badge status-{{ case.status }}" style="background: linear-gradient(135deg, #00bfa5, #00e5ff); color: white;">
                         {{ case.status|title }}
                     </span>
                 </div>
@@ -417,6 +417,9 @@
                             <p class="case-meta"><i class="fas fa-birthday-cake"></i>Age: {{ case.age }}</p>
                             <p class="case-meta"><i class="fas fa-calendar"></i>Last Seen: {{ case.last_seen_date|date:"F d, Y" }}</p>
                             <p class="case-meta"><i class="fas fa-map-marker-alt"></i>Location: {{ case.last_seen_location }}</p>
+                            <a href="{% url 'missing_person_detail' case_number=case.case_number %}" class="btn btn-sm btn-primary rounded-pill px-4 py-1 mt-2" style="background: linear-gradient(to right, #006d5b, #009688); border: none; transition: transform 0.2s ease;">
+                                <i class="fas fa-eye me-1"></i> View Details
+                            </a>
                         </div>
                     </div>
                     

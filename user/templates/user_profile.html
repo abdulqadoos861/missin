@@ -1,342 +1,158 @@
 {% extends 'base_users.html' %}
-{% load static %}
 
-{% block title %}Profile Settings | Pakistani Police Force{% endblock %}
-
-{% block extra_css %}
-<style>
-    /* Enhanced Text Colors and Typography */
-    .card {
-        background: rgba(26, 35, 126, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-    }
-
-    .card-header {
-        background: linear-gradient(135deg, #1a237e, #4a148c) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .card-header h5 {
-        color: #ffffff;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-
-    .form-label {
-        color: #e0e0e0;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-
-    .form-control {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #ffffff;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: #ff4081;
-        color: #ffffff;
-        box-shadow: 0 0 0 0.25rem rgba(255, 64, 129, 0.25);
-    }
-
-    .form-control:disabled {
-        background: rgba(255, 255, 255, 0.05);
-        color: #b0b0b0;
-    }
-
-    .text-muted {
-        color: #b0b0b0 !important;
-    }
-
-    /* List Group Styling */
-    .list-group-item {
-        background: rgba(26, 35, 126, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #e0e0e0;
-        transition: all 0.3s ease;
-    }
-
-    .list-group-item:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        transform: translateX(5px);
-    }
-
-    .list-group-item.active {
-        background: linear-gradient(135deg, #ff4081, #ff1744);
-        border-color: #ff4081;
-        color: #ffffff;
-    }
-
-    /* Form Switch Styling */
-    .form-check-input {
-        background-color: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .form-check-input:checked {
-        background-color: #ff4081;
-        border-color: #ff4081;
-    }
-
-    .form-check-label {
-        color: #e0e0e0;
-        font-weight: 500;
-    }
-
-    /* Button Styling */
-    .btn-primary {
-        background: linear-gradient(135deg, #ff4081, #ff1744);
-        border: none;
-        color: #ffffff;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #ff1744, #ff4081);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3);
-    }
-
-    /* Alert Styling */
-    .alert {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #ffffff;
-    }
-
-    .alert-success {
-        background: rgba(0, 200, 83, 0.2);
-        border-color: rgba(0, 200, 83, 0.3);
-    }
-
-    .alert-danger {
-        background: rgba(255, 23, 68, 0.2);
-        border-color: rgba(255, 23, 68, 0.3);
-    }
-
-    /* Section Headers */
-    .section-title {
-        color: #ffffff;
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-        position: relative;
-        padding-bottom: 0.5rem;
-    }
-
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        height: 3px;
-        background: #ff4081;
-        border-radius: 3px;
-    }
-
-    /* Card Body Enhancement */
-    .card-body {
-        color: #e0e0e0;
-    }
-
-    /* Tab Content Animation */
-    .tab-pane {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
-{% endblock %}
+{% block title %}User Profile | Punjab Police Portal{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row">
-        <!-- Sidebar Navigation -->
-        <div class="col-md-3 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
-                            <i class="fas fa-user-circle me-2"></i>Profile Information
-                        </a>
-                        <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">
-                            <i class="fas fa-shield-alt me-2"></i>Security Settings
-                        </a>
-                        <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">
-                            <i class="fas fa-bell me-2"></i>Notification Preferences
-                        </a>
-                        <a href="#privacy" class="list-group-item list-group-item-action" data-bs-toggle="list">
-                            <i class="fas fa-lock me-2"></i>Privacy Settings
-                        </a>
-                    </div>
+<div class="container mt-5 pt-5" style="background: linear-gradient(to bottom, #f5f7fa, #e9ecef); padding: 30px; border-radius: 15px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                <div class="card-header text-white py-4" style="background: linear-gradient(135deg, #006d5b, #009688);">
+                    <h3 class="mb-0">User Profile</h3>
+                    <p class="mb-0 text-white-75">Manage your personal information and settings</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <div class="tab-content">
-                <!-- Profile Information -->
-                <div class="tab-pane fade show active" id="profile">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profile Information</h5>
-                        </div>
-                        <div class="card-body">
-                            {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                {% endfor %}
+                <div class="card-body p-5">
+                    <div class="row mb-5">
+                        <div class="col-md-4 text-center">
+                            {% if request.user.profile_picture %}
+                                <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle shadow-lg mb-3" style="width: 150px; height: 150px; border: 3px solid #009688;">
+                            {% else %}
+                                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; border: 3px solid #009688; margin: 0 auto;">
+                                    <i class="fas fa-user fa-3x text-muted"></i>
+                                </div>
                             {% endif %}
-                            
-                            <form method="POST" class="needs-validation" novalidate>
+                            <h4 class="mt-2" style="color: #004d40;">{{ request.user.get_full_name }}</h4>
+                            <p class="text-muted">{{ request.user.email }}</p>
+                            <form method="post" enctype="multipart/form-data" class="mt-3">
                                 {% csrf_token %}
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="first_name" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ request.user.first_name }}" required>
+                                <input type="hidden" name="form_type" value="profile_picture">
+                                <div class="mb-3">
+                                    <label for="profile_picture" class="form-label" style="color: #004d40;">Update Profile Picture</label>
+                                    <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
+                                </div>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 py-2" style="background: linear-gradient(to right, #006d5b, #009688); border: none;">
+                                    <i class="fas fa-camera me-2"></i>Upload
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="mb-4" style="color: #004d40; font-weight: 600;">Personal Information</h5>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="profile_update">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="first_name" class="form-label" style="color: #004d40;">First Name</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ request.user.first_name }}" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="last_name" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ request.user.last_name }}" required>
+                                    <div class="col-md-6">
+                                        <label for="last_name" class="form-label" style="color: #004d40;">Last Name</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ request.user.last_name }}" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" required>
+                                    <label for="email" class="form-label" style="color: #004d40;">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="username" value="{{ request.user.username }}" disabled>
-                                    <small class="text-muted">Username cannot be changed</small>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-2"></i>Save Changes
-                                    </button>
-                                </div>
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 py-2" style="background: linear-gradient(to right, #006d5b, #009688); border: none;">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
                             </form>
                         </div>
                     </div>
-                </div>
 
-                <!-- Security Settings -->
-                <div class="tab-pane fade" id="security">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Security Settings</h5>
+                    <hr style="border-color: rgba(0, 109, 91, 0.2); margin: 30px 0;">
+
+                    <div class="row mb-5">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                                <div class="card-header text-white" style="background: linear-gradient(135deg, #00796b, #009688);">
+                                    <h6 class="mb-0"><i class="fas fa-lock me-2"></i>Change Password</h6>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="form_type" value="password_change">
+                                        <div class="mb-3">
+                                            <label for="current_password" class="form-label" style="color: #004d40;">Current Password</label>
+                                            <input type="password" class="form-control" id="current_password" name="current_password" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="new_password" class="form-label" style="color: #004d40;">New Password</label>
+                                            <input type="password" class="form-control" id="new_password" name="new_password" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="confirm_password" class="form-label" style="color: #004d40;">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" style="background: rgba(0, 109, 91, 0.1); border: 1px solid rgba(0, 109, 91, 0.2);">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2" style="background: linear-gradient(to right, #006d5b, #009688); border: none;">
+                                            <i class="fas fa-key me-2"></i>Update Password
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form method="POST" class="needs-validation" novalidate>
-                                {% csrf_token %}
-                                <input type="hidden" name="form_type" value="password_change">
-                                <div class="mb-3">
-                                    <label for="current_password" class="form-label">Current Password</label>
-                                    <input type="password" class="form-control" id="current_password" name="current_password" required>
+                        <div class="col-md-6">
+                            <div class="card shadow-sm" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                                <div class="card-header text-white" style="background: linear-gradient(135deg, #00564d, #00796b);">
+                                    <h6 class="mb-0"><i class="fas fa-bell me-2"></i>Notification Preferences</h6>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="new_password" class="form-label">New Password</label>
-                                    <input type="password" class="form-control" id="new_password" name="new_password" required>
+                                <div class="card-body p-4">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="form_type" value="notifications">
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="email_notifications" name="email_notifications" checked style="border: 1px solid rgba(0, 109, 91, 0.2);">
+                                            <label class="form-check-label" for="email_notifications" style="color: #004d40;">Email Notifications</label>
+                                        </div>
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="sms_notifications" name="sms_notifications" style="border: 1px solid rgba(0, 109, 91, 0.2);">
+                                            <label class="form-check-label" for="sms_notifications" style="color: #004d40;">SMS Notifications</label>
+                                        </div>
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="case_updates" name="case_updates" checked style="border: 1px solid rgba(0, 109, 91, 0.2);">
+                                            <label class="form-check-label" for="case_updates" style="color: #004d40;">Case Updates</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2" style="background: linear-gradient(to right, #006d5b, #009688); border: none;">
+                                            <i class="fas fa-save me-2"></i>Save Preferences
+                                        </button>
+                                    </form>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="confirm_password" class="form-label">Confirm New Password</label>
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-key me-2"></i>Change Password
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Notification Preferences -->
-                <div class="tab-pane fade" id="notifications">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Notification Preferences</h5>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST" class="needs-validation" novalidate>
-                                {% csrf_token %}
-                                <input type="hidden" name="form_type" value="notifications">
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" checked>
-                                        <label class="form-check-label" for="email_notifications">Email Notifications</label>
-                                    </div>
-                                    <small class="text-muted">Receive updates about your cases via email</small>
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div class="card shadow-sm" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                                <div class="card-header text-white" style="background: linear-gradient(135deg, #004d40, #006d5b);">
+                                    <h6 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Privacy Settings</h6>
                                 </div>
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="sms_notifications" name="sms_notifications">
-                                        <label class="form-check-label" for="sms_notifications">SMS Notifications</label>
-                                    </div>
-                                    <small class="text-muted">Receive important updates via SMS</small>
+                                <div class="card-body p-4">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="form_type" value="privacy">
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="profile_visibility" name="profile_visibility" style="border: 1px solid rgba(0, 109, 91, 0.2);">
+                                            <label class="form-check-label" for="profile_visibility" style="color: #004d40;">Make my profile visible to other users</label>
+                                        </div>
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input" id="case_visibility" name="case_visibility" style="border: 1px solid rgba(0, 109, 91, 0.2);">
+                                            <label class="form-check-label" for="case_visibility" style="color: #004d40;">Allow others to see my case reports</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary rounded-pill px-5 py-2" style="background: linear-gradient(to right, #006d5b, #009688); border: none;">
+                                            <i class="fas fa-save me-2"></i>Save Settings
+                                        </button>
+                                    </form>
                                 </div>
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="case_updates" name="case_updates" checked>
-                                        <label class="form-check-label" for="case_updates">Case Updates</label>
-                                    </div>
-                                    <small class="text-muted">Get notified about changes in your reported cases</small>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-2"></i>Save Preferences
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Privacy Settings -->
-                <div class="tab-pane fade" id="privacy">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0"><i class="fas fa-lock me-2"></i>Privacy Settings</h5>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST" class="needs-validation" novalidate>
-                                {% csrf_token %}
-                                <input type="hidden" name="form_type" value="privacy">
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="profile_visibility" name="profile_visibility" checked>
-                                        <label class="form-check-label" for="profile_visibility">Public Profile</label>
-                                    </div>
-                                    <small class="text-muted">Allow others to view your profile information</small>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="case_visibility" name="case_visibility" checked>
-                                        <label class="form-check-label" for="case_visibility">Case Visibility</label>
-                                    </div>
-                                    <small class="text-muted">Show your reported cases to other users</small>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-2"></i>Save Privacy Settings
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="mt-5 text-center">
+                        <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary rounded-pill px-5 py-2" style="border-color: #6c757d; color: #6c757d; transition: transform 0.2s ease;">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                        </a>
                     </div>
                 </div>
             </div>
@@ -344,31 +160,3 @@
     </div>
 </div>
 {% endblock %}
-
-{% block extra_js %}
-<script>
-    // Form validation
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms).forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-
-    // Password confirmation validation
-    document.getElementById('confirm_password')?.addEventListener('input', function() {
-        if (this.value !== document.getElementById('new_password').value) {
-            this.setCustomValidity('Passwords do not match');
-        } else {
-            this.setCustomValidity('');
-        }
-    });
-</script>
-{% endblock %} 

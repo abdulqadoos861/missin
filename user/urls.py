@@ -25,4 +25,3 @@ urlpatterns = [
     path('logout/', custom_logout, name='user_logout'),
     path('test-email/', TestEmailView.as_view(), name='test_email'),
 ]
-

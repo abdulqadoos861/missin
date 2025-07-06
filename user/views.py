@@ -141,19 +141,6 @@ def report_missing_person(request):
     return render(request, 'report_missing_person.html', {'form': form})
 
 @login_required
-def missing_person_detail(request, case_number):
-    try:
-        missing_person = MissingPerson.objects.get(case_number=case_number)
-        # Check if user is authorized to view this report
-        if not (request.user.is_admin() or request.user.is_officer() or missing_person.reporter == request.user):
-            messages.error(request, 'You are not authorized to view this report.')
-            return redirect('user_dashboard')
-        return render(request, 'missing_person_detail.html', {'missing_person': missing_person})
-    except MissingPerson.DoesNotExist:
-        messages.error(request, 'Missing person report not found.')
-        return redirect('user_dashboard')
-
-@login_required
 def my_reports(request):
     # Redirect to track_cases view which shows the user's reports
     return track_cases(request)
@@ -211,3 +198,51 @@ def user_profile(request):
             messages.success(request, 'Profile updated successfully')
             
     return render(request, 'user_profile.html')
+
+@login_required
+def missing_person_detail(request, case_number):
+    try:
+        missing_person = MissingPerson.objects.get(case_number=case_number)
+        # Check if user is authorized to view this report
+        if not (request.user.is_admin() or request.user.is_officer() or missing_person.reporter == request.user):
+            messages.error(request, 'You are not authorized to view this report.')
+            return redirect('user_dashboard')
+        
+        # Fetch all updates related to this case
+        all_updates = []
+        # Add initial case creation update
+        all_updates.append({
+            'datetime': missing_person.created_at,
+            'description': f'Case reported by {request.user.get_full_name() or request.user.username}'
+        })
+        
+        # Add user updates
+        for update in missing_person.updates.all():
+            all_updates.append({
+                'datetime': update.created_at,
+                'description': update.description
+            })
+        
+        # Add officer updates
+        for update in missing_person.officer_updates.all():
+            all_updates.append({
+                'datetime': update.updated_at,
+                'description': f'Officer Update: {update.description}'
+            })
+        
+        # Sort all updates chronologically (most recent first)
+        all_updates.sort(key=lambda x: x['datetime'], reverse=True)
+        
+        # Format for template
+        formatted_updates = [
+            {'date': u['datetime'].strftime('%B %d, %Y'), 'description': u['description']}
+            for u in all_updates
+        ]
+        
+        return render(request, 'missing_person_detail.html', {
+            'missing_person': missing_person,
+            'updates': formatted_updates
+        })
+    except MissingPerson.DoesNotExist:
+        messages.error(request, 'Missing person report not found.')
+        return redirect('user_dashboard')

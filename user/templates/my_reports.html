@@ -14,21 +14,21 @@
     </div>
 
     <!-- Reports Table -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">All My Reports</h6>
+    <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #e61313, #f9f6f1);">
+        <div class="card-header py-3 text-white" style="background: linear-gradient(135deg, #006d5b, #009688);">
+            <h6 class="m-0 font-weight-bold text-uppercase"><i class="fas fa-file-alt me-2"></i>All My Reports</h6>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
             {% if reports %}
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="reportsTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-hover" id="reportsTable" width="100%" cellspacing="0" style="margin-bottom: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                        <thead style="background: linear-gradient(to right, #10304f, #dee2e6); color: #495057;">
                             <tr>
-                                <th>Report ID</th>
-                                <th>Person Name</th>
-                                <th>Status</th>
-                                <th>Last Seen</th>
-                                <th>Actions</th>
+                                <th><i class="fas fa-hashtag me-1"></i> Report ID</th>
+                                <th><i class="fas fa-user me-1"></i> Person Name</th>
+                                <th><i class="fas fa-info-circle me-1"></i> Status</th>
+                                <th><i class="fas fa-calendar-alt me-1"></i> Last Seen</th>
+                                <th><i class="fas fa-cog me-1"></i> Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,14 +37,14 @@
                                 <td>#{{ report.id }}</td>
                                 <td>{{ report.missing_person.first_name }} {{ report.missing_person.last_name }}</td>
                                 <td>
-                                    <span class="badge {% if report.status == 'active' %}bg-warning{% elif report.status == 'resolved' %}bg-success{% else %}bg-secondary{% endif %}">
-                                        {{ report.get_status_display }}
+                                    <span class="badge rounded-pill {% if report.status == 'active' %}bg-warning text-dark{% elif report.status == 'resolved' %}bg-success text-white{% else %}bg-danger text-white{% endif %} px-3 py-2" style="font-size: 0.9em; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                        <i class="fas {% if report.status == 'active' %}fa-exclamation-triangle{% elif report.status == 'resolved' %}fa-check-circle{% else %}fa-times-circle{% endif %} me-1"></i> {{ report.get_status_display }}
                                     </span>
                                 </td>
                                 <td>{{ report.last_seen_date|date:"M d, Y" }}</td>
                                 <td>
-                                    <a href="{% url 'missing_person_detail' report.id %}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-eye"></i> View
+                                    <a href="{% url 'missing_person_detail' report.id %}" class="btn btn-sm btn-primary rounded-pill px-4 py-1" style="background: linear-gradient(to right, #007bff, #00b7ff); border: none; transition: transform 0.2s ease;">
+                                        <i class="fas fa-eye me-1"></i> View
                                     </a>
                                 </td>
                             </tr>
@@ -53,12 +53,12 @@
                     </table>
                 </div>
             {% else %}
-                <div class="text-center py-5">
-                    <i class="fas fa-clipboard-list fa-4x mb-3 text-gray-400"></i>
-                    <h5>No reports found</h5>
-                    <p class="text-muted">You haven't submitted any missing person reports yet.</p>
-                    <a href="{% url 'report_missing_person' %}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Create Your First Report
+                <div class="text-center py-5" style="background: linear-gradient(to bottom, #f8f9fa, #e9ecef); border-radius: 10px;">
+                    <i class="fas fa-clipboard-list fa-5x mb-3 text-gray-300" style="opacity: 0.7;"></i>
+                    <h4 class="text-gray-700" style="font-weight: 600;">No Reports Found</h4>
+                    <p class="text-muted mb-4">You haven't submitted any missing person reports yet.</p>
+                    <a href="{% url 'report_missing_person' %}" class="btn btn-primary rounded-pill px-5 py-2" style="background: linear-gradient(to right, #007bff, #00b7ff); border: none; box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); transition: transform 0.2s ease;">
+                        <i class="fas fa-plus me-2"></i> Create Your First Report
                     </a>
                 </div>
             {% endif %}
@@ -71,6 +71,64 @@
 <!-- Page level plugins -->
 <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Custom styles for DataTables filter and table -->
+<style>
+.dataTables_wrapper .dataTables_filter input {
+    border-color: #006d5b; /* Dark teal border for visibility */
+    background-color: #0a71d8; /* Light background for contrast */
+    padding: 8px 15px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+    outline: none;
+    border-color: #009688; /* Dark teal on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 109, 91, 0.3);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.4em 1em;
+    margin: 0 3px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: linear-gradient(to right, #006d5b, #009688);
+    color: white !important;
+    border-color: #006d5b;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: linear-gradient(to right, #009688, #00bfa5);
+    color: white !important;
+    border-color: #009688;
+    transform: scale(1.05);
+}
+.dataTables_wrapper .dataTables_length select {
+    border-color: #007bff;
+    border-radius: 5px;
+    padding: 0.3em;
+}
+.dataTables_wrapper .dataTables_info {
+    padding-top: 0.5em;
+    color: #6c757d;
+}
+#reportsTable tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#reportsTable tbody tr:nth-child(even) {
+    background-color: #f5f7fa;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#reportsTable tbody tr:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+</style>
 
 <!-- Page level custom scripts -->
 <script>

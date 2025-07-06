@@ -14788,3 +14788,323 @@ Traceback (most recent call last):
     raise NoReverseMatch(msg)
 django.urls.exceptions.NoReverseMatch: Reverse for 'update_case' not found. 'update_case' is not a valid view function or pattern name.
 Not Found: /officer/view-cases/12/missing_persons/additional/tahir.jpeg
+Login attempt - CSRF Cookie: u5xTSFrgq0tA8jLlap1E0iLAkw80D1nT
+Login attempt - CSRF POST: 4otaJ8iz53aHYeXrTSecfTYftbQZLesFojQTrDzFlTt7WnyCT75G51zFDxOPe5Fo
+User abc1 authenticated successfully
+New session created: p5q94gdj3xu4srlcz1ovfrzp6irm8b1k
+User is officer, redirecting to officer dashboard
+Setting CSRF token: fHDzz5pKmFnB0slZIYZQ2376JXu1yYph
+Login successful, redirecting...
+Login attempt - CSRF Cookie: fHDzz5pKmFnB0slZIYZQ2376JXu1yYph
+Login attempt - CSRF POST: D2kbz8HIb9pYTJt0pFPpuOrMTgdjEcNpIzNAY3WinECpJ1EPXtE5mHoIs3xa202w
+User aabb1122 authenticated successfully
+New session created: xq1646qw3dx2lpwaofpu6u0bd35z5pbo
+User is admin, redirecting to admin dashboard
+Setting CSRF token: 7UbYdbmWVFSapAGtx1ux7tcG9F7KEq2A
+Login successful, redirecting...
+Login attempt - CSRF Cookie: 7UbYdbmWVFSapAGtx1ux7tcG9F7KEq2A
+Login attempt - CSRF POST: hWBzTJHIztLQH4EUAS9UhAeEYzrLr4hpeGCnWKTukYtQWuadXJtheTgaX4olVk9P
+User xyz5 authenticated successfully
+New session created: x0zv6vmo6istk6cg50ub4lb2krd4uc6l
+User is regular user, redirecting to user dashboard
+Setting CSRF token: TcNDkmPWvljoATllskYdkfI0Axoi2OJ8
+Login successful, redirecting...
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: xyz5 (Regular User)
+Track cases view accessed by user: xyz5 (Regular User)
+Login attempt - CSRF Cookie: TcNDkmPWvljoATllskYdkfI0Axoi2OJ8
+Login attempt - CSRF POST: qPu0VRIe0ARIHlDGgMsbMwAwptQk6l5a9R7t53n0lL0W74ORyWgeWB8mPQ4sYZE8
+User aabb1122 authenticated successfully
+New session created: 0sgj4uq56ba5jcs5bdwxrs7pfqes3x8d
+User is admin, redirecting to admin dashboard
+Setting CSRF token: mzR73qfaaXGwswXvnylyCkDDz7rD9DAl
+Login successful, redirecting...
+Login attempt - CSRF Cookie: mzR73qfaaXGwswXvnylyCkDDz7rD9DAl
+Login attempt - CSRF POST: ArEpgbAw2z7wHIHFEd9TyMbglijhhPXqMQlm9rFw2mDSZ4u0RBkh0WEJKfAKginB
+User aabb1122 authenticated successfully
+New session created: n1fldpz2eyfpbdi5hqit527356kuakvg
+User is admin, redirecting to admin dashboard
+Setting CSRF token: pNi8B80HA4glcIdQtPY7JZtZ6b7nItwZ
+Login successful, redirecting...
+Not Found: /favicon.ico
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Login attempt - CSRF Cookie: hcJXVirG4IL8HzGFNwWuVPxTBhdWNxft
+Login attempt - CSRF POST: AA9UzMyKfs3INtoWXChFqWhyxNlJg4QFHCIHkUPg90EGkSUrAY3ZbBEhYUovTrVY
+Failed login attempt for username: admin
+Login attempt - CSRF Cookie: hcJXVirG4IL8HzGFNwWuVPxTBhdWNxft
+Login attempt - CSRF POST: YwLS32lIZ0BVirkTi0nMJKvcOXuAY3hq5ykFOaCeTycTPQQoVm96upSVf4xmBqmJ
+Failed login attempt for username: abc1@gmail.com
+Login attempt - CSRF Cookie: hcJXVirG4IL8HzGFNwWuVPxTBhdWNxft
+Login attempt - CSRF POST: Z03dbcXsLyFNAMY9cStsqt3BhyFPbT8h62C0WkeYF6gL7buEPefMb8qkIFIBOgdA
+User abc1 authenticated successfully
+New session created: 5p974enoef2uf27up423ac6b7ibu0gf8
+User is officer, redirecting to officer dashboard
+Setting CSRF token: FNg3HflhMpQJdU2GMFmbBX2xg8THCTYi
+Login successful, redirecting...
+Login attempt - CSRF Cookie: FNg3HflhMpQJdU2GMFmbBX2xg8THCTYi
+Login attempt - CSRF POST: vayNjw6SxOlzPGI0XSa6PEyuiiOFj7xH0NEGQBhZ9318SqAwznm7grqRogxcLQlP
+User aabb1122 authenticated successfully
+New session created: qd45v1wfn4si54h0pygb7lt8y1b4lrng
+User is admin, redirecting to admin dashboard
+Setting CSRF token: Aj7BmaVfk0qCZBIKS8PvhESIqlpAqKaF
+Login successful, redirecting...
+Login attempt - CSRF Cookie: Aj7BmaVfk0qCZBIKS8PvhESIqlpAqKaF
+Login attempt - CSRF POST: L55eTIjmOXVYdAubhU5XwjxjAo4mZQuube2F5I4rYNbq212LZSKiDNfRQzjMfquZ
+User xyz5 authenticated successfully
+New session created: 5nhvjbu2iv4aorbka139vwily8b4o4wv
+User is regular user, redirecting to user dashboard
+Setting CSRF token: DdR5wn6sXXVKalrlHgxBjKO95VDcrase
+Login successful, redirecting...
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: xyz5 (Regular User)
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: xyz5 (Regular User)
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Login attempt - CSRF Cookie: GJwXe2EB4JHVvBs6qdGs7vqwBSYGhGSG
+Login attempt - CSRF POST: 4nbtUL1iVqzfjgu2L6GrSOVJWJGHkFihAWxgYDvJPZ60EHMY19cJP9b5nrudrb0N
+Failed login attempt for username: abc@gmail.com
+Login attempt - CSRF Cookie: GJwXe2EB4JHVvBs6qdGs7vqwBSYGhGSG
+Login attempt - CSRF POST: FE4B0hODmEYSlzf0aMlCTUny3jllZ7Lxbdqo49i4gdvDG0xWqPRUQfDUu19R6Dt3
+Failed login attempt for username: abc1@gmail.com
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Not Found: /user/report-missing-person/...
+Form validation errors: <ul class="errorlist"><li>last_seen_date<ul class="errorlist" id="id_last_seen_date_error"><li>This field is required.</li></ul></li><li>last_seen_location<ul class="errorlist" id="id_last_seen_location_error"><li>This field is required.</li></ul></li><li>last_seen_wearing<ul class="errorlist" id="id_last_seen_wearing_error"><li>This field is required.</li></ul></li><li>description<ul class="errorlist" id="id_description_error"><li>This field is required.</li></ul></li><li>photo<ul class="errorlist" id="id_photo_error"><li>This field is required.</li></ul></li></ul>
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /user/report-missing-person/...
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /user/report-missing-person/...
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /user/report-missing-person/...
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Not Found: /user/report-missing-person/...
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+Track cases view accessed by user: crime (Regular User)
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /user/missing-person/MP-B90C78D6/
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\user\views.py", line 242, in missing_person_detail
+    return render(request, 'missing_person_detail.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 523, in parse
+    self.unclosed_block_tag(parse_until)
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 590, in unclosed_block_tag
+    raise self.error(token, msg)
+django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 5: 'block'. Looking for one of: endblock.
+Track cases view accessed by user: crime (Regular User)
+Not Found: /user/report-missing-person/...
+Not Found: /user/report-missing-person/...
+Track cases view accessed by user: crime (Regular User)
+Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\crime\frontend\views.py", line 63, in login_view
+    response = render(request, 'login.html')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\Abdul Qadoos Bhatti\Desktop\mp\venv\Lib\site-packages\django\template\base.py", line 567, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 28: 'static', expected 'endblock'. Did you forget to register or load this tag?
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Not Found: /.well-known/appspecific/com.chrome.devtools.json
+Login attempt - CSRF Cookie: Rp8pgoBVMVOoNGCTTONT0gLHDcjozpAE
+Login attempt - CSRF POST: RDEDEpwVLe173lQz2CmzXxWAIMZeW3JqySCSKDXGnZFlGRiiLgZiNDx7bO8sli9U
+User crime authenticated successfully
+New session created: 73636slmkw4xy9kwg1tpr5hmzcna37zh
+User is regular user, redirecting to user dashboard
+Setting CSRF token: X5DSDBa3HDwyPqv8x6WD7qaYHUxulRoZ
+Login successful, redirecting...
+Not Found: /.well-known/appspecific/com.chrome.devtools.json

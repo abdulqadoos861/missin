@@ -23,10 +23,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="container my-5">
+<div class="container my-5" style="background: linear-gradient(to bottom, #f5f7fa, #e9ecef); padding: 30px; border-radius: 15px;">
     <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Report a Missing Person</h1>
-        <p class="lead text-muted">Submit the details below. Fields marked with <span class="text-danger">*</span> are required.</p>
+        <h1 class="display-5 fw-bold" style="color: #004d40; text-shadow: 1px 1px 2px rgba(0, 77, 64, 0.3);">Report a Missing Person</h1>
+        <p class="lead text-muted" style="font-size: 1.2em;">Submit the details below. Fields marked with <span class="text-danger">*</span> are required.</p>
     </div>
 
     <div class="row justify-content-center">
@@ -39,8 +39,8 @@
                 {% endif %}
 
                 <!-- Personal Details -->
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">
+                <div class="card shadow-lg mb-4" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #006d5b, #009688);">
                         <h5 class="mb-0"><i class="fas fa-user me-2"></i>Personal Details</h5>
                     </div>
                     <div class="card-body p-4">
@@ -75,8 +75,8 @@
                 </div>
 
                 <!-- Physical Description -->
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-info text-white">
+                <div class="card shadow-lg mb-4" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #008573, #00bfa5);">
                         <h5 class="mb-0"><i class="fas fa-ruler-combined me-2"></i>Physical Description</h5>
                     </div>
                     <div class="card-body p-4">
@@ -116,8 +116,8 @@
                 </div>
 
                 <!-- Last Seen Details -->
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-warning text-dark">
+                <div class="card shadow-lg mb-4" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #00796b, #009688);">
                         <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Last Seen Details</h5>
                     </div>
                     <div class="card-body p-4">
@@ -142,35 +142,35 @@
                 </div>
 
                 <!-- Photos -->
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-dark text-white">
+                <div class="card shadow-lg mb-4" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #004d40, #006d5b);">
                         <h5 class="mb-0"><i class="fas fa-images me-2"></i>Photos</h5>
                     </div>
                     <div class="card-body p-4">
                         <div class="mb-3">
                             <label for="{{ form.photo.id_for_label }}" class="form-label">Main Photo <span class="text-danger">*</span></label>
-                            <label for="{{ form.photo.id_for_label }}" class="btn btn-outline-primary"><i class="fas fa-upload me-2"></i>Upload Main Photo</label>
+                            <label for="{{ form.photo.id_for_label }}" class="btn btn-outline-primary rounded-pill px-4" style="background: linear-gradient(to right, #006d5b, #009688); border: none; color: white; transition: transform 0.2s ease;"><i class="fas fa-upload me-2"></i>Upload Main Photo</label>
                             {{ form.photo }}
                             <img id="photo-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect fill='%23e9ecef' width='150' height='150'/%3E%3Ctext fill='%236c757d' font-family='sans-serif' font-size='1rem' dy='.3em' font-weight='bold' x='50%25' y='50%25' text-anchor='middle'%3EPreview%3C/text%3E%3C/svg%3E" alt="Main photo preview" class="ms-3 image-preview">
                             {% if form.photo.errors %}<div class="invalid-feedback d-block">{{ form.photo.errors.0 }}</div>{% endif %}
                         </div>
-                        <hr>
-                        <p class="mb-2">Additional Photos (Optional)</p>
+                        <hr style="border-color: rgba(0, 109, 91, 0.2);">
+                        <p class="mb-2" style="color: #495057; font-weight: 500;">Additional Photos (Optional)</p>
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label for="{{ form.additional_photo_1.id_for_label }}" class="btn btn-outline-secondary w-100"><i class="fas fa-plus me-2"></i>Add Photo 1</label>
+                                <label for="{{ form.additional_photo_1.id_for_label }}" class="btn btn-outline-secondary w-100 rounded-pill px-3" style="border-color: #6c757d; color: #6c757d; transition: transform 0.2s ease;"><i class="fas fa-plus me-2"></i>Add Photo 1</label>
                                 {{ form.additional_photo_1 }}
                                 <img id="additional_photo_1-preview" src="..." class="d-none mt-2 image-preview">
                                 {% if form.additional_photo_1.errors %}<div class="invalid-feedback d-block">{{ form.additional_photo_1.errors.0 }}</div>{% endif %}
                             </div>
                             <div class="col-md-4">
-                                <label for="{{ form.additional_photo_2.id_for_label }}" class="btn btn-outline-secondary w-100"><i class="fas fa-plus me-2"></i>Add Photo 2</label>
+                                <label for="{{ form.additional_photo_2.id_for_label }}" class="btn btn-outline-secondary w-100 rounded-pill px-3" style="border-color: #6c757d; color: #6c757d; transition: transform 0.2s ease;"><i class="fas fa-plus me-2"></i>Add Photo 2</label>
                                 {{ form.additional_photo_2 }}
                                 <img id="additional_photo_2-preview" src="..." class="d-none mt-2 image-preview">
                                 {% if form.additional_photo_2.errors %}<div class="invalid-feedback d-block">{{ form.additional_photo_2.errors.0 }}</div>{% endif %}
                             </div>
                             <div class="col-md-4">
-                                <label for="{{ form.additional_photo_3.id_for_label }}" class="btn btn-outline-secondary w-100"><i class="fas fa-plus me-2"></i>Add Photo 3</label>
+                                <label for="{{ form.additional_photo_3.id_for_label }}" class="btn btn-outline-secondary w-100 rounded-pill px-3" style="border-color: #6c757d; color: #6c757d; transition: transform 0.2s ease;"><i class="fas fa-plus me-2"></i>Add Photo 3</label>
                                 {{ form.additional_photo_3 }}
                                 <img id="additional_photo_3-preview" src="..." class="d-none mt-2 image-preview">
                                 {% if form.additional_photo_3.errors %}<div class="invalid-feedback d-block">{{ form.additional_photo_3.errors.0 }}</div>{% endif %}
@@ -180,8 +180,8 @@
                 </div>
 
                 <!-- Contact Information -->
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-secondary text-white">
+                <div class="card shadow-lg mb-4" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #00564d, #00796b);">
                         <h5 class="mb-0"><i class="fas fa-address-book me-2"></i>Contact Information</h5>
                     </div>
                     <div class="card-body p-4">
@@ -201,8 +201,8 @@
                 </div>
 
                 <!-- Special Note -->
-                <div class="card shadow-sm">
-                    <div class="card-header">
+                <div class="card shadow-lg mb-4" style="border-radius: 15px; overflow: hidden; background: linear-gradient(to bottom, #ffffff, #f5f7fa);">
+                    <div class="card-header" style="background: linear-gradient(135deg, #004d40, #006d5b); color: white;">
                         <h5 class="mb-0"><i class="fas fa-sticky-note me-2"></i>Special Note</h5>
                     </div>
                     <div class="card-body p-4">
@@ -212,8 +212,8 @@
                     </div>
                 </div>
 
-                <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-success btn-lg"><i class="fas fa-paper-plane me-2"></i>Submit Report</button>
+                <div class="d-grid mt-5">
+                    <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 py-3" style="background: linear-gradient(to right, #006d5b, #009688); border: none; box-shadow: 0 4px 6px rgba(0, 109, 91, 0.3); transition: transform 0.2s ease; font-size: 1.2em;"><i class="fas fa-paper-plane me-2"></i>Submit Report</button>
                 </div>
             </form>
         </div>
