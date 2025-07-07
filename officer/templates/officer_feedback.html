@@ -1,0 +1,103 @@
+{% extends 'base_officer.html' %}
+{% load static %}
+
+{% block title %}View Feedback | Officer Panel{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Feedback Header -->
+    <div class="card-header animate__animated animate__fadeInDown mb-5" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); color: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); position: relative; overflow: hidden;">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h1 class="mb-3 display-5" style="font-weight: 700; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">User Feedback</h1>
+                </div>
+                <div class="mb-4" style="color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); font-size: 1.1rem;">
+                    <p>Review feedback submitted by users to improve services.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback List -->
+    <div class="card shadow mb-4 animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); border: none; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25); overflow: hidden; backdrop-filter: blur(15px);">
+        <div class="card-body p-4">
+            <div class="table-responsive" style="background: rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); padding: 1rem;">
+                <table class="table table-striped" style="color: white;">
+                    <thead>
+                        <tr style="background: rgba(255, 255, 255, 0.1);">
+                            <th scope="col" style="padding: 1rem;">#</th>
+                            <th scope="col" style="padding: 1rem;">Feedback Type</th>
+                            <th scope="col" style="padding: 1rem;">Title</th>
+                            <th scope="col" style="padding: 1rem;">Description</th>
+                            <th scope="col" style="padding: 1rem;">Submitted By</th>
+                            <th scope="col" style="padding: 1rem;">Date</th>
+                            <th scope="col" style="padding: 1rem;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feedback in feedbacks %}
+                        <tr style="border-color: rgba(255, 255, 255, 0.1);">
+                            <th scope="row" style="padding: 1rem;">{{ forloop.counter }}</th>
+                            <td style="padding: 1rem;">N/A</td>
+                            <td style="padding: 1rem;">{{ feedback.title }}</td>
+                            <td style="padding: 1rem;">{{ feedback.description|truncatewords:10 }}</td>
+                            <td style="padding: 1rem;">{{ feedback.user.username }}</td>
+                            <td style="padding: 1rem;">{{ feedback.created_at|date:"F d, Y" }}</td>
+                            <td style="padding: 1rem;">
+                                <button class="btn btn-sm btn-info" style="background: rgba(74, 144, 226, 0.6); border: none;" data-bs-toggle="modal" data-bs-target="#feedbackModal{{ feedback.id }}">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center" style="padding: 2rem; color: rgba(255, 255, 255, 0.7);">No feedback available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feedback Detail Modals -->
+{% for feedback in feedbacks %}
+<div class="modal fade" id="feedbackModal{{ feedback.id }}" tabindex="-1" aria-labelledby="feedbackModalLabel{{ feedback.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); border: none; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); overflow: hidden; backdrop-filter: blur(15px);">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem 2rem;">
+                <h5 class="modal-title" id="feedbackModalLabel{{ feedback.id }}" style="color: white; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);">Feedback Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div class="mb-3">
+                    <label class="fw-bold" style="color: rgba(255, 255, 255, 0.9);">Feedback Type:</label>
+                    <p style="color: white;">N/A</p>
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold" style="color: rgba(255, 255, 255, 0.9);">Title:</label>
+                    <p style="color: white;">{{ feedback.title }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold" style="color: rgba(255, 255, 255, 0.9);">Description:</label>
+                    <p style="color: white; background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 10px;">{{ feedback.description }}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold" style="color: rgba(255, 255, 255, 0.9);">Submitted By:</label>
+                    <p style="color: white;">{{ feedback.user.username }} ({{ feedback.user.email }})</p>
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold" style="color: rgba(255, 255, 255, 0.9);">Date Submitted:</label>
+                    <p style="color: white;">{{ feedback.created_at|date:"F d, Y H:i" }}</p>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 1.5rem 2rem;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: rgba(255, 255, 255, 0.1); border: none; color: white; border-radius: 12px;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

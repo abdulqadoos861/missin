@@ -1,79 +1,86 @@
 {% extends 'base_admin.html' %}
 {% load static %}
 
+{% block title %}Admin Settings | Admin Dashboard{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0" style="color: white; font-weight: 600; letter-spacing: 1px; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">Admin Settings</h1>
+    </div>
+
     <div class="row">
         <!-- Profile Information -->
         <div class="col-md-8">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">
+            <div class="card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; backdrop-filter: blur(10px); margin-bottom: 2rem;">
+                <div class="card-header" style="background: linear-gradient(135deg, #4a90e2, #357abd); border-radius: 16px 16px 0 0; color: white; padding: 1.25rem;">
+                    <h5 class="mb-0" style="font-weight: 600; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
                         <i class="fas fa-user-cog me-2"></i>Profile Settings
-                    </h6>
+                    </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="background: rgba(255, 255, 255, 0.05); color: white; padding: 2rem;">
                     <form method="POST" action="{% url 'cadmin:update_admin_profile' %}" class="needs-validation" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="first_name" class="form-label">First Name</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="first_name" class="form-label fw-bold" style="color: white;">First Name</label>
                                 <input type="text" class="form-control" id="first_name" name="first_name" 
-                                    value="{{ user.first_name }}" required>
+                                    value="{{ user.first_name }}" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="last_name" class="form-label">Last Name</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="last_name" class="form-label fw-bold" style="color: white;">Last Name</label>
                                 <input type="text" class="form-control" id="last_name" name="last_name" 
-                                    value="{{ user.last_name }}" required>
+                                    value="{{ user.last_name }}" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email Address</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="email" class="form-label fw-bold" style="color: white;">Email Address</label>
                                 <input type="email" class="form-control" id="email" name="email" 
-                                    value="{{ user.email }}" required>
+                                    value="{{ user.email }}" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="phone_number" class="form-label">Phone Number</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="phone_number" class="form-label fw-bold" style="color: white;">Phone Number</label>
                                 <input type="tel" class="form-control" id="phone_number" name="phone_number" 
-                                    value="{{ user.phone_number }}" required>
+                                    value="{{ user.phone_number }}" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required>{{ user.address }}</textarea>
+                        <div class="mb-4">
+                            <label for="address" class="form-label fw-bold" style="color: white;">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">{{ user.address }}</textarea>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="cnic" class="form-label">CNIC</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="cnic" class="form-label fw-bold" style="color: white;">CNIC</label>
                                 <input type="text" class="form-control" id="cnic" name="cnic" 
                                     value="{{ user.cnic }}" pattern="\d{5}-\d{7}-\d{1}" 
-                                    placeholder="33201-0649966-2" required>
-                                <div class="form-text">Format: 33201-0649966-2</div>
+                                    placeholder="33201-0649966-2" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
+                                <div class="form-text" style="color: rgba(255, 255, 255, 0.7);">Format: 33201-0649966-2</div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                            <div class="col-md-6 mb-4">
+                                <label for="date_of_birth" class="form-label fw-bold" style="color: white;">Date of Birth</label>
                                 <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
-                                    value="{{ user.date_of_birth|date:'Y-m-d' }}" required>
+                                    value="{{ user.date_of_birth|date:'Y-m-d' }}" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="profile_picture" class="form-label">Profile Picture</label>
+                        <div class="mb-4">
+                            <label for="profile_picture" class="form-label fw-bold" style="color: white;">Profile Picture</label>
                             <input type="file" class="form-control" id="profile_picture" name="profile_picture" 
-                                accept="image/*">
+                                accept="image/*" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                             {% if user.profile_picture %}
-                            <div class="mt-2">
+                            <div class="mt-3">
                                 <img src="{{ user.profile_picture.url }}" alt="Current Profile Picture" 
-                                    class="img-thumbnail" style="max-width: 150px;">
+                                    class="img-thumbnail" style="max-width: 150px; border: 2px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1);">
                             </div>
                             {% endif %}
                         </div>
 
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 8px; padding: 0.75rem 1.5rem; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;">
                             <i class="fas fa-save me-2"></i>Update Profile
                         </button>
                     </form>
@@ -81,75 +88,74 @@
             </div>
         </div>
 
-        <!-- Change Password -->
+        <!-- Change Password & Account Information -->
         <div class="col-md-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
+            <div class="card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; backdrop-filter: blur(10px); margin-bottom: 2rem;">
+                <div class="card-header" style="background: linear-gradient(135deg, #4a90e2, #357abd); border-radius: 16px 16px 0 0; color: white; padding: 1.25rem;">
+                    <h5 class="mb-0" style="font-weight: 600; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
                         <i class="fas fa-key me-2"></i>Change Password
-                    </h6>
+                    </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="background: rgba(255, 255, 255, 0.05); color: white; padding: 2rem;">
                     <form method="POST" action="{% url 'cadmin:change_admin_password' %}" class="needs-validation" novalidate>
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="current_password" class="form-label">Current Password</label>
+                        <div class="mb-4">
+                            <label for="current_password" class="form-label fw-bold" style="color: white;">Current Password</label>
                             <input type="password" class="form-control" id="current_password" 
-                                name="current_password" required>
+                                name="current_password" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                         </div>
-                        <div class="mb-3">
-                            <label for="new_password" class="form-label">New Password</label>
+                        <div class="mb-4">
+                            <label for="new_password" class="form-label fw-bold" style="color: white;">New Password</label>
                             <input type="password" class="form-control" id="new_password" 
-                                name="new_password" required>
+                                name="new_password" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                         </div>
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm New Password</label>
+                        <div class="mb-4">
+                            <label for="confirm_password" class="form-label fw-bold" style="color: white;">Confirm New Password</label>
                             <input type="password" class="form-control" id="confirm_password" 
-                                name="confirm_password" required>
+                                name="confirm_password" required style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px;">
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 8px; padding: 0.75rem 1.5rem; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;">
                             <i class="fas fa-key me-2"></i>Change Password
                         </button>
                     </form>
                 </div>
             </div>
 
-            <!-- Account Information -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
+            <div class="card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; backdrop-filter: blur(10px); margin-bottom: 2rem;">
+                <div class="card-header" style="background: linear-gradient(135deg, #4a90e2, #357abd); border-radius: 16px 16px 0 0; color: white; padding: 1.25rem;">
+                    <h5 class="mb-0" style="font-weight: 600; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
                         <i class="fas fa-info-circle me-2"></i>Account Information
-                    </h6>
+                    </h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="background: rgba(255, 255, 255, 0.05); color: white; padding: 2rem;">
                     <div class="text-center mb-4">
                         {% if user.profile_picture %}
-                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture mb-3">
+                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture mb-3" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1);">
                         {% else %}
-                            <div class="profile-picture-placeholder mb-3">
+                            <div class="profile-picture-placeholder mb-3" style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #4a90e2, #357abd); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto; border: 3px solid rgba(255, 255, 255, 0.3);">
                                 {{ user.username|first|upper }}
                             </div>
                         {% endif %}
-                        <h5 class="mb-1">{{ user.get_full_name }}</h5>
-                        <p class="text-muted mb-0">{{ user.email }}</p>
+                        <h5 class="mb-1" style="font-weight: 600; color: white;">{{ user.get_full_name }}</h5>
+                        <p class="text-muted mb-0" style="color: rgba(255, 255, 255, 0.7) !important;">{{ user.email }}</p>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold" style="color: white;">Username</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" readonly style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px; cursor: not-allowed;">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Account Type</label>
-                        <input type="text" class="form-control" value="Administrator" readonly>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold" style="color: white;">Account Type</label>
+                        <input type="text" class="form-control" value="Administrator" readonly style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px; cursor: not-allowed;">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Member Since</label>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold" style="color: white;">Member Since</label>
                         <input type="text" class="form-control" 
-                            value="{{ user.date_joined|date:'F d, Y' }}" readonly>
+                            value="{{ user.date_joined|date:'F d, Y' }}" readonly style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px; cursor: not-allowed;">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Last Login</label>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold" style="color: white;">Last Login</label>
                         <input type="text" class="form-control" 
-                            value="{{ user.last_login|date:'F d, Y H:i' }}" readonly>
+                            value="{{ user.last_login|date:'F d, Y H:i' }}" readonly style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 12px 20px; border-radius: 8px; cursor: not-allowed;">
                     </div>
                 </div>
             </div>
@@ -158,98 +164,24 @@
 </div>
 
 <style>
-/* Set default text color to white for the entire settings page */
-.card, .card * {
-    color: white !important;
+.action-btn:hover {
+    transform: translateY(-2px) scale(1.05);
 }
 
-/* Style form labels and text */
-.form-label, .form-text, .text-primary {
+.form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #4a90e2;
     color: white !important;
+    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
 }
 
-/* Style form inputs */
-.form-control, .form-select {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white !important;
-}
-
-/* Style input placeholders */
 .form-control::placeholder {
     color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Style the file input button */
-.form-control[type="file"] {
-    background-color: transparent !important;
-}
-
-/* Style the profile picture thumbnail */
-.img-thumbnail {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.form-control:read-only {
-    background-color: #f8f9fc;
-    cursor: not-allowed;
-}
-
-.card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-    background-color: #fff;
-    border-bottom: 1px solid #e3e6f0;
-}
-
-.form-label {
-    font-weight: 500;
-    color: #5a5c69;
-}
-
-.btn-primary {
-    padding: 0.5rem 1.5rem;
-    font-weight: 500;
-}
-
-.form-text {
-    color: #858796;
-    font-size: 0.875rem;
-}
-
-.img-thumbnail {
-    border: 2px solid #e3e6f0;
-    padding: 0.25rem;
-}
-
-.profile-picture {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #e3e6f0;
-    padding: 3px;
-    background-color: white;
-}
-
-.profile-picture-placeholder {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0 auto;
-    border: 3px solid #e3e6f0;
+.btn-close:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 </style>
 

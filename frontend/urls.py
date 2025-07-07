@@ -8,6 +8,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register, name='register'),
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('report-incident/', views.report_incident_redirect, name='report_incident'),
 ]
-

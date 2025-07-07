@@ -4,29 +4,68 @@
 {% block title %}About Us | Public Safety Portal{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
+<header class="hero-section hero-about-bg">
+    <div class="hero-overlay"></div>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-12 hero-text" data-aos="zoom-in">
+                <h1 class="display-4 fw-bold mb-3 text-white">Dedicated to Your Safety</h1>
+                <p class="lead mb-5 text-white">Learn more about our mission, vision, and the team committed to protecting our community.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg shadow-lg">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</header>
+
 <!-- About Us Section -->
-<section id="about" class="about-section py-5">
+<section id="about" class="about-section py-5 bg-dark text-light">
     <div class="container">
-        <div class="row align-items-center">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold mb-2">Who We Are</h2>
+            <p class="lead text-muted">Serving with integrity and dedication.</p>
+        </div>
+        <div class="row align-items-center mb-5">
             <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
-                <img src="{% static 'images/police-team.jpg' %}" alt="Police Force" class="img-fluid rounded-3 shadow-lg">
+                <img src="{% static 'images/police-team.jpg' %}" alt="Police Force" class="img-fluid rounded-3 shadow-lg about-img">
             </div>
             <div class="col-lg-6" data-aos="fade-left">
-                <h2 class="fw-bold mb-4">Dedicated to Serving and Protecting</h2>
-                <p class="lead text-white-50">The Pakistani Police Force is committed to maintaining law and order, preventing crime, and ensuring the safety and security of all citizens. We strive to uphold justice with integrity, professionalism, and compassion.</p>
+                <h3 class="fw-bold mb-4">Our Commitment to the Community</h3>
+                <p class="text-light mb-4">The Pakistani Police Force is devoted to maintaining law and order, preventing crime, and ensuring the safety and security of all citizens. We strive to uphold justice with integrity, professionalism, and compassion, working tirelessly to build trust within the communities we serve.</p>
+                <p class="text-light mb-4">Through innovative programs and community engagement, we aim to create a safer environment for everyone. Our efforts are focused on proactive crime prevention, rapid response to emergencies, and providing support to those in need.</p>
                 <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="feature-item p-3">
-                            <h5 class="text-accent"><i class="fas fa-shield-alt me-2"></i> Our Mission</h5>
-                            <p class="text-white-50">To serve and protect our communities with courage and dedication.</p>
+                    <div class="col-md-6 mb-3">
+                        <div class="feature-item p-3 bg-dark-alt rounded shadow-sm">
+                            <h5 class="text-accent mb-2"><i class="fas fa-shield-alt me-2"></i> Our Mission</h5>
+                            <p class="text-light mb-0">To serve and protect our communities with courage, dedication, and unwavering commitment to justice.</p>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="feature-item p-3">
-                            <h5 class="text-accent"><i class="fas fa-eye me-2"></i> Our Vision</h5>
-                            <p class="text-white-50">A peaceful and secure Pakistan for every citizen.</p>
+                    <div class="col-md-6 mb-3">
+                        <div class="feature-item p-3 bg-dark-alt rounded shadow-sm">
+                            <h5 class="text-accent mb-2"><i class="fas fa-eye me-2"></i> Our Vision</h5>
+                            <p class="text-light mb-0">A peaceful and secure Pakistan where every citizen feels safe and protected.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center mt-5" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-md-4 mb-4">
+                <div class="impact-card p-4 rounded shadow">
+                    <h2 class="display-5 fw-bold mb-2">50+</h2>
+                    <p class="lead text-light">Years of Service</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="impact-card p-4 rounded shadow">
+                    <h2 class="display-5 fw-bold mb-2">10K+</h2>
+                    <p class="lead text-light">Officers Nationwide</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="impact-card p-4 rounded shadow">
+                    <h2 class="display-5 fw-bold mb-2">1M+</h2>
+                    <p class="lead text-light">Citizens Assisted</p>
                 </div>
             </div>
         </div>
@@ -34,15 +73,15 @@
 </section>
 
 <!-- Team Section -->
-<section class="team-section py-5 bg-dark-alt">
+<section class="team-section py-5 bg-dark-alt text-light">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="fw-bold">Meet Our Leadership</h2>
+            <h2 class="fw-bold mb-2">Meet Our Leadership</h2>
             <p class="lead text-muted">The dedicated individuals leading our force.</p>
         </div>
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="team-member">
+                <div class="team-member rounded shadow">
                     <img src="{% static 'images/pic1.jpg' %}" alt="Team Member" class="img-fluid">
                     <div class="team-info">
                         <h5 class="mb-0">Ahmed Khan</h5>
@@ -51,7 +90,7 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="team-member">
+                <div class="team-member rounded shadow">
                     <img src="{% static 'images/pic2.jpg' %}" alt="Team Member" class="img-fluid">
                     <div class="team-info">
                         <h5 class="mb-0">Fatima Ali</h5>
@@ -60,7 +99,7 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="team-member">
+                <div class="team-member rounded shadow">
                     <img src="{% static 'images/pic3.jpg' %}" alt="Team Member" class="img-fluid">
                     <div class="team-info">
                         <h5 class="mb-0">Zainab Shah</h5>
@@ -69,6 +108,15 @@
                 </div>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- Call-to-Action Section -->
+<section class="py-5 bg-gradient-accent text-dark">
+    <div class="container text-center" data-aos="zoom-in">
+        <h2 class="fw-bold mb-3">Join Our Efforts</h2>
+        <p class="lead mb-4">Partner with us to build a safer community. Your support makes a difference.</p>
+        <a href="{% url 'contact' %}" class="btn btn-dark btn-lg shadow">Get Involved</a>
     </div>
 </section>
 {% endblock %}

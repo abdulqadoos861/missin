@@ -6,52 +6,52 @@
 {% block content %}
 <div class="container-fluid px-4">
     <!-- Page Header -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Assigned Cases</h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 animate__animated animate__fadeInDown">
+        <h1 class="h3 mb-0" style="color: white; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);">Assigned Cases</h1>
         <div class="d-flex">
-            <span class="badge bg-primary text-white px-3 py-2 me-3">
+            <span class="badge bg-primary text-white px-3 py-2 me-3" style="background: linear-gradient(135deg, #4a90e2, #357abd) !important; border-radius: 10px; box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3);">
                 <i class="fas fa-folder-open me-2"></i>Total Cases: {{ cases|length }}
             </span>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 10px; transition: all 0.3s ease; box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3);">
                 <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
             </a>
         </div>
-    </div>
+    </div
 
     <!-- Filters Card -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Filter Cases</h6>
+    <div class="card shadow mb-4 animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); overflow: hidden; backdrop-filter: blur(10px);">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background: rgba(255, 255, 255, 0.05); border-bottom: none;">
+            <h6 class="m-0 font-weight-bold" style="color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);"><i class="fas fa-filter me-2" style="color: #f5a623;"></i>Filter Cases</h6>
         </div>
         <div class="card-body">
             <form method="GET" class="row g-3">
                 <div class="col-md-4">
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control" name="search" placeholder="Search by name or case ID..." 
-                               value="{{ request.GET.search }}">
+                    <div class="input-group" style="background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2);">
+                        <span class="input-group-text" style="background: rgba(255, 255, 255, 0.1); border: none; color: white;"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" name="search" placeholder="Search by name or case ID..." value="{{ request.GET.search }}" style="background: transparent; color: white; border: none; box-shadow: none;">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <select class="form-select" name="status">
-                        <option value="">All Active Cases</option>
-                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
-                        <option value="investigation" {% if request.GET.status == 'investigation' %}selected{% endif %}>Under Investigation</option>
-                        <option value="found" {% if request.GET.status == 'found' %}selected{% endif %}>Found</option>
-                        <option value="closed" {% if request.GET.status == 'closed' %}selected{% endif %}>Closed Cases Only</option>
+                    <select class="form-select" name="status" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; box-shadow: none;">
+                        <option value="" style="background: #2c3e50; color: white;">All Active Cases</option>
+                        <option value="all" {% if request.GET.status == 'all' %}selected{% endif %} style="background: #2c3e50; color: white;">All Cases (Including Closed)</option>
+                        <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %} style="background: #2c3e50; color: white;">Pending</option>
+                        <option value="investigation" {% if request.GET.status == 'investigation' %}selected{% endif %} style="background: #2c3e50; color: white;">Under Investigation</option>
+                        <option value="found" {% if request.GET.status == 'found' %}selected{% endif %} style="background: #2c3e50; color: white;">Found</option>
+                        <option value="closed" {% if request.GET.status == 'closed' %}selected{% endif %} style="background: #2c3e50; color: white;">Closed Cases Only</option>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input type="date" class="form-control" name="date" value="{{ request.GET.date }}">
+                    <input type="date" class="form-control" name="date" value="{{ request.GET.date }}" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; box-shadow: none;">
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit" class="btn btn-primary w-100" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 10px; transition: all 0.3s ease; box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3);">
                         <i class="fas fa-filter me-2"></i>Filter
                     </button>
                 </div>
                 {% if request.GET %}
                 <div class="col-12">
-                    <a href="{% url 'officer:officer_view_case' %}" class="text-primary">
+                    <a href="{% url 'officer:officer_view_case' %}" style="color: #f5a623; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);">
                         <i class="fas fa-times me-1"></i> Clear filters
                     </a>
                 </div>
@@ -61,71 +61,72 @@
     </div>
 
     <!-- All Cases Section -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">All Cases</h6>
+    <div class="card shadow mb-4 animate__animated animate__fadeInUp animate__delay-1s" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); overflow: hidden; backdrop-filter: blur(10px);">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: rgba(255, 255, 255, 0.05); border-bottom: none;">
+            <h6 class="m-0 font-weight-bold" style="color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);"><i class="fas fa-briefcase me-2" style="color: #f5a623;"></i>All Cases</h6>
             <div>
-                <span class="me-3">
-                    <i class="fas fa-circle text-warning me-1"></i> Pending: {{ pending_count }}
+                <span class="me-3" style="color: white;">
+                    <i class="fas fa-circle text-warning me-1"></i> Pending: {{ pending_cases }}
                 </span>
-                <span class="me-3">
-                    <i class="fas fa-circle text-info me-1"></i> Investigation: {{ investigation_count }}
+                <span class="me-3" style="color: white;">
+                    <i class="fas fa-circle text-info me-1"></i> Investigation: {{ investigation_cases }}
                 </span>
-                <span class="me-3">
-                    <i class="fas fa-circle text-success me-1"></i> Found: {{ found_count }}
+                <span class="me-3" style="color: white;">
+                    <i class="fas fa-circle text-success me-1"></i> Found: {{ found_cases }}
                 </span>
-                <span>
-                    <i class="fas fa-circle text-secondary me-1"></i> Closed: {{ closed_count }}
+                <span style="color: white;">
+                    <i class="fas fa-circle text-secondary me-1"></i> Closed: {{ closed_cases }}
                 </span>
             </div>
         </div>
         <div class="card-body">
-            {% if cases %}
+            {% if page_obj.object_list %}
             <div class="row g-4">
-                {% for case in cases %}
+                {% for case in page_obj.object_list %}
                 <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="position-relative">
-                            <img src="{{ case.photo.url }}" class="card-img-top" alt="{{ case.name }}" style="height: 200px; object-fit: cover;">
-                            <div class="position-absolute top-0 end-0 m-3">
+                    <div class="card h-100 border-0 case-card animate__animated animate__zoomIn" style="background: rgba(255, 255, 255, 0.1); border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); overflow: hidden; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; backdrop-filter: blur(5px);">
+                        <div class="position-relative" style="height: 200px; overflow: hidden;">
+                            <img src="{{ case.photo.url }}" class="card-img-top" alt="{{ case.name }}" style="height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                            <div class="position-absolute top-0 end-0 m-3" style="z-index: 2;">
                                 {% if case.status == 'pending' %}
-                                <span class="badge bg-warning text-dark">
+                                <span class="badge bg-warning text-dark" style="border-radius: 8px; box-shadow: 0 3px 8px rgba(243, 156, 18, 0.3); padding: 6px 12px;">
                                     <i class="fas fa-clock me-1"></i> Pending
                                 </span>
                                 {% elif case.status == 'investigation' %}
-                                <span class="badge bg-info text-white">
+                                <span class="badge bg-info text-white" style="border-radius: 8px; box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3); padding: 6px 12px;">
                                     <i class="fas fa-search me-1"></i> Investigation
                                 </span>
                                 {% elif case.status == 'found' %}
-                                <span class="badge bg-success">
+                                <span class="badge bg-success" style="border-radius: 8px; box-shadow: 0 3px 8px rgba(46, 204, 113, 0.3); padding: 6px 12px;">
                                     <i class="fas fa-check-circle me-1"></i> Found
                                 </span>
                                 {% else %}
-                                <span class="badge bg-secondary">
+                                <span class="badge bg-secondary" style="border-radius: 8px; box-shadow: 0 3px 8px rgba(108, 117, 125, 0.3); padding: 6px 12px;">
                                     <i class="fas fa-times-circle me-1"></i> Closed
                                 </span>
                                 {% endif %}
                             </div>
+                            <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: linear-gradient(to top, rgba(26, 38, 57, 0.8), transparent); z-index: 1;"></div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="color: white;">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title mb-0">{{ case.first_name }} {{ case.last_name }}</h5>
-                                <span class="badge bg-light text-dark">{{ case.get_gender_display }}, {{ case.age }} years</span>
+                                <h5 class="card-title mb-0" style="font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">{{ case.first_name }} {{ case.last_name }}</h5>
+                                <span class="badge bg-light text-dark" style="background: rgba(255, 255, 255, 0.2) !important; color: white !important; border-radius: 8px;">{{ case.get_gender_display }}, {{ case.age }} years</span>
                             </div>
-                            <p class="small text-muted mb-2">
-                                <i class="far fa-calendar-alt me-1"></i> 
+                            <p class="small mb-2" style="opacity: 0.8;">
+                                <i class="far fa-calendar-alt me-1" style="color: #f5a623;"></i> 
                                 Last Seen: {{ case.last_seen_date|date:"M d, Y" }}
                             </p>
-                            <p class="small text-muted mb-2">
-                                <i class="fas fa-map-marker-alt me-1"></i>
+                            <p class="small mb-2" style="opacity: 0.8;">
+                                <i class="fas fa-map-marker-alt me-1" style="color: #f5a623;"></i>
                                 {{ case.last_seen_location|truncatechars:30 }}
                             </p>
-                            <p class="small text-muted mb-2">
-                                <i class="fas fa-user-tag me-1"></i>
+                            <p class="small mb-2" style="opacity: 0.8;">
+                                <i class="fas fa-user-tag me-1" style="color: #f5a623;"></i>
                                 Reported by: {{ case.reporter.get_full_name|default:case.reporter.username }}
                             </p>
                             <div class="d-grid gap-2 mt-3">
-                                <a href="{% url 'officer:officer_view_case_detail' case.id %}" class="btn btn-primary">
+                                <a href="{% url 'officer:officer_view_case_detail' case.id %}" class="btn btn-primary" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 10px; transition: all 0.3s ease; box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3);">
                                     <i class="fas fa-eye me-1"></i> View Case
                                 </a>
                             </div>
@@ -136,63 +137,63 @@
             </div>
             {% else %}
             <div class="text-center py-5">
-                <div class="text-muted">
+                <div style="color: rgba(255, 255, 255, 0.7);">
                     <i class="fas fa-folder-open fa-4x mb-4" style="opacity: 0.5;"></i>
                     <h4 class="mb-2">No cases found</h4>
-                    {% if request.GET %}
-                        <p class="mb-0">Try adjusting your search or filter criteria</p>
+                    {% if request.GET.search or request.GET.status or request.GET.date %}
+                        <p class="mb-0">Try adjusting your search or filter criteria. No cases match the current filters.</p>
                     {% else %}
-                        <p class="mb-0">No cases have been registered yet</p>
+                        <p class="mb-0">There are no cases assigned to you at the moment. Please check back later or contact an administrator if you believe this is an error.</p>
                     {% endif %}
                 </div>
             </div>
             {% endif %}
             
             <!-- Pagination -->
-            {% if cases.has_other_pages %}
+            {% if page_obj.has_other_pages %}
             <nav aria-label="Page navigation" class="mt-4">
                 <ul class="pagination justify-content-center">
-                    {% if cases.has_previous %}
+                    {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">First</a>
+                        <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease; border-radius: 8px; margin: 0 3px;">First</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ cases.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">Previous</a>
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease; border-radius: 8px; margin: 0 3px;">Previous</a>
                     </li>
                     {% else %}
                     <li class="page-item disabled">
-                        <span class="page-link">First</span>
+                        <span class="page-link" style="background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; margin: 0 3px;">First</span>
                     </li>
                     <li class="page-item disabled">
-                        <span class="page-link">Previous</span>
+                        <span class="page-link" style="background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; margin: 0 3px;">Previous</span>
                     </li>
                     {% endif %}
                     
-                    {% for i in cases.paginator.page_range %}
-                        {% if cases.number == i %}
+                    {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
                         <li class="page-item active">
-                            <span class="page-link">{{ i }}</span>
+                            <span class="page-link" style="background: linear-gradient(135deg, #4a90e2, #357abd); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; margin: 0 3px;">{{ i }}</span>
                         </li>
-                        {% elif i > cases.number|add:'-3' and i < cases.number|add:'3' %}
+                        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">{{ i }}</a>
+                            <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease; border-radius: 8px; margin: 0 3px;">{{ i }}</a>
                         </li>
                         {% endif %}
                     {% endfor %}
                     
-                    {% if cases.has_next %}
+                    {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ cases.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">Next</a>
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease; border-radius: 8px; margin: 0 3px;">Next</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ cases.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}">Last</a>
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date %}&date={{ request.GET.date }}{% endif %}" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease; border-radius: 8px; margin: 0 3px;">Last</a>
                     </li>
                     {% else %}
                     <li class="page-item disabled">
-                        <span class="page-link">Next</span>
+                        <span class="page-link" style="background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; margin: 0 3px;">Next</span>
                     </li>
                     <li class="page-item disabled">
-                        <span class="page-link">Last</span>
+                        <span class="page-link" style="background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; margin: 0 3px;">Last</span>
                     </li>
                     {% endif %}
                 </ul>
@@ -201,28 +202,79 @@
         </div>
     </div>
 </div>
+
+<style>
+body {
+    background: linear-gradient(135deg, #14162e 0%, #1a2639 100%);
+}
+
+.case-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.case-card:hover img {
+    transform: scale(1.1);
+}
+
+.form-select:focus, .form-control:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #f5a623 !important;
+    box-shadow: 0 0 0 0.2rem rgba(245, 166, 35, 0.25) !important;
+    color: white !important;
+}
+
+::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+:-moz-placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+</style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+    // Add hover effect to case cards
+    document.querySelectorAll('.case-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+            this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.25)';
+            this.style.background = 'rgba(255, 255, 255, 0.15)';
+            const img = this.querySelector('img');
+            if (img) {
+                img.style.transform = 'scale(1.1)';
+            }
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            this.style.background = 'rgba(255, 255, 255, 0.1)';
+            const img = this.querySelector('img');
+            if (img) {
+                img.style.transform = 'scale(1)';
+            }
+        });
+    });
+
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    // Initialize DataTable
-    $(document).ready(function() {
-        $('#dataTable').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-            "ordering": true,
-            "order": [[5, 'desc']], // Sort by date reported by default
-            "columnDefs": [
-                { "orderable": false, "targets": [6] } // Disable sorting on actions column
-            ]
-        });
     });
 </script>
 {% endblock %}

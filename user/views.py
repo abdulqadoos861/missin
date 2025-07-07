@@ -246,3 +246,32 @@ def missing_person_detail(request, case_number):
     except MissingPerson.DoesNotExist:
         messages.error(request, 'Missing person report not found.')
         return redirect('user_dashboard')
+
+@login_required
+def feedback(request):
+    """
+    Displays the feedback form for users to submit their feedback.
+    """
+    from .models import Feedback
+    if request.method == 'POST':
+        title = request.POST.get('subject')
+        description = request.POST.get('message')
+        rating = request.POST.get('rating', '0')
+        
+        if title and description:
+            try:
+                feedback = Feedback.objects.create(
+                    user=request.user,
+                    title=title,
+                    description=description,
+                    rating=int(rating) if rating.isdigit() else 0
+                )
+                messages.success(request, 'Feedback submitted successfully! Thank you for your input.')
+                return redirect('feedback')
+            except Exception as e:
+                logger.error(f"Error saving feedback: {str(e)}")
+                messages.error(request, 'An error occurred while submitting your feedback. Please try again.')
+        else:
+            messages.error(request, 'Please fill out all required fields.')
+    
+    return render(request, 'feedback.html')

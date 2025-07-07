@@ -4,86 +4,94 @@
 
 {% block content %}
 <div class="row">
-    <!-- Welcome Card -->
+    <!-- Welcome Card with Animation -->
     <div class="col-12 mb-4">
-        <div class="card bg-gradient-primary text-white">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center">
+        <div class="card animate__animated animate__fadeInDown" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); border: none; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); overflow: hidden; backdrop-filter: blur(15px); position: relative;">
+            <div class="card-body p-5" style="color: white; position: relative; z-index: 2;">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
                     <div>
-                        <h4 class="mb-1">Welcome back, {{ user.get_full_name }}!</h4>
-                        <p class="mb-0 opacity-75">Here's what's happening with your cases today.</p>
+                        <h3 class="mb-1" style="font-weight: 700; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">Welcome back, {{ user.get_full_name }}!</h3>
+                        <p class="mb-0" style="opacity: 0.9; font-size: 1.1rem;">Dive into your case updates for today.</p>
                     </div>
-                    <div class="text-end">
-                        <h6 class="mb-1">Current Date</h6>
-                        <p class="mb-0">{{ current_date|date:"F d, Y" }}</p>
+                    <div class="text-end mt-3 mt-md-0">
+                        <h6 class="mb-1" style="font-weight: 500; color: #f5a623;">Current Date</h6>
+                        <p class="mb-0" style="font-size: 1.1rem;">{{ current_date|date:"F d, Y" }}</p>
                     </div>
                 </div>
+            </div>
+            <div style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; opacity: 0.2; z-index: 1; overflow: hidden;">
+                <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: #f5a623; border-radius: 50%; filter: blur(50px);"></div>
+                <div style="position: absolute; bottom: -50px; left: -50px; width: 200px; height: 200px; background: #4a90e2; border-radius: 50%; filter: blur(50px);"></div>
             </div>
         </div>
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Statistics Cards with Hover Effects and Vibrant Colors -->
     <div class="col-md-3 mb-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
+        <div class="card stat-card h-100 animate__animated animate__zoomIn" style="background: linear-gradient(145deg, #1a2639, #2c3e50); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); overflow: hidden; position: relative;">
+            <div class="card-body" style="color: white; z-index: 2;">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon bg-primary bg-opacity-10 rounded-circle p-3 me-3">
-                        <i class="fas fa-folder-open text-primary fa-2x"></i>
+                    <div class="stat-icon rounded-circle p-3 me-3 animate__animated animate__pulse animate__infinite" style="background: linear-gradient(135deg, #4a90e2, #357abd); box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);">
+                        <i class="fas fa-folder-open fa-2x"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">Total Cases</h6>
-                        <h3 class="mb-0 fw-bold">{{ total_cases }}</h3>
+                        <h6 class="mb-1" style="color: rgba(255, 255, 255, 0.8);">Total Cases</h6>
+                        <h3 class="mb-0 fw-bold" style="font-weight: 800; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">{{ total_cases }}</h3>
                     </div>
                 </div>
             </div>
+            <div style="position: absolute; bottom: 0; right: 0; width: 100px; height: 100px; background: rgba(74, 144, 226, 0.2); border-radius: 50%; transform: translate(50%, 50%); filter: blur(30px); z-index: 1;"></div>
         </div>
     </div>
 
     <div class="col-md-3 mb-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
+        <div class="card stat-card h-100 animate__animated animate__zoomIn animate__delay-1s" style="background: linear-gradient(145deg, #1a2639, #2c3e50); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); overflow: hidden; position: relative;">
+            <div class="card-body" style="color: white; z-index: 2;">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon bg-success bg-opacity-10 rounded-circle p-3 me-3">
-                        <i class="fas fa-check-circle text-success fa-2x"></i>
+                    <div class="stat-icon rounded-circle p-3 me-3 animate__animated animate__pulse animate__infinite" style="background: linear-gradient(135deg, #2ecc71, #27ae60); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);">
+                        <i class="fas fa-check-circle fa-2x"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">Solved Cases</h6>
-                        <h3 class="mb-0 fw-bold">{{ solved_cases }}</h3>
+                        <h6 class="mb-1" style="color: rgba(255, 255, 255, 0.8);">Solved Cases</h6>
+                        <h3 class="mb-0 fw-bold" style="font-weight: 800; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">{{ solved_cases }}</h3>
                     </div>
                 </div>
             </div>
+            <div style="position: absolute; bottom: 0; right: 0; width: 100px; height: 100px; background: rgba(46, 204, 113, 0.2); border-radius: 50%; transform: translate(50%, 50%); filter: blur(30px); z-index: 1;"></div>
         </div>
     </div>
 
     <div class="col-md-3 mb-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
+        <div class="card stat-card h-100 animate__animated animate__zoomIn animate__delay-2s" style="background: linear-gradient(145deg, #1a2639, #2c3e50); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); overflow: hidden; position: relative;">
+            <div class="card-body" style="color: white; z-index: 2;">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon bg-warning bg-opacity-10 rounded-circle p-3 me-3">
-                        <i class="fas fa-clock text-warning fa-2x"></i>
+                    <div class="stat-icon rounded-circle p-3 me-3 animate__animated animate__pulse animate__infinite" style="background: linear-gradient(135deg, #f39c12, #e67e22); box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);">
+                        <i class="fas fa-clock fa-2x"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">Pending Cases</h6>
-                        <h3 class="mb-0 fw-bold">{{ pending_cases }}</h3>
+                        <h6 class="mb-1" style="color: rgba(255, 255, 255, 0.8);">Pending Cases</h6>
+                        <h3 class="mb-0 fw-bold" style="font-weight: 800; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">{{ pending_cases }}</h3>
                     </div>
                 </div>
             </div>
+            <div style="position: absolute; bottom: 0; right: 0; width: 100px; height: 100px; background: rgba(243, 156, 18, 0.2); border-radius: 50%; transform: translate(50%, 50%); filter: blur(30px); z-index: 1;"></div>
         </div>
     </div>
 
     <div class="col-md-3 mb-4">
-        <div class="card stat-card h-100">
-            <div class="card-body">
+        <div class="card stat-card h-100 animate__animated animate__zoomIn animate__delay-3s" style="background: linear-gradient(145deg, #1a2639, #2c3e50); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); overflow: hidden; position: relative;">
+            <div class="card-body" style="color: white; z-index: 2;">
                 <div class="d-flex align-items-center">
-                    <div class="stat-icon bg-danger bg-opacity-10 rounded-circle p-3 me-3">
-                        <i class="fas fa-flag-checkered text-danger fa-2x"></i>
+                    <div class="stat-icon rounded-circle p-3 me-3 animate__animated animate__pulse animate__infinite" style="background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);">
+                        <i class="fas fa-flag-checkered fa-2x"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1">Cases Closed</h6>
-                        <h3 class="mb-0 fw-bold">{{ cases_closed }}</h3>
+                        <h6 class="mb-1" style="color: rgba(255, 255, 255, 0.8);">Cases Closed</h6>
+                        <h3 class="mb-0 fw-bold" style="font-weight: 800; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">{{ cases_closed }}</h3>
                     </div>
                 </div>
             </div>
+            <div style="position: absolute; bottom: 0; right: 0; width: 100px; height: 100px; background: rgba(231, 76, 60, 0.2); border-radius: 50%; transform: translate(50%, 50%); filter: blur(30px); z-index: 1;"></div>
         </div>
     </div>
 </div>
@@ -92,88 +100,94 @@
     <div class="col-md-6 mb-4">
         <div class="row">
             <div class="col-md-6 mb-3 mb-md-0">
-                <div class="card stat-card h-100">
-                    <div class="card-body">
+                <div class="card stat-card h-100 animate__animated animate__flipInX" style="background: linear-gradient(145deg, #1a2639, #2c3e50); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); overflow: hidden; position: relative;">
+                    <div class="card-body" style="color: white; z-index: 2;">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-info bg-opacity-10 rounded-circle p-3 me-3">
-                                <i class="fas fa-chart-line text-info fa-2x"></i>
+                            <div class="stat-icon rounded-circle p-3 me-3" style="background: linear-gradient(135deg, #1abc9c, #16a085); box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);">
+                                <i class="fas fa-chart-line fa-2x"></i>
                             </div>
                             <div>
-                                <h6 class="text-muted mb-1">Success Rate</h6>
-                                <h3 class="mb-0 fw-bold">{{ success_rate }}%</h3>
-                                <p class="text-muted small mb-0">Cases solved vs total cases</p>
+                                <h6 class="mb-1" style="color: rgba(255, 255, 255, 0.8);">Success Rate</h6>
+                                <h3 class="mb-0 fw-bold" style="font-weight: 800; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">{{ success_rate }}%</h3>
+                                <p class="text-muted small mb-0" style="color: rgba(255, 255, 255, 0.7) !important;">Cases solved vs total cases</p>
                             </div>
                         </div>
                     </div>
+                    <div style="position: absolute; bottom: 0; right: 0; width: 100px; height: 100px; background: rgba(26, 188, 156, 0.2); border-radius: 50%; transform: translate(50%, 50%); filter: blur(30px); z-index: 1;"></div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card stat-card h-100">
-                    <div class="card-body">
+                <div class="card stat-card h-100 animate__animated animate__flipInX animate__delay-1s" style="background: linear-gradient(145deg, #1a2639, #2c3e50); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); backdrop-filter: blur(10px); overflow: hidden; position: relative;">
+                    <div class="card-body" style="color: white; z-index: 2;">
                         <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-purple bg-opacity-10 rounded-circle p-3 me-3">
-                                <i class="fas fa-user-shield text-purple fa-2x"></i>
+                            <div class="stat-icon rounded-circle p-3 me-3" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);">
+                                <i class="fas fa-user-shield fa-2x"></i>
                             </div>
                             <div>
-                                <h6 class="text-muted mb-1">Your Closed Cases</h6>
-                                <h3 class="mb-0 fw-bold">{{ request.user.cases_closed }}</h3>
-                                <p class="text-muted small mb-0">Cases you've successfully closed</p>
+                                <h6 class="mb-1" style="color: rgba(255, 255, 255, 0.8);">Your Closed Cases</h6>
+                                <h3 class="mb-0 fw-bold" style="font-weight: 800; text-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);">{{ request.user.cases_closed }}</h3>
+                                <p class="text-muted small mb-0" style="color: rgba(255, 255, 255, 0.7) !important;">Cases you've successfully closed</p>
                             </div>
                         </div>
                     </div>
+                    <div style="position: absolute; bottom: 0; right: 0; width: 100px; height: 100px; background: rgba(155, 89, 182, 0.2); border-radius: 50%; transform: translate(50%, 50%); filter: blur(30px); z-index: 1;"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Quick Actions with Interactive Hover Effects -->
     <div class="col-12 mt-4">
-        <div class="card">
-            <div class="card-header bg-light py-3">
-                <h6 class="mb-0 text-primary fw-bold">
-                    <i class="fas fa-bolt me-2"></i>Quick Actions
-                </h6>
+        <div class="card animate__animated animate__fadeInUp" style="background: linear-gradient(135deg, #1a2639 0%, #2c3e50 100%); border: none; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); overflow: hidden; backdrop-filter: blur(15px); position: relative;">
+            <div class="card-header py-4" style="background: rgba(255, 255, 255, 0.05); border-bottom: none;">
+                <h5 class="mb-0 fw-bold" style="color: white; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);">
+                    <i class="fas fa-bolt me-2" style="color: #f5a623; animation: boltPulse 2s infinite;"></i>Quick Actions
+                </h5>
             </div>
-            <div class="card-body">
-                <div class="row g-3">
+            <div class="card-body" style="color: white;">
+                <div class="row g-4">
                     <div class="col-md-3">
-                        <a href="{% url 'officer:officer_view_case' %}" class="card text-decoration-none h-100">
-                            <div class="card-body text-center">
-                                <div class="mb-3">
-                                    <i class="fas fa-folder-open fa-2x text-primary"></i>
+                        <a href="{% url 'officer:officer_view_case' %}" class="card text-decoration-none h-100 quick-action-card" style="background: rgba(255, 255, 255, 0.1); border: none; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); overflow: hidden; position: relative;">
+                            <div class="card-body text-center" style="z-index: 2;">
+                                <div class="mb-3 icon-wrapper" style="width: 60px; height: 60px; margin: 0 auto 10px; background: rgba(74, 144, 226, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-folder-open fa-2x" style="color: #4a90e2;"></i>
                                 </div>
-                                <h6 class="mb-0">View Cases</h6>
+                                <h6 class="mb-0" style="color: white; font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">View Cases</h6>
                             </div>
+                            <div class="ripple-effect" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; background: rgba(74, 144, 226, 0.2); border-radius: 50%; z-index: 1; transition: all 0.6s ease;"></div>
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{% url 'officer:officer_profile' %}" class="card text-decoration-none h-100">
-                            <div class="card-body text-center">
-                                <div class="mb-3">
-                                    <i class="fas fa-user fa-2x text-success"></i>
+                        <a href="{% url 'officer:officer_profile' %}" class="card text-decoration-none h-100 quick-action-card" style="background: rgba(255, 255, 255, 0.1); border: none; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); overflow: hidden; position: relative;">
+                            <div class="card-body text-center" style="z-index: 2;">
+                                <div class="mb-3 icon-wrapper" style="width: 60px; height: 60px; margin: 0 auto 10px; background: rgba(46, 204, 113, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user fa-2x" style="color: #2ecc71;"></i>
                                 </div>
-                                <h6 class="mb-0">Update Profile</h6>
+                                <h6 class="mb-0" style="color: white; font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">Update Profile</h6>
                             </div>
+                            <div class="ripple-effect" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; background: rgba(46, 204, 113, 0.2); border-radius: 50%; z-index: 1; transition: all 0.6s ease;"></div>
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="card text-decoration-none h-100">
-                            <div class="card-body text-center">
-                                <div class="mb-3">
-                                    <i class="fas fa-file-alt fa-2x text-warning"></i>
+                        <a href="#" class="card text-decoration-none h-100 quick-action-card" style="background: rgba(255, 255, 255, 0.1); border: none; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); overflow: hidden; position: relative;">
+                            <div class="card-body text-center" style="z-index: 2;">
+                                <div class="mb-3 icon-wrapper" style="width: 60px; height: 60px; margin: 0 auto 10px; background: rgba(243, 156, 18, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-file-alt fa-2x" style="color: #f39c12;"></i>
                                 </div>
-                                <h6 class="mb-0">Generate Report</h6>
+                                <h6 class="mb-0" style="color: white; font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">Generate Report</h6>
                             </div>
+                            <div class="ripple-effect" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; background: rgba(243, 156, 18, 0.2); border-radius: 50%; z-index: 1; transition: all 0.6s ease;"></div>
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="card text-decoration-none h-100">
-                            <div class="card-body text-center">
-                                <div class="mb-3">
-                                    <i class="fas fa-cog fa-2x text-info"></i>
+                        <a href="#" class="card text-decoration-none h-100 quick-action-card" style="background: rgba(255, 255, 255, 0.1); border: none; border-radius: 16px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); overflow: hidden; position: relative;">
+                            <div class="card-body text-center" style="z-index: 2;">
+                                <div class="mb-3 icon-wrapper" style="width: 60px; height: 60px; margin: 0 auto 10px; background: rgba(26, 188, 156, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-cog fa-2x" style="color: #1abc9c;"></i>
                                 </div>
-                                <h6 class="mb-0">Settings</h6>
+                                <h6 class="mb-0" style="color: white; font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">Settings</h6>
                             </div>
+                            <div class="ripple-effect" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; background: rgba(26, 188, 156, 0.2); border-radius: 50%; z-index: 1; transition: all 0.6s ease;"></div>
                         </a>
                     </div>
                 </div>
@@ -182,34 +196,78 @@
     </div>
 </div>
 
+<style>
+body {
+    background: linear-gradient(135deg, #14162e 0%, #1a2639 100%);
+}
+
+.stat-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.stat-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.quick-action-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.quick-action-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.quick-action-card:hover .ripple-effect {
+    width: 300px;
+    height: 300px;
+}
+
+@keyframes boltPulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
+
 {% block extra_js %}
 <script>
     // Add hover effect to stat cards
     document.querySelectorAll('.stat-card').forEach(card => {
         card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
+            this.style.transform = 'translateY(-10px) scale(1.02)';
         });
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
+            this.style.transform = 'translateY(0) scale(1)';
         });
     });
 
-    // Add hover effect to quick action cards
-    document.querySelectorAll('.card.text-decoration-none').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+    // Add hover effect to quick action cards with ripple
+    document.querySelectorAll('.quick-action-card').forEach(card => {
+        card.addEventListener('mouseenter', function(e) {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+            this.style.boxShadow = '0 15px 30px rgba(0,0,0,0.25)';
+            this.style.background = 'rgba(255, 255, 255, 0.15)';
+            const ripple = this.querySelector('.ripple-effect');
+            if (ripple) {
+                ripple.style.width = '300px';
+                ripple.style.height = '300px';
+            }
         });
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = 'none';
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            this.style.background = 'rgba(255, 255, 255, 0.1)';
+            const ripple = this.querySelector('.ripple-effect');
+            if (ripple) {
+                ripple.style.width = '0';
+                ripple.style.height = '0';
+            }
         });
     });
 </script>
 {% endblock %}
 
 {% endblock %}
-
-
-
-

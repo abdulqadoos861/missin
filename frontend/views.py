@@ -94,6 +94,11 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             
             if user is not None:
+                if not user.is_active:
+                    messages.error(request, 'Your account is not verified. Please check your email for the OTP and verify your account.')
+                    response = render(request, 'login.html')
+                    response.set_cookie('csrftoken', request.META.get('CSRF_COOKIE', ''))
+                    return response
                 try:
                     # Log the user in first to establish the session
                     auth_login(request, user)
@@ -163,13 +168,27 @@ def register(request):
                 user = form.save(commit=False)
                 # Set user type to regular user by default
                 user.user_type = 'user'
+                user.is_active = False  # Mark as inactive until OTP verification
                 user.save()
                 
-                # Log the user in
-                auth_login(request, user)
+                # Generate OTP and send it to user's email
+                import random
+                otp = str(random.randint(100000, 999999))
+                request.session['otp'] = otp
+                request.session['user_id'] = user.id
+                request.session.modified = True
                 
-                messages.success(request, 'Registration successful! Welcome to Pakistani Police Force Portal.')
-                return redirect('user_dashboard')
+                # Send OTP email
+                send_mail(
+                    'Your OTP for Registration',
+                    f'Your One-Time Password (OTP) for registration is: {otp}. Please enter this code to complete your registration.',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [user.email],
+                    fail_silently=False,
+                )
+                
+                messages.success(request, 'An OTP has been sent to your email. Please check your inbox to complete registration.')
+                return redirect('verify_otp')
             else:
                 # Form validation failed
                 for field, errors in form.errors.items():
@@ -186,6 +205,35 @@ def register(request):
     
     return render(request, 'register.html', {'form': form})
 
+def verify_otp(request):
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        stored_otp = request.session.get('otp')
+        user_id = request.session.get('user_id')
+        
+        if entered_otp == stored_otp:
+            try:
+                from .models import User
+                user = User.objects.get(id=user_id)
+                # Log the user in
+                user.is_active = True  # Activate user after successful verification
+                user.save()
+                auth_login(request, user)
+                # Clear OTP from session
+                del request.session['otp']
+                del request.session['user_id']
+                request.session.modified = True
+                
+                messages.success(request, 'Registration successful! Welcome to Pakistani Police Force Portal.')
+                return redirect('user_dashboard')
+            except Exception as e:
+                messages.error(request, 'An error occurred during verification. Please try again.')
+                print(f"OTP verification error: {str(e)}")
+        else:
+            messages.error(request, 'Invalid OTP. Please try again.')
+    
+    return render(request, 'otp_verification.html')
+
 
 @login_required(login_url='login')
 def report_incident_redirect(request):
@@ -194,4 +242,3 @@ def report_incident_redirect(request):
     Unauthenticated users are redirected to the login page first.
     """
     return redirect('report_missing_person')
-

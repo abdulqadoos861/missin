@@ -6,72 +6,180 @@
 {% block content %}
 <!-- Hero Section -->
 <header class="hero-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 mx-auto text-center" data-aos="fade-up">
-                <h1 class="display-4 fw-bold">A Safer Community, Together</h1>
-                <p class="lead mb-4">Your trusted platform for public safety and assistance. Report missing persons and help us reunite families.</p>
-                <a href="{% url 'report_incident' %}" class="custom-btn btn-lg">Get Started</a>
+    <div class="hero-overlay"></div>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-12 hero-text" data-aos="zoom-in">
+                <h1 class="display-4 fw-bold mb-3 text-white">Safeguarding Our Community Together</h1>
+                <p class="lead mb-5 text-white">Report missing persons, track cases, and join us in building a safer tomorrow.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'report_incident' %}" class="btn btn-primary btn-lg shadow-lg">Report Now</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg shadow-lg">Track Case</a>
+                </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Featured Services Section -->
-<section class="py-5">
+<!-- Urgent Call-to-Action Section -->
+<section class="urgent-cta py-5 bg-warning text-dark">
+    <div class="container">
+        <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-8 mb-3 mb-md-0">
+                <h3 class="fw-bold mb-2">Know Something About a Missing Person?</h3>
+                <p class="lead mb-0">Your information could save a life. Act now and help us bring them home.</p>
+            </div>
+            <div class="col-md-4 text-center text-md-end">
+                <a href="{% url 'report_incident' %}" class="btn btn-dark btn-lg shadow">Submit Information</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5 bg-dark text-light">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="fw-bold">Our Core Service</h2>
-            <p class="lead text-muted">Committed to ensuring your safety and security.</p>
+            <h2 class="fw-bold mb-2">How We Serve You</h2>
+            <p class="lead text-muted">Dedicated to protecting and supporting our community.</p>
         </div>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="card service-card h-100 text-center">
-                    <div class="card-body">
-                        <div class="feature-icon-box"><i class="fas fa-user-slash fa-2x"></i></div>
-                        <h3 class="h5 mt-3">Missing Persons</h3>
-                        <p>Report and search for missing individuals to help reunite families.</p>
-                    </div>
+        <div class="row g-4 text-center">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-search fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Missing Persons Search</h4>
+                    <p>Help us find loved ones by reporting missing individuals and providing crucial information.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Community Protection</h4>
+                    <p>Stay updated with safety alerts and resources to keep your neighborhood secure.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-headset fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">24/7 Support</h4>
+                    <p>Reach out anytime for assistance or to report urgent situations requiring immediate action.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Why Choose Us Section -->
-<section class="py-5 bg-dark-alt">
+<!-- Impact Highlights -->
+<section class="py-5 bg-gradient-primary text-white">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="fw-bold">Why Trust Our Platform?</h2>
-            <p class="lead text-muted">A secure and reliable system for public safety.</p>
+            <h2 class="fw-bold mb-2">Our Community Impact</h2>
+            <p class="lead">Together, we are making a real difference in public safety.</p>
         </div>
-        <div class="row align-items-center">
-            <div class="col-lg-6" data-aos="fade-right">
-                <img src="{% static 'images/why-us.png' %}" alt="Secure Platform" class="img-fluid rounded-3">
-            </div>
-            <div class="col-lg-6" data-aos="fade-left">
-                <div class="d-flex align-items-start mb-4 feature-item" data-aos="fade-left" data-aos-delay="100">
-                    <div class="feature-icon-box me-3"><i class="fas fa-lock"></i></div>
-                    <div>
-                        <h5>Secure & Confidential</h5>
-                        <p class="text-white-50">Your data is protected with end-to-end encryption, ensuring privacy and security.</p>
-                    </div>
-                </div>
-                <div class="d-flex align-items-start mb-4 feature-item" data-aos="fade-left" data-aos-delay="200">
-                    <div class="feature-icon-box me-3"><i class="fas fa-rocket"></i></div>
-                    <div>
-                        <h5>Fast & Efficient</h5>
-                        <p class="text-white-50">Our streamlined process ensures your reports are handled promptly by the right authorities.</p>
-                    </div>
-                </div>
-                <div class="d-flex align-items-start feature-item" data-aos="fade-left" data-aos-delay="300">
-                    <div class="feature-icon-box me-3"><i class="fas fa-users"></i></div>
-                    <div>
-                        <h5>Community Focused</h5>
-                        <p class="text-white-50">We are dedicated to building a safer community by connecting citizens with law enforcement.</p>
-                    </div>
+        <div class="row text-center g-4">
+            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="impact-card p-4 rounded shadow">
+                    <h2 class="display-5 fw-bold mb-2">600+</h2>
+                    <p class="lead text-light">Cases Reported</p>
                 </div>
             </div>
+            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+                <div class="impact-card p-4 rounded shadow">
+                    <h2 class="display-5 fw-bold mb-2">400+</h2>
+                    <p class="lead text-light">Individuals Reunited</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="zoom-in" data-aos-delay="300">
+                <div class="impact-card p-4 rounded shadow">
+                    <h2 class="display-5 fw-bold mb-2">15K+</h2>
+                    <p class="lead text-light">Active Supporters</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stories Section -->
+<section class="py-5 bg-dark-alt text-light">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold mb-2">Heartfelt Reunions</h2>
+            <p class="lead text-muted">Stories of hope and recovery from our community.</p>
+        </div>
+        <div class="row g-4 align-items-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-6">
+                <img src="{% static 'images/pic1.jpg' %}" alt="Reunion Story" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-lg-6">
+                <div class="story-content p-4 rounded shadow bg-dark">
+                    <h3 class="fw-bold mb-3 text-primary">A Family Made Whole Again</h3>
+                    <p class="mb-4">"This platform helped us locate our missing daughter within days. The community's support was overwhelming, and we are eternally thankful."</p>
+                    <p class="text-muted mb-0">- Anna Thompson, Grateful Mother</p>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4 align-items-center mt-5" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-6 order-lg-2">
+                <img src="{% static 'images/pic2.jpg' %}" alt="Reunion Story" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="story-content p-4 rounded shadow bg-dark">
+                    <h3 class="fw-bold mb-3 text-primary">Hope Restored</h3>
+                    <p class="mb-4">"Thanks to the rapid response facilitated by this portal, we found our son safe. The real-time updates kept us informed every step of the way."</p>
+                    <p class="text-muted mb-0">- David Lee, Relieved Father</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-dark text-light">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold mb-2">What Our Community Says</h2>
+            <p class="lead text-muted">Voices of trust and gratitude from those we've helped.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="testimonial-box p-4 rounded shadow h-100">
+                    <p class="mb-4 testimonial-quote">"This service gave us hope when we needed it most. Our missing relative was found thanks to the community's efforts."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/pic1.jpg' %}" alt="User" class="rounded-circle me-3 testimonial-img">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Sarah Miller</h6>
+                            <p class="text-muted mb-0">Local Resident</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+                <div class="testimonial-box p-4 rounded shadow h-100">
+                    <p class="mb-4 testimonial-quote">"Reporting was easy, and the follow-up was immediate. I felt supported throughout the entire process."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/pic2.jpg' %}" alt="User" class="rounded-circle me-3 testimonial-img">
+                        <div>
+                            <h6 class="mb-0 fw-bold">James Carter</h6>
+                            <p class="text-muted mb-0">Concerned Citizen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
+                <div class="testimonial-box p-4 rounded shadow h-100">
+                    <p class="mb-4 testimonial-quote">"An invaluable resource for our community. It connects us with law enforcement in a way that truly makes a difference."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="{% static 'images/pic3.jpg' %}" alt="User" class="rounded-circle me-3 testimonial-img">
+                        <div>
+                            <h6 class="mb-0 fw-bold">Lisa Brown</h6>
+                            <p class="text-muted mb-0">Community Advocate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="400">
+            <a href="{% url 'contact' %}" class="btn btn-primary btn-lg shadow">Share Your Experience</a>
         </div>
     </div>
 </section>

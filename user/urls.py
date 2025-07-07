@@ -24,4 +24,5 @@ urlpatterns = [
     path('profile/', views.user_profile, name='user_profile'),
     path('logout/', custom_logout, name='user_logout'),
     path('test-email/', TestEmailView.as_view(), name='test_email'),
+    path('feedback/', views.feedback, name='feedback'),
 ]

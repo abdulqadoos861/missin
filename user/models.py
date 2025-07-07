@@ -91,3 +91,23 @@ class MissingPerson(models.Model):
         ordering = ['-created_at']
         verbose_name = 'Missing Person'
         verbose_name_plural = 'Missing Persons'
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedback')
+    feedback_type = models.CharField(max_length=50, blank=True, help_text="Type of feedback")
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    rating = models.IntegerField(default=0, help_text="Rating out of 5")
+    reply = models.TextField(blank=True, null=True, help_text="Reply from the admin or officer")
+    reply_date = models.DateTimeField(blank=True, null=True)
+    is_resolved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Feedback from {self.user.username} - {self.title}"
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Feedback'
+        verbose_name_plural = 'Feedback'

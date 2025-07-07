@@ -1,26 +1,67 @@
-        :root {
-    --primary-color: #1a202c;
-    --secondary-color: #2d3748;
-    --accent-color: #4299e1;
-    --text-light: #e2e8f0;
+:root {
+    --primary-color: #2c2f7e;
+    --secondary-color: #5a4b9c;
+    --accent-color: #ffb74d;
+    --text-light: #e0e0e0;
     --text-dark: #ffffff;
-    --glass-color: rgba(45, 55, 72, 0.25);
-    --glass-border: rgba(226, 232, 240, 0.18);
-    --bg-dark: #1a202c;
-    --card-bg: rgba(45, 55, 72, 0.5);
+    --glass-color: rgba(30, 30, 50, 0.2);
+    --glass-border: rgba(100, 100, 150, 0.3);
+    --bg-dark: #1a1c3b;
+    --card-bg: #25274d;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-light);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    min-height: 100vh;
+    padding-top: 56px;
+    margin: 0;
 }
 
 .hero-section {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../images/police-team.jpg') no-repeat center center;
     background-size: cover;
     color: var(--text-dark);
-    padding: 150px 0;
+    padding: 0;
     text-align: center;
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sub-hero-section {
+    background: url('../images/police-team.jpg') no-repeat center center;
+    background-size: cover;
+    height: 50vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-section h1 {
     font-size: 3.5rem;
     font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .hero-section .lead {
@@ -28,60 +69,73 @@
     margin-bottom: 30px;
 }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    color: var(--text-light);
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    min-height: 100vh;
-    position: relative;
-    padding-top: 70px; /* Adjusted for fixed navbar */
-}
-
-.auth-bg {
-    background-color: var(--bg-dark);
-    min-height: 100vh;
-    position: relative;
-}
-
-.dark-overlay {
-    position: absolute;
+.navbar-glass {
+    background: var(--glass-color) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    transition: all 0.3s ease;
+    position: fixed;
     top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
 }
 
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
-    color: var(--text-light);
-    margin-bottom: 20px;
+.navbar-glass.scrolled {
+    background: rgba(44, 47, 126, 0.95) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.auth-card {
-    overflow: hidden;
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-light) !important;
+}
+
+.navbar-brand img {
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover img {
+    transform: scale(1.1);
+}
+
+.navbar-glass .nav-link {
+    color: var(--text-light) !important;
+    font-weight: 500;
+    margin: 0 5px;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.navbar-glass .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent-color) !important;
+}
+
+.navbar-glass .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--accent-color) !important;
 }
 
 .custom-btn {
-    background-color: var(--accent-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border: none;
-    border-radius: 50px;
+    border-radius: 4px;
     font-weight: 600;
-    padding: 12px 30px;
-    color: var(--bg-dark);
+    padding: 10px 20px;
+    color: var(--text-light);
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
 }
 
 .custom-btn:hover {
-    transform: translateY(-3px);
-    background-color: #ffb74d;
+    transform: translateY(-3px) scale(1.02);
+    background: var(--accent-color);
     color: var(--bg-dark);
-    box-shadow: 0 8px 25px rgba(252, 163, 17, 0.4);
+    box-shadow: 0 8px 25px rgba(252, 163, 17, 0.5);
 }
 
 .custom-btn::before {
@@ -99,23 +153,45 @@ body {
     left: 100%;
 }
 
-.form-control,
-.form-select {
+.card {
+    background: var(--card-bg);
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(255, 183, 77, 0.3);
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.form-control, .form-select {
     background: #33355f;
     border: 1px solid var(--glass-border);
     color: var(--text-light);
+    border-radius: 6px;
+    padding: 12px 15px;
+    font-size: 1rem;
 }
 
-.form-control:focus,
-.form-select:focus {
+.form-control:focus, .form-select:focus {
     background: #33355f;
-    border-color: var(--secondary-color);
+    border-color: var(--accent-color);
     color: var(--text-light);
-    box-shadow: none;
+    box-shadow: 0 0 0 0.2rem rgba(255, 183, 77, 0.25);
 }
 
 .form-label {
     color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 8px;
 }
 
 .input-group-text {
@@ -124,105 +200,78 @@ body {
     color: var(--text-light);
 }
 
-/* General Styling */
+.form-check-input {
+    background-color: #33355f;
+    border: 1px solid var(--glass-border);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.form-check-label {
+    color: var(--text-light);
+}
+
+.alert-info {
+    background-color: #2a3a6a;
+    border-color: var(--glass-border);
+    color: var(--text-light);
+}
+
+.alert-warning {
+    background-color: #4a3a2a;
+    border-color: #6a5a3a;
+    color: var(--text-light);
+}
+
+.badge-pending {
+    background-color: #4a3a2a;
+    color: var(--text-light);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.badge-resolved, .badge-completed {
+    background-color: #2a4a3a;
+    color: var(--text-light);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
 a {
-    color: var(--secondary-color);
+    color: var(--accent-color);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 a:hover {
     color: var(--text-light);
+    text-decoration: underline;
 }
 
 .text-muted {
     color: #a0a0c0 !important;
 }
 
-/* Navbar */
-.navbar-glass {
-    background: var(--glass-color);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--glass-border);
-    transition: background 0.3s ease;
-}
-
-.navbar-brand img {
-    transition: transform 0.3s ease;
-}
-
-.navbar-brand:hover img {
-    transform: scale(1.1);
-}
-
-.nav-link {
+.section-title {
     color: var(--text-light);
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--accent-color);
-}
-
-
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-}
-
-/* Service Section */
-.service-card {
-    background: linear-gradient(145deg, var(--secondary-color), var(--primary-color));
-    border: 1px solid var(--glass-border);
-    border-radius: 15px;
-    padding: 30px;
-    transition: all 0.3s ease-in-out;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.service-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(255, 193, 7, 0.3);
-}
-
-.service-card .feature-icon-box {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-}
-
-.service-card:hover .feature-icon-box {
-    transform: rotate(360deg);
-}
-
-.service-card h3 {
-    color: var(--accent-color);
     font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--glass-border);
 }
 
-/* Feature Item Section */
-.feature-item {
-    padding: 20px;
+.image-preview {
+    max-width: 150px;
+    max-height: 150px;
     border-radius: 10px;
-    transition: all 0.3s ease-in-out;
+    border: 2px solid var(--glass-border);
 }
 
-.feature-item:hover {
-    background-color: var(--card-bg);
-    transform: translateY(-5px);
-}
-
-/* Auth Pages */
 .auth-bg {
     background: linear-gradient(rgba(13, 27, 42, 0.85), rgba(13, 27, 42, 0.85)), url('../images/police-team.jpg') no-repeat center center;
     background-size: cover;
@@ -246,7 +295,7 @@ a:hover {
 .auth-card .form-control:focus {
     background-color: var(--primary-color);
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(255, 183, 77, 0.25);
 }
 
 .auth-card .form-label {
@@ -254,7 +303,6 @@ a:hover {
     font-weight: 600;
 }
 
-/* Form Card */
 .form-card {
     background: var(--card-bg);
     border: 1px solid var(--glass-border);
@@ -277,24 +325,60 @@ a:hover {
     padding: 30px;
 }
 
-.section-title {
-    color: var(--text-light);
-    font-weight: 600;
+.service-card {
+    background: linear-gradient(145deg, var(--secondary-color), var(--primary-color));
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 30px;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(255, 183, 77, 0.3);
+}
+
+.service-card .feature-icon-box {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--glass-border);
+    transition: all 0.3s ease;
 }
 
-.image-preview {
-    max-width: 150px;
-    max-height: 150px;
+.service-card:hover .feature-icon-box {
+    transform: rotate(360deg);
+    box-shadow: 0 8px 20px rgba(255, 183, 77, 0.4);
+}
+
+.service-card h3 {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.feature-item {
+    padding: 20px;
     border-radius: 10px;
-    border: 2px solid var(--glass-border);
+    transition: all 0.3s ease-in-out;
 }
 
-/* About Us Section */
-.about-section {
+.feature-item:hover {
+    background-color: var(--card-bg);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.about-section, .contact-section, .initiatives-section, .testimonials-section {
     padding: 80px 0;
+    background: linear-gradient(rgba(26, 28, 59, 0.9), rgba(26, 28, 59, 0.9));
 }
 
 .text-accent {
@@ -302,10 +386,27 @@ a:hover {
 }
 
 .bg-dark-alt {
-    background-color: var(--primary-color);
+    background-color: var(--bg-dark);
 }
 
-/* Team Section */
+.about-img {
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.contact-info-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.contact-icon {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
 .team-section .team-member {
     position: relative;
     overflow: hidden;
@@ -343,31 +444,111 @@ a:hover {
     margin-bottom: 5px;
 }
 
-.about-img {
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Contact Section */
-.contact-section {
-    padding: 80px 0;
-}
-
-.contact-info-card {
+.initiative-card {
     background: var(--card-bg);
-    padding: 30px;
     border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
 }
 
-/* Footer */
+.initiative-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.initiative-img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.initiative-body {
+    padding: 20px;
+}
+
+.initiative-date {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.testimonial-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 30px;
+    position: relative;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-card:before {
+    content: "\201C";
+    font-family: Georgia, serif;
+    font-size: 60px;
+    color: var(--accent-color);
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    opacity: 0.3;
+}
+
+.testimonial-text {
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+    font-size: 1.1rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.author-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid var(--accent-color);
+}
+
+.author-info h5 {
+    margin-bottom: 0;
+    font-size: 1.1rem;
+}
+
+.author-info p {
+    color: var(--text-muted);
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--text-light);
+    opacity: 0.5;
+}
+
+.carousel-indicators button.active {
+    background-color: var(--accent-color);
+    opacity: 1;
+}
+
 .footer-section {
     background: var(--bg-dark);
     padding: 40px 0;
     color: var(--text-light);
 }
 
-.footer-section h5 {
-    color: var(--text-dark);
+.footer-section h5, .footer-section h4 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
 }
 
 .footer-section a {
@@ -376,7 +557,7 @@ a:hover {
 }
 
 .footer-section a:hover {
-    color: var(--secondary-color);
+    color: var(--accent-color);
 }
 
 .social-icon {
@@ -392,46 +573,9 @@ a:hover {
 }
 
 .social-icon:hover {
-    background: var(--secondary-color);
-    transform: translateY(-2px);
-}
-
-/* Feature Icon Box */
-.feature-icon-box {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    background-color: var(--accent-color);
+    background: var(--accent-color);
     color: var(--bg-dark);
-    border-radius: 50%;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-}
-
-.service-card:hover .feature-icon-box {
-    transform: scale(1.1) rotate(15deg);
-    box-shadow: 0 8px 20px rgba(252, 163, 17, 0.3);
-}
-
-/* Alternate Background for Sections */
-.bg-dark-alt {
-    background-color: var(--bg-dark);
-}
-
-.dashboard-footer {
-    background: var(--primary-color);
-    color: var(--text-light);
-    padding: 3rem 0;
-    border-top: 1px solid var(--glass-border);
-}
-
-.footer-section h4 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--accent-color);
-    margin-bottom: 1.5rem;
+    transform: translateY(-2px);
 }
 
 .footer-links {
@@ -531,13 +675,9 @@ a:hover {
 }
 
 .scroll-to-top:hover {
-    background: #ffb74d;
+    background: #ffa500;
     transform: scale(1.1);
-}
-
-.navbar.scrolled {
-    background: var(--primary-color) !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
 }
 
 .fade-in {
@@ -549,1401 +689,298 @@ a:hover {
     opacity: 1;
 }
 
-        .about-img {
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Contact Us Section */
-        .contact-section {
-            padding: 80px 0;
-            background: linear-gradient(rgba(26, 28, 59, 0.9), rgba(26, 28, 59, 0.9));
-        }
-
-        .contact-info-card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-            height: 100%;
-        }
-
-        .contact-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-
-        .form-control {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-light);
-        }
-
-        .form-control:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-color: var(--primary-color);
-            color: var(--text-light);
-            box-shadow: 0 0 0 0.25rem rgba(44, 47, 126, 0.25);
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        @media (max-width: 768px) {
-            .hero-section {
-                height: 60vh;
-            }
-            .hero-section h1 {
-                font-size: 2.5rem;
-            }
-        }
-        /* Community Initiatives Section */
-        .initiatives-section {
-            padding: 80px 0;
-            background: linear-gradient(rgba(26, 28, 59, 0.9), rgba(26, 28, 59, 0.9));
-        }
-        
-        .initiative-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-        
-        .initiative-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .initiative-img {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
-        
-        .initiative-body {
-            padding: 20px;
-        }
-        
-        .initiative-date {
-            color: var(--secondary-color);
-            font-weight: 500;
-        }
-        
-        /* Testimonials Section */
-        .testimonials-section {
-            padding: 80px 0;
-            background: rgba(30, 30, 50, 0.7);
-        }
-        
-        .testimonial-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 30px;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .testimonial-card:before {
-            content: "\201C";
-            font-family: Georgia, serif;
-            font-size: 60px;
-            color: var(--primary-color);
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            opacity: 0.3;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .author-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 15px;
-            border: 2px solid var(--primary-color);
-        }
-        
-        .author-info h5 {
-            margin-bottom: 0;
-        }
-        
-        .author-info p {
-            color: var(--text-muted);
-            margin-bottom: 0;
-            font-size: 0.9rem;
-        }
-        
-        /* Carousel Indicators */
-        .carousel-indicators button {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--text-light);
-            opacity: 0.5;
-        }
-        
-        .carousel-indicators button.active {
-            background-color: var(--primary-color);
-            opacity: 1;
-        }
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .form-control, .form-select {
-            background: #33355f;
-            border: 1px solid var(--glass-border);
-            color: var(--text-light);
-        }
-
-        .form-control:focus, .form-select:focus {
-            background: #33355f;
-            border-color: var(--secondary-color);
-            color: var(--text-light);
-            box-shadow: none;
-        }
-
-        .form-label {
-            color: var(--text-light);
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-resolved {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-resolved {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-resolved {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-resolved {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-resolved {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-resolved {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .badge-pending {
-            background-color: #4a3a2a;
-            color: var(--text-light);
-        }
-
-        .badge-completed {
-            background-color: #2a4a3a;
-            color: var(--text-light);
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .form-control, .form-select {
-            background: #33355f;
-            border: 1px solid var(--glass-border);
-            color: var(--text-light);
-        }
-
-        .form-control:focus, .form-select:focus {
-            background: #33355f;
-            border-color: var(--secondary-color);
-            color: var(--text-light);
-            box-shadow: none;
-        }
-
-        .form-label {
-            color: var(--text-light);
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        @media (max-width: 768px) {
-            .card-body {
-                padding: 15px;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .sub-hero-section {
-            background: url('../images/hero-bg.png') no-repeat center center;
-            background-size: cover;
-            height: 50vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .dark-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .form-control, .form-select {
-            background: #33355f;
-            border: 1px solid var(--glass-border);
-            color: var(--text-light);
-        }
-
-        .form-control:focus, .form-select:focus {
-            background: #33355f;
-            border-color: var(--secondary-color);
-            color: var(--text-light);
-            box-shadow: none;
-        }
-
-        .form-label {
-            color: var(--text-light);
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        @media (max-width: 768px) {
-            .sub-hero-section {
-                height: 60vh;
-            }
-            .sub-hero-section h1 {
-                font-size: 2.5rem;
-            }
-        }
-
-        :root {
-            --primary-color: #2c2f7e;
-            --secondary-color: #5a4b9c;
-            --text-light: #e0e0e0;
-            --text-dark: #ffffff;
-            --glass-color: rgba(30, 30, 50, 0.2);
-            --glass-border: rgba(100, 100, 150, 0.3);
-            --bg-dark: #1a1c3b;
-            --card-bg: #25274d;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-light);
-            background: linear-gradient(135deg, #2c2f7e 0%, #3a2065 100%);
-            min-height: 100vh;
-            padding-top: 56px;
-        }
-
-        .navbar-glass {
-            background: var(--glass-color) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            border-bottom: 1px solid var(--glass-border) !important;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass.scrolled {
-            background: rgba(44, 47, 126, 0.95) !important;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-light) !important;
-        }
-
-        .navbar-glass .nav-link {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            margin: 0 5px;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-glass .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-glass .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: var(--text-light);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-
-
-        .sub-hero-section {
-            background: url('../images/police-team.jpg') no-repeat center center;
-            background-size: cover;
-            height: 50vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .dark-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: var(--text-light);
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .form-control, .form-select {
-            background: #33355f;
-            border: 1px solid var(--glass-border);
-            color: var(--text-light);
-        }
-
-        .form-control:focus, .form-select:focus {
-            background: #33355f;
-            border-color: var(--secondary-color);
-            color: var(--text-light);
-            box-shadow: none;
-        }
-
-        .form-label {
-            color: var(--text-light);
-        }
-
-        .form-check-input {
-            background-color: #33355f;
-            border: 1px solid var(--glass-border);
-        }
-
-        .form-check-input:checked {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-
-        .form-check-label {
-            color: var(--text-light);
-        }
-
-        .alert-info {
-            background-color: #2a3a6a;
-            border-color: var(--glass-border);
-            color: var(--text-light);
-        }
-
-        .alert-warning {
-            background-color: #4a3a2a;
-            border-color: #6a5a3a;
-            color: var(--text-light);
-        }
-
-        footer {
-            background-color: #14152f;
-            color: var(--text-light);
-        }
-
-        footer a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--secondary-color);
-        }
-
-        @media (max-width: 768px) {
-            .sub-hero-section {
-                height: 60vh;
-            }
-            .sub-hero-section h1 {
-                font-size: 2.5rem;
-            }
-        }
-
- 
+@media (max-width: 768px) {
+    .hero-section {
+        height: 60vh;
+        padding: 100px 0;
+    }
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    .sub-hero-section {
+        height: 60vh;
+    }
+    .sub-hero-section h1 {
+        font-size: 2.5rem;
+    }
+    .card-body {
+        padding: 15px;
+    }
+    .carousel-item .row {
+        flex-direction: column;
+        text-align: center;
+    }
+    .carousel-item .col-lg-6 {
+        margin-bottom: 20px;
+    }
+    .bg-gradient-accent {
+        padding: 20px 0;
+    }
+    .stat-card {
+        min-height: auto;
+    }
+}
+
+.hero-custom-bg {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../images/hero-bg.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-custom-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 183, 77, 0.1);
+    z-index: 0;
+}
+
+.hero-modern-bg {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../images/police-team.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-services-bg {
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../images/police-team.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    height: 70vh;
+}
+
+.hero-about-bg {
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../images/police-team.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    height: 70vh;
+}
+
+.hero-contact-bg {
+    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../images/police-team.jpg') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    height: 70vh;
+}
+
+/* Removed side image styling as it's now a full background */
+
+.btn-outline-light {
+    border-color: var(--text-light);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: var(--text-light);
+    color: var(--bg-dark);
+    transform: translateY(-3px);
+}
+
+.subtitle-rotator {
+    height: 30px;
+    overflow: hidden;
+}
+
+.rotating-text {
+    animation: rotateText 9s infinite;
+    position: relative;
+    opacity: 0;
+    height: 0;
+}
+
+.rotating-text:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.rotating-text:nth-child(2) {
+    animation-delay: 3s;
+}
+
+.rotating-text:nth-child(3) {
+    animation-delay: 6s;
+}
+
+@keyframes rotateText {
+    0%, 33.33% {
+        opacity: 1;
+        height: auto;
+    }
+    33.34%, 100% {
+        opacity: 0;
+        height: 0;
+    }
+}
+
+.animate-card {
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.animate-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 183, 77, 0.3);
+}
+
+.animate-text {
+    animation: fadeInDown 1s ease-out;
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pulse-btn {
+    animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 183, 77, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 20px rgba(255, 183, 77, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 183, 77, 0);
+    }
+}
+
+.bg-gradient-accent {
+    background: linear-gradient(135deg, var(--accent-color), #ff9100);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 145, 0, 0.3);
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.carousel-control-prev, .carousel-control-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev:hover, .carousel-control-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-item {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* New styles for rebuilt index page */
+.hero-text {
+    position: relative;
+    z-index: 2;
+}
+
+.urgent-cta {
+    background-color: #ffc107;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.service-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+.service-box i {
+    color: var(--accent-color);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.impact-card {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.impact-card:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.story-content {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.testimonial-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15);
+}
+
+.testimonial-img {
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--accent-color);
+}
+
+.testimonial-quote {
+    font-style: italic;
+    position: relative;
+}
+
+.testimonial-quote:before {
+    content: "\201C";
+    font-family: Georgia, serif;
+    font-size: 50px;
+    color: var(--accent-color);
+    position: absolute;
+    left: -20px;
+    top: -10px;
+    opacity: 0.3;
+}

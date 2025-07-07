@@ -1,157 +1,23 @@
 {% extends 'base_admin.html' %}
-
-{% block extra_css %}
-<style>
-    /* Modern color palette aligned with base_admin.html */
-    :root {
-        --primary-color: #1a73e8; /* Vibrant blue for primary actions */
-        --secondary-color: #34c759; /* Green for success states */
-        --background-color: #f4f6f8; /* Matches page background */
-        --text-dark: #1a202c; /* Dark text for readability */
-        --border-color: #e2e8f0; /* Subtle border color */
-        --input-bg: #e8ecef; /* Slightly darker input background */
-        --shadow-color: rgba(0, 0, 0, 0.1); /* Soft shadow */
-        --table-header-bg: #edf2f7; /* Light gray for table headers */
-        --success-bg: #e6ffed; /* Light green for success alerts */
-        --error-bg: #fee2e2; /* Light red for error alerts */
-    }
-
-    /* Card styling: transparent background */
-    .card {
-        background-color: transparent !important;
-        border: none !important;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px var(--shadow-color) !important;
-    }
-
-    /* Text and headings */
-    .card, .card .card-title, .card h5, .form-label, .table {
-        color: var(--text-dark);
-    }
-
-    /* Form inputs */
-    .form-control, .form-select {
-        background-color: var(--input-bg);
-        color: var(--text-dark);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .form-control::placeholder {
-        color: #a0aec0; /* Softer placeholder color */
-    }
-
-    .form-control:focus, .form-select:focus {
-        background-color: var(--input-bg);
-        color: var(--text-dark);
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-    }
-
-    /* Table styles */
-    .table thead {
-        background-color: var(--table-header-bg);
-        color: var(--text-dark);
-    }
-
-    .table td, .table th {
-        border-color: var(--border-color);
-    }
-
-    /* Alerts */
-    .alert-success {
-        background-color: var(--success-bg);
-        color: var(--text-dark);
-        border: 1px solid var(--secondary-color);
-    }
-
-    .alert-danger {
-        background-color: var(--error-bg);
-        color: var(--text-dark);
-        border: 1px solid #f56565;
-    }
-
-    .btn-close {
-        filter: none;
-        opacity: 0.6;
-    }
-
-    .btn-close:hover {
-        opacity: 1;
-    }
-
-    /* Button styling */
-    .btn-primary {
-        background: linear-gradient(45deg, var(--primary-color), #60a5fa);
-        border: none;
-        border-radius: 8px;
-        padding: 0.75rem 2rem;
-        font-weight: 500;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .btn-outline-primary {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        border-radius: 8px;
-        transition: all 0.2s ease;
-    }
-
-    .btn-outline-primary:hover {
-        background-color: var(--primary-color);
-        color: #ffffff;
-    }
-
-    /* Headings */
-    h5 {
-        color: var(--text-dark);
-        font-weight: 600;
-        border-bottom: 2px solid var(--primary-color);
-        padding-bottom: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    /* Badge styling */
-    .badge.bg-success {
-        background-color: var(--secondary-color) !important;
-        color: #ffffff;
-    }
-
-    .badge.bg-danger {
-        background-color: #f56565 !important;
-        color: #ffffff;
-    }
-
-    /* Table hover effect */
-    .table-hover tbody tr:hover {
-        background-color: rgba(26, 115, 232, 0.05);
-    }
-</style>
-{% endblock %}
 {% load static %}
+
+{% block title %}Register Officer | Admin Dashboard{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow">
+            <div class="card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; backdrop-filter: blur(10px);">
+                <div class="card-header py-3" style="background: rgba(255, 255, 255, 0.1); border-bottom: none;">
+                    <h4 class="m-0 font-weight-bold" style="color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);"><i class="fas fa-user-plus me-2"></i>Register New Officer</h4>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title mb-4">
-                        <i class="fas fa-user-plus me-2"></i>Register New Officer
-                    </h4>
-
                     {% if messages %}
                     <div class="messages mb-4">
                         {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="background: rgba(52, 199, 89, 0.2); color: white; border: none; border-radius: 8px; backdrop-filter: blur(5px);" {% if message.tags != 'success' %}style="background: rgba(239, 68, 68, 0.2); color: white; border: none; border-radius: 8px; backdrop-filter: blur(5px);"{% endif %}>
                             {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="filter: none; opacity: 0.8;"></button>
                         </div>
                         {% endfor %}
                     </div>
@@ -163,26 +29,26 @@
                         <!-- Personal Information -->
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h5 class="mb-3">Personal Information</h5>
+                                <h5 class="mb-3" style="color: white; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 0.5rem;">Personal Information</h5>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" required>
-                                <div class="invalid-feedback">Please enter first name.</div>
+                                <label for="first_name" class="form-label" style="color: white; font-weight: 500;">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter first name.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="last_name" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" required>
-                                <div class="invalid-feedback">Please enter last name.</div>
+                                <label for="last_name" class="form-label" style="color: white; font-weight: 500;">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter last name.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="cnic" class="form-label">CNIC</label>
-                                <input type="text" class="form-control" id="cnic" name="cnic" pattern="[0-9]{5}-[0-9]{7}-[0-9]" placeholder="12345-1234567-1" required>
-                                <div class="invalid-feedback">Please enter a valid CNIC (format: 12345-1234567-1).</div>
+                                <label for="cnic" class="form-label" style="color: white; font-weight: 500;">CNIC</label>
+                                <input type="text" class="form-control" id="cnic" name="cnic" pattern="[0-9]{5}-[0-9]{7}-[0-9]" placeholder="12345-1234567-1" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter a valid CNIC (format: 12345-1234567-1).</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="rank" class="form-label">Rank</label>
-                                <select class="form-select" id="rank" name="rank" required>
+                                <label for="rank" class="form-label" style="color: white; font-weight: 500;">Rank</label>
+                                <select class="form-select" id="rank" name="rank" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
                                     <option value="">Select Rank</option>
                                     <option value="IGP">Inspector General of Police (IGP)</option>
                                     <option value="DIG">Deputy Inspector General (DIG)</option>
@@ -196,75 +62,75 @@
                                     <option value="HC">Head Constable (HC)</option>
                                     <option value="Constable">Constable</option>
                                 </select>
-                                <div class="invalid-feedback">Please select a rank.</div>
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please select a rank.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                                <div class="invalid-feedback">Please choose a username.</div>
+                                <label for="username" class="form-label" style="color: white; font-weight: 500;">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please choose a username.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                                <label for="email" class="form-label" style="color: white; font-weight: 500;">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter a valid email address.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="phone_number" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="phone_number" name="phone_number" required>
-                                <div class="invalid-feedback">Please enter phone number.</div>
+                                <label for="phone_number" class="form-label" style="color: white; font-weight: 500;">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter phone number.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="date_of_birth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
-                                <div class="invalid-feedback">Please enter date of birth.</div>
+                                <label for="date_of_birth" class="form-label" style="color: white; font-weight: 500;">Date of Birth</label>
+                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter date of birth.</div>
                             </div>
                         </div>
 
                         <!-- Address Information -->
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h5 class="mb-3">Address Information</h5>
+                                <h5 class="mb-3" style="color: white; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 0.5rem;">Address Information</h5>
                             </div>
                             <div class="col-12 mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                                <div class="invalid-feedback">Please enter address.</div>
+                                <label for="address" class="form-label" style="color: white; font-weight: 500;">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;"></textarea>
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter address.</div>
                             </div>
                         </div>
 
                         <!-- Account Security -->
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h5 class="mb-3">Account Security</h5>
+                                <h5 class="mb-3" style="color: white; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 0.5rem;">Account Security</h5>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="password1" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password1" name="password1" required>
-                                <div class="invalid-feedback">Please enter password.</div>
+                                <label for="password1" class="form-label" style="color: white; font-weight: 500;">Password</label>
+                                <input type="password" class="form-control" id="password1" name="password1" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please enter password.</div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="password2" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="password2" name="password2" required>
-                                <div class="invalid-feedback">Please confirm password.</div>
+                                <label for="password2" class="form-label" style="color: white; font-weight: 500;">Confirm Password</label>
+                                <input type="password" class="form-control" id="password2" name="password2" required style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="invalid-feedback" style="color: rgba(239, 68, 68, 0.8);">Please confirm password.</div>
                             </div>
                         </div>
 
                         <!-- Profile Picture -->
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h5 class="mb-3">Profile Picture</h5>
+                                <h5 class="mb-3" style="color: white; font-weight: 600; border-bottom: 2px solid rgba(255, 255, 255, 0.2); padding-bottom: 0.5rem;">Profile Picture</h5>
                             </div>
                             <div class="col-12 mb-3">
-                                <label for="profile_picture" class="form-label">Upload Photo</label>
-                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
-                                <div class="form-text">Upload a professional photo of the officer.</div>
+                                <label for="profile_picture" class="form-label" style="color: white; font-weight: 500;">Upload Photo</label>
+                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px 15px;">
+                                <div class="form-text" style="color: rgba(255, 255, 255, 0.7);">Upload a professional photo of the officer.</div>
                             </div>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 20px; padding: 10px 20px; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;">
                                     <i class="fas fa-user-plus me-2"></i>Register Officer
                                 </button>
                             </div>
@@ -280,54 +146,54 @@
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card shadow">
+            <div class="card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); overflow: hidden; backdrop-filter: blur(10px);">
+                <div class="card-header py-3" style="background: rgba(255, 255, 255, 0.1); border-bottom: none;">
+                    <h4 class="m-0 font-weight-bold" style="color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);"><i class="fas fa-users me-2"></i>Registered Officers</h4>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title mb-4">
-                        <i class="fas fa-users me-2"></i>Registered Officers
-                    </h4>
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Photo</th>
-                                    <th>Name</th>
-                                    <th>Rank</th>
-                                    <th>CNIC</th>
-                                    <th>Email</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                        <table class="custom-table table-hover align-middle" style="background: transparent; border-collapse: separate; border-spacing: 0 8px;">
+                            <thead>
+                                <tr style="background: linear-gradient(135deg, rgba(74, 144, 226, 0.3), rgba(74, 144, 226, 0.2)); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">Photo</th>
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">Name</th>
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">Rank</th>
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">CNIC</th>
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">Email</th>
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">Status</th>
+                                    <th style="padding: 15px 20px; font-size: 1rem; letter-spacing: 1.2px; color: white; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); font-weight: 600;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for officer in officers %}
-                                <tr>
-                                    <td>
+                                <tr style="background: rgba(255, 255, 255, 0.05); transition: transform 0.2s ease, background 0.2s ease; border-radius: 10px; overflow: hidden;" class="message-row">
+                                    <td style="padding: 15px 20px;">
                                         {% if officer.profile_picture %}
-                                            <img src="{{ officer.profile_picture.url }}" alt="{{ officer.get_full_name }}" class="rounded-circle" width="40" height="40">
+                                            <img src="{{ officer.profile_picture.url }}" alt="{{ officer.get_full_name }}" class="rounded-circle" width="40" height="40" style="border: 2px solid rgba(255, 255, 255, 0.3);">
                                         {% else %}
-                                            <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle" width="40" height="40">
+                                            <img src="{% static 'images/default_avatar.png' %}" alt="Default Avatar" class="rounded-circle" width="40" height="40" style="border: 2px solid rgba(255, 255, 255, 0.3);">
                                         {% endif %}
                                     </td>
-                                    <td>{{ officer.get_full_name }}</td>
-                                    <td>{{ officer.rank }}</td>
-                                    <td>{{ officer.cnic }}</td>
-                                    <td>{{ officer.email }}</td>
-                                    <td>
+                                    <td style="color: white; padding: 15px 20px; font-weight: 500;">{{ officer.get_full_name }}</td>
+                                    <td style="color: white; padding: 15px 20px; font-weight: 500;">{{ officer.rank }}</td>
+                                    <td style="color: white; padding: 15px 20px; font-weight: 500;">{{ officer.cnic }}</td>
+                                    <td style="color: white; padding: 15px 20px; font-weight: 500;">{{ officer.email }}</td>
+                                    <td style="padding: 15px 20px;">
                                         {% if officer.is_active %}
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge bg-success text-white" style="padding: 6px 12px; border-radius: 20px; font-weight: 600; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">Active</span>
                                         {% else %}
-                                            <span class="badge bg-danger">Inactive</span>
+                                            <span class="badge bg-danger text-white" style="padding: 6px 12px; border-radius: 20px; font-weight: 600; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">Inactive</span>
                                         {% endif %}
                                     </td>
-                                    <td>
-                                        <a href="{% url 'cadmin:edit_officer' officer.id %}" class="btn btn-sm btn-outline-primary">
+                                    <td style="padding: 15px 20px;">
+                                        <a href="{% url 'cadmin:edit_officer' officer.id %}" class="btn btn-sm btn-primary action-btn" style="background: linear-gradient(135deg, #4a90e2, #357abd); border: none; border-radius: 20px; padding: 8px 16px; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;">
                                             <i class="fas fa-edit me-1"></i>Edit
                                         </a>
                                     </td>
                                 </tr>
                                 {% empty %}
-                                <tr>
-                                    <td colspan="7" class="text-center">No officers registered yet.</td>
+                                <tr style="background: rgba(255, 255, 255, 0.05);">
+                                    <td colspan="7" class="text-center" style="color: white; padding: 20px; font-style: italic;">No officers registered yet.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -338,6 +204,54 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.message-row:hover {
+    transform: translateY(-3px) scale(1.01);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.message-row {
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+}
+
+.form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #4a90e2;
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-select option {
+    background-color: #2c3e50;
+    color: white;
+}
+
+.btn-close:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.custom-table th {
+    background: linear-gradient(90deg, #25274d, #25274d);
+    padding: 14px;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+</style>
+{% endblock %}
 
 {% block extra_js %}
 <script>
@@ -375,5 +289,4 @@ document.getElementById('cnic').addEventListener('input', function() {
     }
 });
 </script>
-{% endblock %}
 {% endblock %}

@@ -767,3 +767,91 @@ def change_admin_password(request):
             messages.error(request, f'Error changing password: {str(e)}')
     
     return redirect('admin_settings')
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def admin_feedback(request):
+    """Display all user feedback in the admin dashboard."""
+    from user.models import Feedback
+    feedbacks = Feedback.objects.all().order_by('-created_at')
+    paginator = Paginator(feedbacks, 15)  # Show 15 feedbacks per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'feedbacks': page_obj,
+    }
+    return render(request, 'admin_feedback.html', context)
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def reply_feedback(request, feedback_id):
+    """Handle reply to user feedback."""
+    from user.models import Feedback
+    from django.utils import timezone
+    feedback = get_object_or_404(Feedback, id=feedback_id)
+    
+    if request.method == 'POST':
+        reply_text = request.POST.get('reply_text')
+        if reply_text:
+            feedback.reply = reply_text
+            feedback.reply_date = timezone.now()
+            feedback.is_resolved = True
+            feedback.save()
+            
+            # Optionally send an email to the user
+            if feedback.user.email:
+                try:
+                    send_mail(
+                        f'Re: Feedback - {feedback.title}',
+                        reply_text,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [feedback.user.email],
+                        fail_silently=False,
+                    )
+                    messages.success(request, 'Your reply has been sent successfully.')
+                except Exception as e:
+                    logger.error(f"Error sending email: {str(e)}")
+                    messages.warning(request, 'Reply saved, but failed to send email notification.')
+            else:
+                messages.success(request, 'Your reply has been saved.')
+            return redirect('cadmin:admin_feedback')
+        else:
+            messages.error(request, 'Reply cannot be empty.')
+    
+    return redirect('cadmin:admin_feedback')
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def delete_officer(request, officer_id):
+    officer = get_object_or_404(User, id=officer_id, user_type='officer')
+    if request.method == 'POST':
+        officer.delete()
+        messages.success(request, 'Officer deleted successfully.')
+        return redirect('cadmin:register_officer')
+    return render(request, 'register_officer.html', {'officer': officer})
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        user.delete()
+        messages.success(request, 'User deleted successfully.')
+        return redirect('cadmin:manage_users')
+    return render(request, 'manage_user.html', {'user': user})
+
+@login_required(login_url='login')
+@user_passes_test(is_admin, login_url='login')
+def delete_message(request, message_id):
+    message = get_object_or_404(ContactMessage, id=message_id)
+    if request.method == 'POST':
+        message.delete()
+        messages.success(request, 'Message deleted successfully.')
+        return redirect('cadmin:view_contact_messages')
+    return render(request, 'contact_messages.html', {'message': message})
+
+def logout_view(request):
+    from django.contrib.auth import logout
+    logout(request)
+    return redirect('login')

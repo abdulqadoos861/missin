@@ -2,150 +2,300 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid py-4" style="background-color: #f5f7fa; min-height: calc(100vh - var(--header-height)); padding: 2rem;">
-    <!-- Page Header -->
-    <div class="row mb-4">
+<div class="container-fluid py-5" style="background: linear-gradient(135deg, var(--bg-dark) 0%, #14162e 100%); min-height: calc(100vh - var(--header-height)); padding: 2rem;">
+    <!-- Dashboard Header with Hero Section -->
+    <div class="row mb-5">
         <div class="col-12">
-            <div class="card text-white border-0 shadow-lg" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));">
+            <div class="card text-white border-0 shadow-lg overflow-hidden" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border-radius: 20px; height: 220px;">
+                <div class="card-body p-5 position-relative" style="z-index: 2;">
+                    <div class="d-flex justify-content-between align-items-center h-100">
+                        <div class="animate-text">
+                            <h1 class="display-4 fw-bold mb-2 text-accent">Crime Management Hub</h1>
+                            <p class="lead mb-0 opacity-80">Advanced Control Center for Public Safety</p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="me-4 text-end animate-text">
+                                <span class="badge bg-dark-alt text-accent fs-5 px-4 py-2 rounded-pill shadow-sm pulse-badge">
+                                    <i class="fas fa-bolt me-2"></i>System Status: Active
+                                </span>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-dark-alt text-accent fs-5 px-4 py-2 rounded-pill shadow-sm">
+                                    <i class="fas fa-folder me-2"></i>Total Cases: {{ total_cases }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10 police-pattern-bg"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics Dashboard with Interactive Cards -->
+    <div class="row mb-5 g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 border-0 shadow-lg interactive-metric-card total-cases-card">
                 <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h4 class="mb-1 fw-bold">Admin Dashboard</h4>
-                            <p class="mb-0 opacity-75">Welcome to the Crime Management System</p>
+                            <h5 class="mb-2 fw-semibold opacity-80">Total Cases</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ total_cases }}</h2>
                         </div>
-                        <div class="text-end">
-                            <span class="badge bg-white text-primary fs-6 px-3 py-2 rounded-pill">
-                                <i class="fas fa-folder me-2"></i>Total Cases: {{ total_cases }}
-                            </span>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-folder fa-2x opacity-80"></i>
                         </div>
                     </div>
+                    <div class="progress mt-3" style="height: 8px; background-color: rgba(255,255,255,0.2);">
+                        <div class="progress-bar bg-white bg-opacity-50" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <a href="{% url 'cadmin:manage_cases' %}" class="btn btn-outline-light btn-sm mt-4 rounded-pill px-4 w-100 metric-btn">Analyze Cases <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">Updated: Just Now</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 border-0 shadow-lg interactive-metric-card pending-cases-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="mb-2 fw-semibold opacity-80">Pending Cases</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ pending_cases }}</h2>
+                        </div>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-clock fa-2x opacity-80"></i>
+                        </div>
+                    </div>
+<div class="progress mt-3" style="height: 8px; background-color: rgba(255, 255, 255, 0.2);">
+    <div class="progress-bar bg-white bg-opacity-50 pending-progress-bar" role="progressbar" data-value="{{ pending_percentage|default:0 }}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<div class="text-end text-white-80 small mt-1">{{ pending_percentage }}% of total cases</div>
+                </div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">Priority: High</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 border-0 shadow-lg interactive-metric-card investigation-cases-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="mb-2 fw-semibold opacity-80">Under Investigation</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ investigation_cases }}</h2>
+                        </div>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-search fa-2x opacity-80"></i>
+                        </div>
+                    </div>
+<div class="progress mt-3" style="height: 8px; background-color: rgba(255, 255, 255, 0.2);">
+    <div class="progress-bar bg-white bg-opacity-50 investigation-progress-bar" role="progressbar" data-value="{{ investigation_percentage|default:0 }}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<div class="text-end text-white-80 small mt-1">{{ investigation_percentage }}% of total cases</div>
+                </div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">Status: Active</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card text-white h-100 border-0 shadow-lg interactive-metric-card resolved-cases-card">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="mb-2 fw-semibold opacity-80">Resolved Cases</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ found_cases }}</h2>
+                        </div>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-check-circle fa-2x opacity-80"></i>
+                        </div>
+                    </div>
+<div class="progress mt-3" style="height: 8px; background-color: rgba(255, 255, 255, 0.2);">
+    <div class="progress-bar bg-white bg-opacity-50 found-progress-bar" role="progressbar" data-value="{{ found_percentage|default:0 }}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<div class="text-end text-white-80 small mt-1">{{ found_percentage }}% of total cases</div>
+                </div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">Success Rate</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Case Statistics -->
-    <div class="row mb-4 g-4">
-        <div class="col-md-3">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #2980b9, #3498db);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
+    <!-- User Analytics with 3D Effects -->
+    <div class="row mb-5 g-4">
+        <div class="col-md-4">
+            <div class="card text-white h-100 border-0 shadow-lg perspective-card" style="background: linear-gradient(145deg, #434343, #2d2d2d); border-radius: 16px; overflow: hidden; perspective: 1000px;">
+                <div class="card-body p-5 d-flex flex-column justify-content-between" style="transform-style: preserve-3d; transition: transform 0.6s;">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Total Cases</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ total_cases }}</h2>
+                            <h5 class="mb-2 fw-semibold opacity-80">Total Users</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ total_users }}</h2>
                         </div>
-                        <i class="fas fa-folder fa-3x opacity-50"></i>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-users fa-2x opacity-80"></i>
+                        </div>
                     </div>
-                    <a href="{% url 'cadmin:manage_cases' %}" class="text-white stretched-link text-end">View All <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{% url 'cadmin:manage_users' %}" class="btn btn-outline-light btn-sm mt-4 rounded-pill px-4 w-100 metric-btn">Manage Users <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">All Registered Accounts</span>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #f39c12, #f1c40f);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
+        <div class="col-md-4">
+            <div class="card text-white h-100 border-0 shadow-lg perspective-card" style="background: linear-gradient(145deg, #11998e, #38ef7d); border-radius: 16px; overflow: hidden; perspective: 1000px;">
+                <div class="card-body p-5 d-flex flex-column justify-content-between" style="transform-style: preserve-3d; transition: transform 0.6s;">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Pending</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ pending_cases }}</h2>
+                            <h5 class="mb-2 fw-semibold opacity-80">Active Users</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ active_users }}</h2>
                         </div>
-                        <i class="fas fa-clock fa-3x opacity-50"></i>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-check fa-2x opacity-80"></i>
+                        </div>
                     </div>
-                    <div class="text-end text-white-50">{{ pending_percentage }}% of total</div>
+                    <div class="text-end text-white-80 small mt-1">{{ active_percentage }}% of total users</div>
+                </div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">Currently Engaged</span>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #8e44ad, #9b59b6);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
+        <div class="col-md-4">
+            <div class="card text-white h-100 border-0 shadow-lg perspective-card" style="background: linear-gradient(145deg, #cb2d3e, #ef473a); border-radius: 16px; overflow: hidden; perspective: 1000px;">
+                <div class="card-body p-5 d-flex flex-column justify-content-between" style="transform-style: preserve-3d; transition: transform 0.6s;">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Investigation</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ investigation_cases }}</h2>
+                            <h5 class="mb-2 fw-semibold opacity-80">Inactive Users</h5>
+                            <h2 class="mb-0 fw-bold display-3 metric-number">{{ inactive_users }}</h2>
                         </div>
-                        <i class="fas fa-search fa-3x opacity-50"></i>
+                        <div class="metric-icon-box bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-times fa-2x opacity-80"></i>
+                        </div>
                     </div>
-                    <div class="text-end text-white-50">{{ investigation_percentage }}% of total</div>
+                    <div class="text-end text-white-80 small mt-1">{{ inactive_percentage }}% of total users</div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #27ae60, #2ecc71);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Found</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ found_cases }}</h2>
-                        </div>
-                        <i class="fas fa-check-circle fa-3x opacity-50"></i>
-                    </div>
-                    <div class="text-end text-white-50">{{ found_percentage }}% of total</div>
+                <div class="card-footer bg-white bg-opacity-10 border-0 p-3 text-center small">
+                    <span class="opacity-80">Need Re-engagement</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- User Statistics -->
-    <div class="row mb-4 g-4">
-        <div class="col-md-4">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #34495e, #2c3e50);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Total Users</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ total_users }}</h2>
-                        </div>
-                        <i class="fas fa-users fa-3x opacity-50"></i>
-                    </div>
-                    <a href="{% url 'cadmin:manage_users' %}" class="text-white stretched-link text-end">Manage <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #16a085, #1abc9c);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Active</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ active_users }}</h2>
-                        </div>
-                        <i class="fas fa-user-check fa-3x opacity-50"></i>
-                    </div>
-                    <div class="text-end text-white-50">{{ active_percentage }}% of total</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white h-100 border-0 shadow-lg hover-card" style="background: linear-gradient(45deg, #c0392b, #e74c3c);">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1 fw-semibold opacity-75">Inactive</h6>
-                            <h2 class="mb-0 fw-bold display-5">{{ inactive_users }}</h2>
-                        </div>
-                        <i class="fas fa-user-times fa-3x opacity-50"></i>
-                    </div>
-                    <div class="text-end text-white-50">{{ inactive_percentage }}% of total</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row">
+    <!-- Command Center Controls -->
+    <div class="row mb-5 g-4">
         <div class="col-12">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-lg bg-dark-alt overflow-hidden" style="border-radius: 20px; background: linear-gradient(145deg, var(--bg-dark), #1e203f);">
+                <div class="card-header border-0 p-4" style="background: rgba(255,255,255,0.05);">
+                    <h3 class="card-title mb-0 fw-bold text-accent d-flex align-items-center"><i class="fas fa-rocket me-3 text-white"></i>Command Center</h3>
+                </div>
+                <div class="card-body p-5">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <a href="{% url 'cadmin:manage_cases' %}" class="control-btn d-block p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                                <i class="fas fa-shield-alt fa-3x mb-3 control-icon"></i>
+                                <h5 class="mb-0 fw-bold">Case Operations</h5>
+                                <p class="text-light small mt-2 mb-0">Manage all active investigations</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <a href="{% url 'cadmin:register_officer' %}" class="control-btn d-block p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                                <i class="fas fa-user-shield fa-3x mb-3 control-icon"></i>
+                                <h5 class="mb-0 fw-bold">Officer Deployment</h5>
+                                <p class="text-light small mt-2 mb-0">Register and assign personnel</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'cadmin:manage_users' %}" class="control-btn d-block p-4 rounded-3 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                                <i class="fas fa-users-cog fa-3x mb-3 control-icon"></i>
+                                <h5 class="mb-0 fw-bold">User Administration</h5>
+                                <p class="text-light small mt-2 mb-0">Control access and permissions</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status and Alerts -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg bg-dark-alt overflow-hidden h-100" style="border-radius: 16px; background: linear-gradient(145deg, var(--bg-dark), #1e203f);">
+                <div class="card-header border-0 p-4" style="background: rgba(255,255,255,0.05);">
+                    <h4 class="card-title mb-0 fw-bold text-accent d-flex align-items-center"><i class="fas fa-bell me-3 text-white"></i>Recent Alerts</h4>
+                </div>
                 <div class="card-body p-4">
-                    <h5 class="card-title mb-4 fw-bold">Quick Actions</h5>
-                    <div class="d-flex gap-3 flex-wrap">
-                        <a href="{% url 'cadmin:manage_cases' %}" class="btn btn-primary btn-lg px-4 rounded-pill action-btn">
-                            <i class="fas fa-folder me-2"></i>Manage Cases
-                        </a>
-                        <a href="{% url 'cadmin:register_officer' %}" class="btn btn-secondary btn-lg px-4 rounded-pill action-btn">
-                            <i class="fas fa-user-plus me-2"></i>Register Officer
-                        </a>
-                        <a href="{% url 'cadmin:manage_users' %}" class="btn btn-warning text-dark btn-lg px-4 rounded-pill action-btn">
-                            <i class="fas fa-users me-2"></i>Manage Users
-                        </a>
+                    <div class="alert-list">
+                        <div class="alert-item p-3 rounded-3 mb-3" style="background: rgba(255, 183, 77, 0.1); border-left: 4px solid var(--accent-color);">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1 fw-bold text-accent">System Update</h6>
+                                    <p class="mb-0 text-light small">New features deployed successfully</p>
+                                </div>
+                                <span class="badge bg-dark-alt text-accent small rounded-pill">Just Now</span>
+                            </div>
+                        </div>
+                        <div class="alert-item p-3 rounded-3 mb-3" style="background: rgba(255, 77, 77, 0.1); border-left: 4px solid #ff4d4d;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1 fw-bold text-white">Urgent Case Update</h6>
+                                    <p class="mb-0 text-light small">New high-priority case reported</p>
+                                </div>
+                                <span class="badge bg-dark-alt text-accent small rounded-pill">5 min ago</span>
+                            </div>
+                        </div>
+                        <div class="alert-item p-3 rounded-3 mb-0" style="background: rgba(77, 255, 77, 0.1); border-left: 4px solid #4dff4d;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1 fw-bold text-white">Case Resolved</h6>
+                                    <p class="mb-0 text-light small">Missing person located successfully</p>
+                                </div>
+                                <span class="badge bg-dark-alt text-accent small rounded-pill">1 hr ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-outline-light btn-sm mt-4 rounded-pill px-4 d-block mx-auto">View All Alerts <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg bg-dark-alt overflow-hidden h-100" style="border-radius: 16px; background: linear-gradient(145deg, var(--bg-dark), #1e203f);">
+                <div class="card-header border-0 p-4" style="background: rgba(255,255,255,0.05);">
+                    <h4 class="card-title mb-0 fw-bold text-accent d-flex align-items-center"><i class="fas fa-tachometer-alt me-3 text-white"></i>System Performance</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row text-center mb-3">
+                        <div class="col-6 mb-3">
+                            <div class="performance-metric p-3 rounded-3 h-100 d-flex flex-column justify-content-center" style="background: rgba(77, 255, 77, 0.1);">
+                                <h6 class="mb-1 text-accent small">UPTIME</h6>
+                                <h5 class="mb-0 fw-bold">5d 12h</h5>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="performance-metric p-3 rounded-3 h-100 d-flex flex-column justify-content-center" style="background: rgba(77, 255, 77, 0.1);">
+                                <h6 class="mb-1 text-accent small">RESPONSE TIME</h6>
+                                <h5 class="mb-0 fw-bold">0.3s</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="performance-metric p-3 rounded-3 h-100 d-flex flex-column justify-content-center" style="background: rgba(77, 255, 77, 0.1);">
+                                <h6 class="mb-1 text-accent small">CPU USAGE</h6>
+                                <h5 class="mb-0 fw-bold">23%</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="performance-metric p-3 rounded-3 h-100 d-flex flex-column justify-content-center" style="background: rgba(255, 183, 77, 0.1);">
+                                <h6 class="mb-1 text-accent small">MEMORY</h6>
+                                <h5 class="mb-0 fw-bold">45%</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="performance-chart mt-3" style="height: 180px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        <p class="text-light opacity-50 mb-0">Performance Graph Placeholder</p>
                     </div>
                 </div>
             </div>
@@ -154,57 +304,145 @@
 </div>
 
 <style>
-.hover-card {
+.interactive-metric-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.interactive-metric-card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(255, 183, 77, 0.4) !important;
+}
+
+.metric-btn {
     transition: all 0.3s ease;
+    font-weight: 600;
+    border-width: 2px;
+}
+
+.metric-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.metric-number {
+    position: relative;
+    display: inline-block;
+}
+
+.metric-number::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.perspective-card {
+    transition: all 0.5s ease;
     cursor: pointer;
 }
 
-.hover-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2) !important;
+.perspective-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(255, 183, 77, 0.3) !important;
 }
 
-.action-btn {
+.control-btn {
+    background: linear-gradient(145deg, var(--primary-color), var(--secondary-color));
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(255, 183, 77, 0.3);
+    background: linear-gradient(145deg, var(--secondary-color), var(--primary-color));
+}
+
+.control-icon {
+    color: var(--accent-color);
+    transition: all 0.4s ease;
+}
+
+.control-btn:hover .control-icon {
+    transform: scale(1.2);
+    color: var(--text-light);
+}
+
+.pulse-badge {
+    animation: pulseEffect 2s infinite ease-in-out;
+}
+
+@keyframes pulseEffect {
+    0% { box-shadow: 0 0 0 0 rgba(255, 183, 77, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 183, 77, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 183, 77, 0); }
+}
+
+.alert-item {
     transition: all 0.3s ease;
-    min-width: 200px;
 }
 
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+.alert-item:hover {
+    transform: translateX(5px);
+    background: rgba(255, 183, 77, 0.15);
 }
 
-.progress {
-    border-radius: 10px;
-    background-color: #f0f0f0;
+.police-pattern-bg {
+    background-image: url('{% static "images/police-pattern.png" %}');
+    background-repeat: repeat;
+    z-index: 1;
 }
 
-.progress-bar {
-    border-radius: 10px;
-    transition: width 0.6s ease;
+.total-cases-card {
+    background-image: linear-gradient(145deg, rgb(45, 137, 200), rgb(35, 104, 160));
+    border-radius: 16px;
+    overflow: hidden;
+    transform-origin: center;
 }
 
-.bg-gradient-primary {
-    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+.pending-cases-card {
+    background-image: linear-gradient(145deg, rgb(247, 183, 51), rgb(252, 74, 26));
+    border-radius: 16px;
+    overflow: hidden;
+    transform-origin: center;
 }
 
-.rounded-circle {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.investigation-cases-card {
+    background-image: linear-gradient(145deg, rgb(157, 80, 187), rgb(110, 72, 170));
+    border-radius: 16px;
+    overflow: hidden;
+    transform-origin: center;
+}
+
+.resolved-cases-card {
+    background-image: linear-gradient(145deg, rgb(56, 239, 125), rgb(17, 153, 142));
+    border-radius: 16px;
+    overflow: hidden;
+    transform-origin: center;
+}
+
+.pending-progress-bar,
+.investigation-progress-bar,
+.found-progress-bar {
+    width: 0%;
+    transition: width 1.5s ease-in-out;
 }
 </style>
 
 {% block extra_js %}
 <script>
-    // Add animation to numbers
+    // Animate numbers with a smooth counting effect
     function animateNumbers() {
-        document.querySelectorAll('h3.mb-0').forEach(element => {
+        document.querySelectorAll('.metric-number').forEach(element => {
             const finalValue = parseInt(element.textContent);
             let currentValue = 0;
-            const duration = 1000;
+            const duration = 2000;
             const step = finalValue / (duration / 16);
             
             const timer = setInterval(() => {
@@ -219,8 +457,52 @@
         });
     }
 
-    // Call animation when page loads
-    document.addEventListener('DOMContentLoaded', animateNumbers);
+    // Add hover tilt effect to perspective cards
+    function addTiltEffect() {
+        document.querySelectorAll('.perspective-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const tiltX = (centerY - y) / 10;
+                const tiltY = (centerX - x) / -10;
+                
+                card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            });
+        });
+    }
+
+    // Initialize animations and dynamic styles when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        animateNumbers();
+        addTiltEffect();
+        setProgressWidths();
+    });
+
+    // Function to set progress bar widths dynamically
+    function setProgressWidths() {
+        const pendingBar = document.querySelector('.pending-progress-bar');
+        const investigationBar = document.querySelector('.investigation-progress-bar');
+        const foundBar = document.querySelector('.found-progress-bar');
+        
+        const pendingWidth = parseInt(pendingBar.getAttribute('data-value')) || 0;
+        const investigationWidth = parseInt(investigationBar.getAttribute('data-value')) || 0;
+        const foundWidth = parseInt(foundBar.getAttribute('data-value')) || 0;
+        
+        pendingBar.style.width = pendingWidth + '%';
+        investigationBar.style.width = investigationWidth + '%';
+        foundBar.style.width = foundWidth + '%';
+        
+        pendingBar.setAttribute('aria-valuenow', pendingWidth);
+        investigationBar.setAttribute('aria-valuenow', investigationWidth);
+        foundBar.setAttribute('aria-valuenow', foundWidth);
+    }
 </script>
 {% endblock %}
 

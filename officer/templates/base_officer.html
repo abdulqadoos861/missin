@@ -34,12 +34,15 @@
 
         /* Sidebar Styling */
         .sidebar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(180deg, #1a2639 0%, #2c3e50 100%);
             min-height: 100vh;
             position: fixed;
             width: 250px;
             transition: all 0.3s ease;
             z-index: 1000;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
         }
 
         .sidebar.collapsed {
@@ -48,48 +51,66 @@
 
         .sidebar-header {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .sidebar-brand {
             color: white;
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand:hover {
+            transform: scale(1.03);
         }
 
         .nav-item {
-            margin: 0.5rem 0;
+            margin: 0.8rem 0;
+            border-radius: 0 25px 25px 0;
+            overflow: hidden;
         }
 
         .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 0.8rem 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.9rem 1.8rem;
             display: flex;
             align-items: center;
             gap: 0.8rem;
             transition: all 0.3s ease;
-            border-radius: 8px;
+            border-radius: 0 25px 25px 0;
             margin: 0 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
         .nav-link:hover {
             color: white;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(245, 166, 35, 0.25);
             transform: translateX(5px);
+            box-shadow: inset 0 0 10px rgba(245, 166, 35, 0.2);
         }
 
         .nav-link.active {
             color: white;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(245, 166, 35, 0.25);
+            border-left: 5px solid #f5a623;
+            box-shadow: inset 0 0 10px rgba(245, 166, 35, 0.2);
         }
 
         .nav-link i {
-            width: 20px;
+            width: 22px;
             text-align: center;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover i, .nav-link.active i {
+            transform: scale(1.1);
         }
 
         /* Main Content Area */
@@ -319,6 +340,12 @@
                 <a href="{% url 'officer:officer_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_profile' %}active{% endif %}">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'officer:officer_feedback' %}" class="nav-link {% if request.resolver_match.url_name == 'officer_feedback' %}active{% endif %}">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>Feedback</span>
                 </a>
             </li>
             <li class="nav-item">

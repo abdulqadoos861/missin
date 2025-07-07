@@ -1,27 +1,89 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Our Service | Public Safety Portal{% endblock %}
+{% block title %}Our Services | Public Safety Portal{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
+<header class="hero-section hero-services-bg">
+    <div class="hero-overlay"></div>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-12 hero-text" data-aos="zoom-in">
+                <h1 class="display-4 fw-bold mb-3 text-white">Our Commitment to Your Safety</h1>
+                <p class="lead mb-5 text-white">Explore the range of services we provide to protect and support our community.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary btn-lg shadow-lg">Get in Touch</a>
+            </div>
+        </div>
+    </div>
+</header>
+
 <!-- Services Section -->
-<section id="OurServices" class="py-5" style="padding-top: 100px !important;">
+<section id="OurServices" class="py-5 bg-dark text-light">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Our Core Service</h2>
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold mb-2">Our Core Services</h2>
             <p class="lead text-muted">Committed to ensuring your safety and security.</p>
         </div>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card service-card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-user-slash fa-3x mb-3 text-primary"></i>
-                        <h3 class="h5">Missing Persons</h3>
-                        <p>Report and search for missing individuals to help reunite families.</p>
-                    </div>
+        <div class="row g-4 justify-content-center text-center">
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-user-slash fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Missing Persons</h4>
+                    <p>Report and search for missing individuals to help reunite families. Our platform facilitates quick information sharing to aid in recovery efforts.</p>
+                    <a href="{% url 'report_incident' %}" class="btn btn-outline-light mt-3">Report Now</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Community Safety Alerts</h4>
+                    <p>Receive real-time updates on local safety concerns, crime alerts, and preventive measures to keep your neighborhood secure.</p>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light mt-3">Stay Informed</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-gavel fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Case Tracking</h4>
+                    <p>Track the progress of reported cases with transparency. Stay updated on investigations and outcomes through our secure portal.</p>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light mt-3">Track a Case</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-hand-holding-heart fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Victim Support</h4>
+                    <p>Access resources and support services for victims and their families. We provide guidance and assistance during difficult times.</p>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light mt-3">Get Support</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Community Engagement</h4>
+                    <p>Join community initiatives and programs aimed at enhancing public safety. Your participation helps build a stronger, safer environment.</p>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light mt-3">Join Us</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-box p-4 rounded shadow h-100">
+                    <i class="fas fa-info-circle fa-3x mb-3 text-primary"></i>
+                    <h4 class="mb-3">Safety Resources</h4>
+                    <p>Explore educational materials and resources on personal and community safety. Knowledge is key to prevention and preparedness.</p>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light mt-3">Learn More</a>
                 </div>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- Call-to-Action Section -->
+<section class="py-5 bg-gradient-accent text-dark">
+    <div class="container text-center" data-aos="zoom-in">
+        <h2 class="fw-bold mb-3">Need Assistance?</h2>
+        <p class="lead mb-4">Our team is ready to help with any safety concerns or reports you may have.</p>
+        <a href="{% url 'contact' %}" class="btn btn-dark btn-lg shadow">Contact Us Now</a>
     </div>
 </section>
 {% endblock %}
