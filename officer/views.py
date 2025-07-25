@@ -6,11 +6,10 @@ from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 import re
-from frontend.models import User
-from user.models import MissingPerson, CaseUpdate
-from officer.models import CaseEvidence
-from user.models import Feedback
 import logging
+
+from frontend.models import User
+from user.models import MissingPerson, Feedback
 
 logger = logging.getLogger(__name__)
 
@@ -21,35 +20,11 @@ def is_officer(user):
 @user_passes_test(is_officer, login_url='login')
 def officer_dashboard(request):
     try:
-        # Get officer's assigned cases
+        # Get officer's basic info
         officer = request.user
-        assigned_cases = MissingPerson.objects.filter(assigned_officer=officer)
-        
-        # Get case statistics
-        total_cases = assigned_cases.count()
-        pending_cases = assigned_cases.filter(status='pending').count()
-        investigation_cases = assigned_cases.filter(status='investigation').count()
-        found_cases = assigned_cases.filter(status='found').count()
-        closed_cases = assigned_cases.filter(status='closed').count()
-        
-        # Calculate percentages
-        pending_percentage = (pending_cases / total_cases * 100) if total_cases > 0 else 0
-        investigation_percentage = (investigation_cases / total_cases * 100) if total_cases > 0 else 0
-        found_percentage = (found_cases / total_cases * 100) if total_cases > 0 else 0
-        
-        # Get recent cases (last 5)
-        recent_cases = assigned_cases.order_by('-created_at')[:5]
         
         context = {
-            'total_cases': total_cases,
-            'pending_cases': pending_cases,
-            'investigation_cases': investigation_cases,
-            'found_cases': found_cases,
-            'closed_cases': closed_cases,
-            'pending_percentage': pending_percentage,
-            'investigation_percentage': investigation_percentage,
-            'found_percentage': found_percentage,
-            'recent_cases': recent_cases,
+            'officer': officer,
         }
         
         return render(request, 'officer_dashboard.html', context)
@@ -57,252 +32,312 @@ def officer_dashboard(request):
     except Exception as e:
         logger.error(f"Error in officer_dashboard view: {str(e)}", exc_info=True)
         messages.error(request, f"An error occurred while loading the dashboard: {str(e)}")
-        return render(request, 'officer_dashboard.html', {
-            'total_cases': 0,
-            'pending_cases': 0,
-            'investigation_cases': 0,
-            'found_cases': 0,
-            'closed_cases': 0,
-            'pending_percentage': 0,
-            'investigation_percentage': 0,
-            'found_percentage': 0,
-            'recent_cases': [],
-        })
+        return render(request, 'officer_dashboard.html', {'officer': request.user})
 
 @login_required(login_url='login')
 @user_passes_test(is_officer, login_url='login')
-def officer_view_case(request):
+def case_list(request):
+    """
+    Display a list of all cases with advanced filtering and search capabilities.
+    """
     try:
-        officer = request.user
-        cases = MissingPerson.objects.all()
-        logger.debug(f"Officer: {officer.username}, Total cases found: {cases.count()}")
+        logger.info("Starting case_list view execution")
         
-        # Get search query and filters
-        search_query = request.GET.get('search', '')
-        status_filter = request.GET.get('status', '')
-        date_filter = request.GET.get('date', '')
-        
-        # By default, exclude closed cases unless specifically filtered
-        if not status_filter:
-            cases = cases.exclude(status='closed')
-            logger.debug(f"Excluding closed cases by default: {cases.count()} cases")
-        elif status_filter == 'all':
-            # Show all cases including closed ones
-            logger.debug("Showing all cases including closed")
-        else:
-            # Apply specific status filter
-            cases = cases.filter(status=status_filter)
-            logger.debug(f"After status filter '{status_filter}': {cases.count()} cases")
-        
-        # Apply filters
-        if search_query:
+        # Get base queryset with related data
+        logger.info("Fetching base queryset")
+        cases = MissingPerson.objects.select_related(
+            'reporter'
+        ).prefetch_related(
+            'updates',
+            'officer_updates'
+        )
+        logger.info(f"Found {cases.count()} total cases")
+
+        # Get filter parameters
+        name_filter = request.GET.get('name', '').strip()
+        number_filter = request.GET.get('number', '').strip()
+        status_filter = request.GET.get('status', '').strip()
+        date_filter = request.GET.get('date', '').strip()
+
+        logger.info(f"Applied filters - Name: {name_filter}, Number: {number_filter}, Status: {status_filter}, Date: {date_filter}")
+
+        # Apply name/location filter
+        if name_filter:
             cases = cases.filter(
-                Q(first_name__icontains=search_query) |
-                Q(last_name__icontains=search_query) |
-                Q(case_number__icontains=search_query)
+                Q(first_name__icontains=name_filter) |
+                Q(last_name__icontains=name_filter) |
+                Q(last_seen_location__icontains=name_filter) |
+                Q(reporter__first_name__icontains=name_filter) |
+                Q(reporter__last_name__icontains=name_filter)
             )
-            logger.debug(f"After search filter '{search_query}': {cases.count()} cases")
+            logger.info(f"After name filter: {cases.count()} cases")
+
+        # Apply case number filter
+        if number_filter:
+            cases = cases.filter(case_number__icontains=number_filter)
+            logger.info(f"After number filter: {cases.count()} cases")
+
+        # Apply status filter
+        if status_filter:
+            cases = cases.filter(status=status_filter)
+            logger.info(f"After status filter: {cases.count()} cases")
         
+        # Apply date filter
         if date_filter:
-            today = timezone.now()
+            today = timezone.now().date()
             if date_filter == 'today':
-                cases = cases.filter(last_seen_date__date=today.date())
+                cases = cases.filter(created_at__date=today)
             elif date_filter == 'week':
-                week_ago = today - timedelta(days=7)
-                cases = cases.filter(last_seen_date__gte=week_ago)
+                cases = cases.filter(created_at__date__gte=today - timedelta(days=7))
             elif date_filter == 'month':
-                month_ago = today - timedelta(days=30)
-                cases = cases.filter(last_seen_date__gte=month_ago)
-            logger.debug(f"After date filter '{date_filter}': {cases.count()} cases")
-        
-        # Order by most recent first
-        cases = cases.order_by('-created_at')
-        
-        # Get case statistics
-        total_cases = cases.count()
-        pending_cases = cases.filter(status='pending').count()
-        investigation_cases = cases.filter(status='investigation').count()
-        found_cases = cases.filter(status='found').count()
-        closed_cases = cases.filter(status='closed').count()
+                cases = cases.filter(created_at__date__gte=today - timedelta(days=30))
+            logger.info(f"After date filter: {cases.count()} cases")
+
+        # Calculate statistics
+        try:
+            total_cases = cases.count()
+            stats = {
+                'total': total_cases,
+                'pending': cases.filter(status='pending').count(),
+                'investigation': cases.filter(status='investigation').count(),
+                'found': cases.filter(status='found').count(),
+                'closed': cases.filter(status='closed').count(),
+            }
+            logger.info(f"Statistics calculated: {stats}")
+
+            # Calculate percentages
+            if total_cases > 0:
+                for key in ['pending', 'investigation', 'found', 'closed']:
+                    stats[f'{key}_percent'] = round((stats[key] / total_cases) * 100, 1)
+        except Exception as stats_error:
+            logger.error(f"Error calculating statistics: {str(stats_error)}")
+            stats = {
+                'total': 0,
+                'pending': 0,
+                'investigation': 0,
+                'found': 0,
+                'closed': 0
+            }
+
+        # Calculate status counts for filter dropdown
+        try:
+            status_counts = {
+                status: cases.filter(status=status).count()
+                for status, _ in MissingPerson.STATUS_CHOICES
+            }
+            logger.info(f"Status counts calculated: {status_counts}")
+        except Exception as count_error:
+            logger.error(f"Error calculating status counts: {str(count_error)}")
+            status_counts = {}
         
         # Pagination
-        paginator = Paginator(cases, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+        try:
+            page_number = request.GET.get('page', 1)
+            paginator = Paginator(cases.order_by('-created_at'), 10)  # 10 cases per page
+            cases = paginator.get_page(page_number)
+            logger.info(f"Pagination applied: Page {page_number} of {paginator.num_pages}")
+        except Exception as page_error:
+            logger.error(f"Error in pagination: {str(page_error)}")
+            cases = []
         
         context = {
-            'page_obj': page_obj,
-            'search_query': search_query,
+            'cases': cases,
+            'name_filter': name_filter,
+            'number_filter': number_filter,
             'status_filter': status_filter,
             'date_filter': date_filter,
+            'status_choices': MissingPerson.STATUS_CHOICES,
+            'status_counts': status_counts,
+            'stats': stats,
+            'total_pages': getattr(paginator, 'num_pages', 1),
             'total_cases': total_cases,
-            'pending_cases': pending_cases,
-            'investigation_cases': investigation_cases,
-            'found_cases': found_cases,
-            'closed_cases': closed_cases,
+            'has_filters': bool(name_filter or number_filter or status_filter or date_filter),
         }
         
-        logger.debug(f"Rendering officer_view_case with {total_cases} total cases for officer {officer.username}")
-        return render(request, 'officer_view_case.html', context)
+        logger.info("Context prepared successfully")
+        return render(request, 'officer/officer_view_case.html', context)
         
     except Exception as e:
-        logger.error(f"Error in officer_view_case view: {str(e)}", exc_info=True)
-        messages.error(request, f"An error occurred while retrieving cases: {str(e)}")
-        return render(request, 'officer_view_case.html', {
-            'page_obj': None,
-            'total_cases': 0,
-            'pending_cases': 0,
-            'investigation_cases': 0,
-            'found_cases': 0,
-            'closed_cases': 0,
-        })
-
-@login_required(login_url='login')
-@user_passes_test(is_officer, login_url='login')
-def officer_view_case_detail(request, case_number):
-    try:
-        # Get the case with all related data
-        case = get_object_or_404(MissingPerson.objects.select_related(
-            'reporter', 
-            'assigned_officer'
-        ).prefetch_related(
-            'updates', 
-            'evidence'
-        ), case_number=case_number, assigned_officer=request.user)
-        
-        # Get case updates with related user data
-        updates = case.updates.select_related('created_by').all()
-        
-        # Get case evidence
-        evidence = case.evidence.all()
-        
-        context = {
-            'case': case,
-            'updates': updates,
-            'evidence': evidence,
-        }
-        
-        return render(request, 'officer_view_case_detail.html', context)
-        
-    except Exception as e:
-        logger.error(f"Error in officer_view_case_detail view: {str(e)}", exc_info=True)
-        messages.error(request, f"An error occurred while retrieving case details: {str(e)}")
+        logger.error(f"Error in case_list view: {str(e)}", exc_info=True)
+        messages.error(request, f"An error occurred while retrieving the cases: {str(e)}")
         return redirect('officer:officer_dashboard')
 
 @login_required(login_url='login')
 @user_passes_test(is_officer, login_url='login')
-def officer_update_case(request, case_number):
+def case_detail(request, case_number):
+    """Display detailed information about a specific case and handle updates."""
     try:
-        case = get_object_or_404(MissingPerson, case_number=case_number, assigned_officer=request.user)
+        case = get_object_or_404(
+            MissingPerson.objects.select_related('reporter').prefetch_related('updates', 'officer_updates'),
+            case_number=case_number
+        )
         
+        # Handle form submission
         if request.method == 'POST':
+            new_status = request.POST.get('status')
+            update_text = request.POST.get('update_text')
+            
             # Check if case is already closed
             if case.status == 'closed':
-                messages.error(request, 'Cannot update a closed case.')
-                return redirect('officer:officer_view_case_detail', case_number=case_number)
+                if new_status != 'closed':
+                    messages.error(request, "This case is closed and cannot be reopened.")
+                    return redirect('officer:case_detail', case_number=case_number)
                 
-            new_status = request.POST.get('status')
-            update_description = request.POST.get('description', '').strip()
-            location_found = request.POST.get('location_found', '').strip()
-            found_date = request.POST.get('found_date', '').strip()
-            evidence_files = request.FILES.getlist('evidence_files')
-            evidence_descriptions = request.POST.getlist('evidence_descriptions')
+                # Only allow adding notes to closed cases
+                if update_text:
+                    case.officer_updates.create(
+                        description=update_text,
+                        updated_by=request.user
+                    )
+                    messages.success(request, "Note added to closed case successfully")
+                return redirect('officer:case_detail', case_number=case_number)
             
-            # Validate status
-            if not new_status or new_status not in dict(MissingPerson.STATUS_CHOICES):
-                messages.error(request, 'Invalid status selected.')
-                return redirect('officer:officer_update_case', case_number=case_number)
-            
-            # Store old status for comparison
-            old_status = case.status
-            
-            # Validate status-specific requirements
-            if new_status == 'found':
-                if not location_found:
-                    messages.error(request, 'Location found is required when marking case as found.')
-                    return redirect('officer:officer_update_case', case_number=case_number)
-                if not found_date:
-                    messages.error(request, 'Found date is required when marking case as found.')
-                    return redirect('officer:officer_update_case', case_number=case_number)
+            # Handle status change for non-closed cases
+            status_changed = new_status and new_status != case.status
+            if status_changed:
+                old_status = case.get_status_display()
+                case.status = new_status
                 
-                # Update found information
-                case.location_found = location_found
-                case.found_date = found_date
-                
-            elif new_status == 'closed':
-                closure_photo = request.FILES.get('closure_proof_photo')
-                if not closure_photo:
-                    messages.error(request, 'A closure proof photo is required to close the case.')
-                    return redirect('officer:officer_update_case', case_number=case_number)
-                case.closure_proof_photo = closure_photo
-                
-                if not update_description:
-                    messages.error(request, 'Closure reason is required when closing a case.')
-                    return redirect('officer:officer_update_case', case_number=case_number)
-            
-            # Update case status
-            case.status = new_status
-            case.save()
-            
-            # Create status update record
-            status_update = CaseUpdate.objects.create(
-                case=case,
-                description=f"Status changed from {case.get_status_display(old_status)} to {case.get_status_display()}",
-                created_by=request.user
-            )
-            
-            # Add additional update if description provided
-            if update_description:
-                CaseUpdate.objects.create(
-                    case=case,
-                    description=update_description,
-                    created_by=request.user
-                )
-            
-            # Handle evidence uploads
-            for i, file in enumerate(evidence_files):
-                if i < len(evidence_descriptions):
-                    description = evidence_descriptions[i].strip()
-                else:
-                    description = ""
+                # Handle found status fields
+                if new_status == 'found':
+                    found_date = request.POST.get('found_date')
+                    location_found = request.POST.get('location_found')
                     
-                evidence = CaseEvidence.objects.create(
-                    case=case,
-                    file=file,
-                    description=description if description else f"Evidence uploaded on {timezone.now().strftime('%Y-%m-%d')}",
-                    uploaded_by=request.user
+                    if not found_date or not location_found:
+                        messages.error(request, "Found date and location are required when marking a case as found.")
+                        return redirect('officer:case_detail', case_number=case_number)
+                    
+                    case.found_date = found_date
+                    case.location_found = location_found
+                    update_text = f"{update_text}\nPerson found at {location_found} on {found_date}" if update_text else f"Person found at {location_found} on {found_date}"
+                
+                # Handle closed status fields
+                elif new_status == 'closed':
+                    closure_date = request.POST.get('closure_date')
+                    
+                    if not closure_date:
+                        messages.error(request, "Closure date is required when closing a case.")
+                        return redirect('officer:case_detail', case_number=case_number)
+                    
+                    case.found_date = closure_date  # Using found_date field for closure date
+                    
+                    if 'closure_proof_photo' in request.FILES:
+                        case.closure_proof_photo = request.FILES['closure_proof_photo']
+                        update_text = f"{update_text}\nCase closed on {closure_date} with proof photo" if update_text else f"Case closed on {closure_date} with proof photo"
+                    else:
+                        update_text = f"{update_text}\nCase closed on {closure_date}" if update_text else f"Case closed on {closure_date}"
+                
+                case.save()
+                
+                # Create status change update
+                case.officer_updates.create(
+                    description=f"Status changed from {old_status} to {case.get_status_display()}. {update_text}",
+                    updated_by=request.user
                 )
+                
+                messages.success(request, f"Case status updated to {case.get_status_display()}")
             
-            # Send email notification to the reporter
-            if case.reporter and case.reporter.email:
-                from django.core.mail import send_mail
-                from django.conf import settings
-                send_mail(
-                    f'Case Update: {case.case_number}',
-                    f'Dear {case.reporter.get_full_name() or case.reporter.username},\n\n'
-                    f'The status of case {case.case_number} regarding {case.first_name} {case.last_name} '
-                    f'has been updated to {case.get_status_display()}.\n\n'
-                    f'Description: {update_description if update_description else "No additional description provided."}\n\n'
-                    f'Please log in to the portal for more details.\n\n'
-                    f'Thank you,\nPakistani Police Force',
-                    settings.DEFAULT_FROM_EMAIL,
-                    [case.reporter.email],
-                    fail_silently=True,
+            elif update_text:
+                # Create general update
+                case.officer_updates.create(
+                    description=update_text,
+                    updated_by=request.user
                 )
-                logger.info(f"Sent email notification to {case.reporter.email} for case {case.case_number}")
-
-            messages.success(request, f'Case status has been updated to {case.get_status_display()}.')
-            return redirect('officer:officer_view_case_detail', case_number=case_number)
+                messages.success(request, "Case update added successfully")
             
+            # Redirect to refresh the page and avoid form resubmission
+            return redirect('officer:case_detail', case_number=case_number)
+        
+        # Get all updates sorted by date
+        all_updates = []
+        
+        # Add case creation
+        all_updates.append({
+            'date': case.created_at,
+            'type': 'creation',
+            'description': f'Case reported by {case.reporter.get_full_name()}',
+            'by': case.reporter.get_full_name()
+        })
+        
+        # Add case updates
+        for update in case.updates.all():
+            all_updates.append({
+                'date': update.created_at,
+                'type': 'update',
+                'description': update.description,
+                'by': update.created_by.get_full_name() if update.created_by else 'System'
+            })
+        
+        # Add officer updates
+        for update in case.officer_updates.all():
+            all_updates.append({
+                'date': update.updated_at,
+                'type': 'officer_update',
+                'description': update.description,
+                'by': update.updated_by.get_full_name() if update.updated_by else 'System'
+            })
+        
+        # Sort updates by date, newest first
+        all_updates.sort(key=lambda x: x['date'], reverse=True)
+        
+        context = {
+            'case': case,
+            'updates': all_updates,
+            'status_choices': MissingPerson.STATUS_CHOICES
+        }
+        
+        return render(request, 'officer/case_detail.html', context)
+        
     except Exception as e:
-        logger.error(f"Error in officer_update_case view: {str(e)}", exc_info=True)
-        messages.error(request, f"An error occurred while updating case: {str(e)}")
-        return redirect('officer:officer_update_case', case_number=case_number)
+        logger.error(f"Error in case_detail view: {str(e)}", exc_info=True)
+        messages.error(request, f"An error occurred while retrieving the case details: {str(e)}")
+        return redirect('officer:case_list')
+
+@login_required(login_url='login')
+@user_passes_test(is_officer, login_url='login')
+def case_update(request, case_number):
+    """Update case status and add updates."""
+    try:
+        case = get_object_or_404(MissingPerson, case_number=case_number)
+        
+        if request.method == 'POST':
+            new_status = request.POST.get('status')
+            update_text = request.POST.get('update_text')
+            
+            if new_status and new_status != case.status:
+                old_status = case.get_status_display()
+                case.status = new_status
+                case.save()
+            
+                # Create status change update
+                case.officer_updates.create(
+                    description=f"Status changed from {old_status} to {case.get_status_display()}",
+                    updated_by=request.user
+                )
+                
+                messages.success(request, f"Case status updated to {case.get_status_display()}")
+            
+            if update_text:
+                # Create general update
+                case.officer_updates.create(
+                    description=update_text,
+                    updated_by=request.user
+                )
+                messages.success(request, "Case update added successfully")
+            
+            return redirect('officer:case_detail', case_number=case_number)
     
-    context = {
+        context = {
         'case': case,
-    }
-    return render(request, 'officer_update_case.html', context)
+            'status_choices': MissingPerson.STATUS_CHOICES
+        }
+        
+        return render(request, 'officer/case_update.html', context)
+        
+    except Exception as e:
+        logger.error(f"Error in case_update view: {str(e)}", exc_info=True)
+        messages.error(request, f"An error occurred while updating the case: {str(e)}")
+        return redirect('officer:case_list')
 
 @login_required(login_url='login')
 @user_passes_test(is_officer, login_url='login')

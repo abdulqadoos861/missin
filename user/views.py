@@ -5,7 +5,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 from django.db import models
 from .forms import MissingPersonForm
-from .models import MissingPerson
+from .models import MissingPerson, CaseUpdate
 import logging
 import json
 from django.db import connection
@@ -118,27 +118,60 @@ def track_cases(request):
 @login_required
 @ensure_csrf_cookie
 def report_missing_person(request):
+    """Handle the submission of a new missing person report."""
+    logger.info(f"Missing person report form accessed by user: {request.user}")
+    
     if request.method == 'POST':
         form = MissingPersonForm(request.POST, request.FILES)
+        logger.info(f"Form submitted by user: {request.user}")
+        
         if form.is_valid():
             try:
-                missing_person = form.save(user=request.user)
-                messages.success(request, f'Missing person report submitted successfully. Case number: {missing_person.case_number}')
-                # Add a success message with a link to track the case
-                messages.info(request, '<a href="/user/track-cases/" class="alert-link">Click here to track your case</a>')
+                # Save the missing person record
+                missing_person = form.save(commit=False)
+                missing_person.reporter = request.user
+                missing_person.save()
+                
+                logger.info(f"Successfully created missing person report with case number: {missing_person.case_number}")
+                
+                # Create initial case update
+                CaseUpdate.objects.create(
+                    case=missing_person,
+                    description=f"Case reported by {request.user.get_full_name() or request.user.username}",
+                    created_by=request.user
+                )
+                
+                messages.success(
+                    request,
+                    f'Missing person report submitted successfully. Your case number is: {missing_person.case_number}'
+                )
+                messages.info(
+                    request,
+                    'You can track your case status using the case number provided.',
+                    extra_tags='safe'
+                )
+                
                 return redirect('track_cases')
+                
             except Exception as e:
-                logger.error(f"Error submitting missing person report: {str(e)}")
-                messages.error(request, 'An error occurred while submitting the report. Please try again.')
+                logger.error(f"Error creating missing person report: {str(e)}", exc_info=True)
+                messages.error(
+                    request,
+                    'An error occurred while submitting the report. Please try again or contact support if the problem persists.'
+                )
         else:
-            logger.error(f"Form validation errors: {form.errors}")
+            logger.warning(f"Form validation errors: {form.errors}")
+            messages.error(request, 'Please correct the errors in the form.')
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field}: {error}")
     else:
         form = MissingPersonForm()
     
-    return render(request, 'report_missing_person.html', {'form': form})
+    return render(request, 'report_missing_person.html', {
+        'form': form,
+        'page_title': 'Report Missing Person',
+    })
 
 @login_required
 def my_reports(request):

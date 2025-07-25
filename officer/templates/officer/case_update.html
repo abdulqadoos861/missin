@@ -1,0 +1,85 @@
+{% extends 'base_officer.html' %}
+{% load static %}
+
+{% block title %}Update Case - {{ case.case_number }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Case Header -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-1">Update Case #{{ case.case_number }}</h2>
+                            <p class="text-muted mb-0">{{ case.get_full_name }}</p>
+                        </div>
+                        <div>
+                            <a href="{% url 'officer:case_detail' case.case_number %}" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Case
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Case Update</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Current Status -->
+                        <div class="mb-4">
+                            <label class="form-label">Current Status</label>
+                            <div>
+                                {% if case.status == 'pending' %}
+                                    <span class="badge bg-warning">{{ case.get_status_display }}</span>
+                                {% elif case.status == 'investigation' %}
+                                    <span class="badge bg-info">{{ case.get_status_display }}</span>
+                                {% elif case.status == 'found' %}
+                                    <span class="badge bg-success">{{ case.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ case.get_status_display }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- New Status -->
+                        <div class="mb-4">
+                            <label for="status" class="form-label">Update Status</label>
+                            <select name="status" id="status" class="form-select">
+                                {% for status_code, status_label in status_choices %}
+                                <option value="{{ status_code }}" {% if case.status == status_code %}selected{% endif %}>
+                                    {{ status_label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Update Text -->
+                        <div class="mb-4">
+                            <label for="update_text" class="form-label">Update Details</label>
+                            <textarea name="update_text" id="update_text" class="form-control" rows="4" placeholder="Provide details about this update..."></textarea>
+                            <div class="form-text">
+                                Include any relevant information about the case update, such as new findings, actions taken, or changes in status.
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

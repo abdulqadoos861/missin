@@ -4,58 +4,33 @@ from frontend.models import User
 from user.models import MissingPerson
 
 class CaseUpdate(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('under_investigation', 'Under Investigation'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ]
+
+    PROGRESS_CHOICES = [
+        ('0', '0%'),
+        ('25', '25%'),
+        ('50', '50%'),
+        ('75', '75%'),
+        ('100', '100%'),
+    ]
+
     case = models.ForeignKey(MissingPerson, on_delete=models.CASCADE, related_name='officer_updates')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    progress = models.CharField(max_length=3, choices=PROGRESS_CHOICES, default='0')
     description = models.TextField()
     updated_at = models.DateTimeField(auto_now=True)
-    officer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='officer_case_updates')
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='officer_case_updates')
 
     class Meta:
         ordering = ['-updated_at']
 
     def __str__(self):
-        return f"Update for {self.case.case_number} by {self.officer.username} - {self.updated_at.strftime('%Y-%m-%d')}"
-
-# Create your models here.
-
-class Case(models.Model):
-    CASE_TYPES = [
-        ('theft', 'Theft'),
-        ('assault', 'Assault'),
-        ('fraud', 'Fraud'),
-        ('other', 'Other'),
-    ]
-
-    STATUS_CHOICES = [
-        ('open', 'Open'),
-        ('under_investigation', 'Under Investigation'),
-        ('closed', 'Closed'),
-    ]
-
-    PRIORITY_CHOICES = [
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High'),
-    ]
-
-    case_number = models.CharField(max_length=20, unique=True)
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    case_type = models.CharField(max_length=20, choices=CASE_TYPES)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
-    location = models.CharField(max_length=200)
-    date_reported = models.DateField()
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-    assigned_officer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='assigned_cases')
-    notes = models.TextField(blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_cases')
-
-    def __str__(self):
-        return f"Case #{self.case_number} - {self.title}"
-
-    class Meta:
-        ordering = ['-date_created']
+        return f"Update for {self.case.case_number} - {self.updated_at.strftime('%Y-%m-%d')}"
 
 class CaseNote(models.Model):
     case = models.ForeignKey(MissingPerson, on_delete=models.CASCADE, related_name='notes')
@@ -94,32 +69,3 @@ class CaseEvidence(models.Model):
 
     def __str__(self):
         return f"Evidence: {self.get_evidence_type_display()} - {self.created_at.strftime('%Y-%m-%d')}"
-
-class CaseUpdate(models.Model):
-    STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('under_investigation', 'Under Investigation'),
-        ('resolved', 'Resolved'),
-        ('closed', 'Closed'),
-    ]
-
-    PROGRESS_CHOICES = [
-        ('0', '0%'),
-        ('25', '25%'),
-        ('50', '50%'),
-        ('75', '75%'),
-        ('100', '100%'),
-    ]
-
-    case = models.ForeignKey(MissingPerson, on_delete=models.CASCADE, related_name='officer_updates')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
-    progress = models.CharField(max_length=3, choices=PROGRESS_CHOICES, default='0')
-    description = models.TextField()
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='officer_case_updates')
-
-    class Meta:
-        ordering = ['-updated_at']
-
-    def __str__(self):
-        return f"Update for {self.case.case_number} - {self.updated_at.strftime('%Y-%m-%d')}"

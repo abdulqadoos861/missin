@@ -1,0 +1,185 @@
+{% extends 'base_officer.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}View Cases - Officer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-md-3">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Filters</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" id="filter-form">
+                        <!-- Name Filter -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Search by Name/Location</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ name_filter|default:'' }}" placeholder="Enter name or location...">
+                        </div>
+
+                        <!-- Case Number Filter -->
+                        <div class="mb-3">
+                            <label for="number" class="form-label">Case Number</label>
+                            <input type="text" class="form-control" id="number" name="number" 
+                                   value="{{ number_filter|default:'' }}" placeholder="Enter case number...">
+                        </div>
+
+                        <!-- Status Filter -->
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                {% for status in status_choices %}
+                                <option value="{{ status.0 }}" {% if status_filter == status.0|stringformat:'s' %}selected{% endif %}>
+                                    {{ status.1 }} ({{ status_counts|get_item:status.0 }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            <a href="{% url 'officer:case_list' %}" class="btn btn-outline-secondary">Reset Filters</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Cases</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Case #</th>
+                                    <th>Name</th>
+                                    <th>Age/Gender</th>
+                                    <th>Last Seen</th>
+                                    <th>Status</th>
+                                    <th>Reporter</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for case in cases %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ case.case_number }}</strong>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if case.photo %}
+                                            <img src="{{ case.photo.url }}" alt="{{ case.get_full_name }}" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                            {% endif %}
+                                            <div>
+                                                <div class="fw-bold">{{ case.get_full_name }}</div>
+                                                <small class="text-muted">Added {{ case.created_at|timesince }} ago</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ case.age }} years</span>
+                                        <span class="badge bg-secondary">{{ case.get_gender_display }}</span>
+                                    </td>
+                                    <td>
+                                        <div>{{ case.last_seen_date|date:"M d, Y" }}</div>
+                                        <small class="text-muted">{{ case.last_seen_location }}</small>
+                                    </td>
+                                    <td>
+                                        {% if case.status == 'pending' %}
+                                            <span class="badge bg-warning">{{ case.get_status_display }}</span>
+                                        {% elif case.status == 'investigation' %}
+                                            <span class="badge bg-info">{{ case.get_status_display }}</span>
+                                        {% elif case.status == 'found' %}
+                                            <span class="badge bg-success">{{ case.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ case.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div>{{ case.reporter.get_full_name }}</div>
+                                        <small class="text-muted">{{ case.reporter.phone_number }}</small>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'officer:case_detail' case.case_number %}" class="btn btn-sm btn-primary" title="View Details & Update">
+                                            <i class="fas fa-eye me-1"></i> View & Update
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <div class="text-muted">
+                                            <i class="fas fa-folder-open fa-3x mb-3"></i>
+                                            <p class="mb-0">No cases found matching your criteria.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                {% if cases.has_other_pages %}
+                <div class="card-footer">
+                    <nav aria-label="Case pagination">
+                        <ul class="pagination justify-content-center mb-0">
+                            {% if cases.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">&laquo; First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ cases.previous_page_number }}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">Previous</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    Page {{ cases.number }} of {{ cases.paginator.num_pages }}
+                                </span>
+                            </li>
+                            
+                            {% if cases.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ cases.next_page_number }}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ cases.paginator.num_pages }}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">Last &raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-submit form when filters change
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterSelects = document.querySelectorAll('select[name]');
+        filterSelects.forEach(select => {
+            select.addEventListener('change', function() {
+                document.getElementById('filter-form').submit();
+            });
+        });
+    });
+</script>
+{% endblock %} 

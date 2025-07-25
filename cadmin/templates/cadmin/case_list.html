@@ -1,0 +1,202 @@
+{% extends 'cadmin/base_cases.html' %}
+{% load case_filters %}
+
+{% block page_title %}Manage Cases{% endblock %}
+
+{% block case_content %}
+<div class="row">
+    <!-- Filters Sidebar -->
+    <div class="col-lg-3">
+        <div class="card filter-card mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold">Filters</h6>
+            </div>
+            <div class="card-body">
+                <form method="get" class="filter-form">
+                    <!-- Name/Location Search -->
+                    <div class="form-group">
+                        <label for="name" class="small font-weight-bold">Name/Location</label>
+                        <input type="text" class="form-control form-control-sm" id="name" name="name" 
+                               value="{{ name_filter|default:'' }}" placeholder="Search by name or location...">
+                    </div>
+
+                    <!-- Case Number -->
+                    <div class="form-group">
+                        <label for="number" class="small font-weight-bold">Case Number</label>
+                        <input type="text" class="form-control form-control-sm" id="number" name="number" 
+                               value="{{ number_filter|default:'' }}" placeholder="Search by case number...">
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="form-group">
+                        <label class="small font-weight-bold">Status</label>
+                        <div class="list-group list-group-flush">
+                            <a href="?" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if not status_filter %}active{% endif %}">
+                                All Cases
+                                <span class="badge badge-primary badge-pill">{{ total_cases|default:0 }}</span>
+                            </a>
+                            {% for status, label in status_choices %}
+                            <a href="?status={{ status }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if status == status_filter %}active{% endif %}">
+                                {{ label }}
+                                <span class="badge badge-{{ status|status_badge_class }} badge-pill">
+                                    {% for s, count in status_count_dict.items %}
+                                        {% if s == status %}{{ count }}{% endif %}
+                                    {% empty %}
+                                        0
+                                    {% endfor %}
+                                </span>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div class="form-group">
+                        <label class="small font-weight-bold">Date Added</label>
+                        <select class="form-control form-control-sm" name="date">
+                            <option value="">All Time</option>
+                            <option value="today" {% if date_filter == 'today' %}selected{% endif %}>Today</option>
+                            <option value="week" {% if date_filter == 'week' %}selected{% endif %}>This Week</option>
+                            <option value="month" {% if date_filter == 'month' %}selected{% endif %}>This Month</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-sm btn-block">Apply Filters</button>
+                        <button type="button" id="reset-filters" class="btn btn-outline-secondary btn-sm">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cases List -->
+    <div class="col-lg-9">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">
+                    {% if name_filter or status_filter or date_filter %}
+                        Filtered Cases ({{ page_obj.paginator.count }})
+                    {% else %}
+                        All Cases ({{ page_obj.paginator.count }})
+                    {% endif %}
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if page_obj %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Case #</th>
+                                    <th>Name</th>
+                                    <th>Age/Gender</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Reported</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for case in page_obj %}
+                                <tr>
+                                    <td>{{ case.case_number }}</td>
+                                    <td>
+                                        <strong>{{ case.first_name }} {{ case.last_name }}</strong><br>
+                                        <small class="text-muted">Reported by: {{ case.reporter.get_full_name|default:case.reporter.username }}</small>
+                                    </td>
+                                    <td>
+                                        {{ case.age }} years<br>
+                                        <small class="text-muted">{{ case.get_gender_display }}</small>
+                                    </td>
+                                    <td>{{ case.last_seen_location|truncatechars:30 }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ case.status|status_badge_class }}">
+                                            {{ case.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ case.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'cadmin:admin_case_details' case.id %}" class="btn btn-sm btn-primary" data-toggle="tooltip" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if page_obj.has_other_pages %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if status_filter %}&status={{ status_filter }}{% endif %}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="First">
+                                        <span aria-hidden="true">&laquo;&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;&laquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if name_filter %}&name={{ name_filter }}{% endif %}{% if number_filter %}&number={{ number_filter }}{% endif %}{% if date_filter %}&date={{ date_filter }}{% endif %}" aria-label="Last">
+                                        <span aria-hidden="true">&raquo;&raquo;</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;&raquo;</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-folder-open fa-4x text-gray-300 mb-3"></i>
+                        <h5 class="text-gray-500">No cases found</h5>
+                        <p class="text-muted">Try adjusting your search or filter criteria</p>
+                        <a href="{% url 'cadmin:manage_cases' %}" class="btn btn-primary mt-2">
+                            <i class="fas fa-redo mr-2"></i>Reset Filters
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

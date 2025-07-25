@@ -1,7 +1,8 @@
-from django.db import models
 from frontend.models import User
 
 # Create your models here.
+
+from django.db import models
 
 class CaseUpdate(models.Model):
     case = models.ForeignKey('MissingPerson', on_delete=models.CASCADE, related_name='updates')
@@ -57,8 +58,6 @@ class MissingPerson(models.Model):
     # Case Details
     case_number = models.CharField(max_length=50, unique=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    assigned_officer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, 
-                                       related_name='assigned_missing_persons')
     
     # Found Information
     location_found = models.CharField(max_length=255, blank=True, null=True)

@@ -1,0 +1,576 @@
+{% extends 'base_officer.html' %}
+{% load static %}
+
+{% block title %}Case Details - {{ case.case_number }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.timeline {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #007bff;
+}
+
+.timeline-content {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.status-badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.detail-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-section h6 {
+    color: #4a90e2;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.detail-item {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+.detail-label {
+    font-weight: 600;
+    width: 150px;
+    color: #6c757d;
+}
+
+.detail-value {
+    flex: 1;
+}
+
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Changed to 300px */
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    max-width: 100%;
+    padding: 0.5rem;
+}
+
+.photo-item {
+    position: relative;
+    width: 300px;  /* Fixed width to 300px */
+    height: 300px; /* Fixed height to 300px */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
+    margin: 0 auto;
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+}
+
+.photo-item:hover img {
+    transform: scale(1.05);
+}
+
+/* Update the Additional Photos card styling */
+.additional-photos-card {
+    max-height: none;  /* Remove max height */
+    padding: 0.25rem;
+}
+
+.additional-photos-card .card-body {
+    padding: 0.25rem;
+}
+
+/* Add a lightbox effect for clicked images */
+.photo-item {
+    cursor: pointer;
+}
+
+.photo-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.photo-item:hover::after {
+    opacity: 1;
+}
+
+/* Make the photos container more compact */
+.photos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .photo-item {
+        width: 250px;  /* Slightly smaller on tablets */
+        height: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .photo-item {
+        width: 200px;  /* Even smaller on mobile */
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .photo-item {
+        width: 100%;  /* Full width on very small screens */
+        height: 300px;
+    }
+}
+
+.additional-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.additional-photo:hover {
+    transform: scale(1.05);
+}
+
+.additional-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .additional-photo {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+    .additional-photo {
+        width: 100px;
+        height: 100px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Case Header -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">Case #{{ case.case_number }}</h2>
+                    <p class="text-muted mb-0">Reported {{ case.created_at|timesince }} ago</p>
+                </div>
+                <div>
+                    {% if case.status == 'pending' %}
+                        <span class="badge bg-warning status-badge">{{ case.get_status_display }}</span>
+                    {% elif case.status == 'investigation' %}
+                        <span class="badge bg-info status-badge">{{ case.get_status_display }}</span>
+                    {% elif case.status == 'found' %}
+                        <span class="badge bg-success status-badge">{{ case.get_status_display }}</span>
+                    {% else %}
+                        <span class="badge bg-secondary status-badge">{{ case.get_status_display }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Case Details -->
+        <div class="col-md-4">
+            <!-- Person Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Person Details</h5>
+                </div>
+                <div class="card-body">
+                    {% if case.photo %}
+                    <img src="{{ case.photo.url }}" alt="{{ case.get_full_name }}" class="img-fluid rounded mb-3">
+                    {% endif %}
+                    
+                    <div class="detail-section">
+                        <h6>Basic Information</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Name:</span>
+                            <span class="detail-value">{{ case.get_full_name }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Age:</span>
+                            <span class="detail-value">{{ case.age }} years</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Gender:</span>
+                            <span class="detail-value">{{ case.get_gender_display }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date of Birth:</span>
+                            <span class="detail-value">{{ case.date_of_birth|date:"F j, Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h6>Physical Description</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Height:</span>
+                            <span class="detail-value">{{ case.height }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Weight:</span>
+                            <span class="detail-value">{{ case.weight }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Eye Color:</span>
+                            <span class="detail-value">{{ case.eye_color }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Hair Color:</span>
+                            <span class="detail-value">{{ case.hair_color }}</span>
+                        </div>
+                        {% if case.distinguishing_marks %}
+                        <div class="detail-item">
+                            <span class="detail-label">Marks:</span>
+                            <span class="detail-value">{{ case.distinguishing_marks }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="detail-section">
+                        <h6>Last Seen Details</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Date:</span>
+                            <span class="detail-value">{{ case.last_seen_date|date:"F j, Y" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Location:</span>
+                            <span class="detail-value">{{ case.last_seen_location }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Wearing:</span>
+                            <span class="detail-value">{{ case.last_seen_wearing }}</span>
+                        </div>
+                    </div>
+
+                    {% if case.status == 'found' %}
+                    <div class="detail-section">
+                        <h6>Found Details</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Found Date:</span>
+                            <span class="detail-value">{{ case.found_date|date:"F j, Y" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Found Location:</span>
+                            <span class="detail-value">{{ case.location_found }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if case.status == 'closed' and case.closure_proof_photo %}
+                    <div class="detail-section">
+                        <h6>Closure Details</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Closure Date:</span>
+                            <span class="detail-value">{{ case.found_date|date:"F j, Y" }}</span>
+                        </div>
+                        <div class="mt-2">
+                            <h6>Closure Proof</h6>
+                            <img src="{{ case.closure_proof_photo.url }}" alt="Closure Proof" class="img-fluid rounded">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Additional Photos -->
+            {% if case.additional_photo_1 or case.additional_photo_2 or case.additional_photo_3 %}
+            <div class="card mb-3">
+                <div class="card-header py-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Additional Photos</h6>
+                        <small class="text-muted">Click to view</small>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <div class="d-flex flex-wrap gap-2">
+                        {% if case.additional_photo_1 %}
+                        <div class="additional-photo" onclick="openImageModal('{{ case.additional_photo_1.url }}')">
+                            <img src="{{ case.additional_photo_1.url }}" alt="Additional Photo 1" loading="lazy">
+                        </div>
+                        {% endif %}
+                        {% if case.additional_photo_2 %}
+                        <div class="additional-photo" onclick="openImageModal('{{ case.additional_photo_2.url }}')">
+                            <img src="{{ case.additional_photo_2.url }}" alt="Additional Photo 2" loading="lazy">
+                        </div>
+                        {% endif %}
+                        {% if case.additional_photo_3 %}
+                        <div class="additional-photo" onclick="openImageModal('{{ case.additional_photo_3.url }}')">
+                            <img src="{{ case.additional_photo_3.url }}" alt="Additional Photo 3" loading="lazy">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <style>
+            .additional-photo {
+                width: 150px;
+                height: 150px;
+                border-radius: 8px;
+                overflow: hidden;
+                cursor: pointer;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                transition: transform 0.2s ease;
+            }
+
+            .additional-photo:hover {
+                transform: scale(1.05);
+            }
+
+            .additional-photo img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .additional-photo {
+                    width: 120px;
+                    height: 120px;
+                }
+            }
+
+            @media (max-width: 576px) {
+                .additional-photo {
+                    width: 100px;
+                    height: 100px;
+                }
+            }
+            </style>
+            {% endif %}
+
+            <!-- Image Modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-header border-0 p-2">
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center p-0">
+                            <img id="modalImage" src="" alt="Enlarged photo" class="img-fluid rounded">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reporter Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Reporter Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="detail-section">
+                        <div class="detail-item">
+                            <span class="detail-label">Name:</span>
+                            <span class="detail-value">{{ case.reporter.get_full_name }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Contact:</span>
+                            <span class="detail-value">{{ case.contact_number }}</span>
+                        </div>
+                        {% if case.additional_contact %}
+                        <div class="detail-item">
+                            <span class="detail-label">Alt. Contact:</span>
+                            <span class="detail-value">{{ case.additional_contact }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case Updates and Actions -->
+        <div class="col-md-8">
+            <!-- Update Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Add Update</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'officer:case_detail' case.case_number %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Status Update -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Update Status</label>
+                                {% if case.status == 'closed' %}
+                                    <div class="alert alert-info py-2">
+                                        <i class="fas fa-lock me-2"></i>This case is closed and cannot be reopened.
+                                    </div>
+                                    <input type="hidden" name="status" value="closed">
+                                {% else %}
+                                    <select name="status" id="status" class="form-select">
+                                        {% for status_code, status_label in status_choices %}
+                                        <option value="{{ status_code }}" {% if case.status == status_code %}selected{% endif %}>
+                                            {{ status_label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Conditional Fields for Found Status -->
+                        {% if case.status != 'closed' %}
+                        <div id="foundFields" class="row mb-3" style="display: none;">
+                            <div class="col-md-6">
+                                <label for="found_date" class="form-label">Found Date</label>
+                                <input type="date" name="found_date" id="found_date" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="location_found" class="form-label">Found Location</label>
+                                <input type="text" name="location_found" id="location_found" class="form-control" placeholder="Enter location where found">
+                            </div>
+                        </div>
+
+                        <!-- Conditional Fields for Closed Status -->
+                        <div id="closedFields" class="row mb-3" style="display: none;">
+                            <div class="col-md-6">
+                                <label for="closure_date" class="form-label">Closure Date</label>
+                                <input type="date" name="closure_date" id="closure_date" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="closure_proof_photo" class="form-label">Closure Proof Photo</label>
+                                <input type="file" name="closure_proof_photo" id="closure_proof_photo" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Update Text -->
+                        <div class="mb-3">
+                            <label for="update_text" class="form-label">Update Details</label>
+                            <textarea name="update_text" id="update_text" class="form-control" rows="3" placeholder="{% if case.status == 'closed' %}Add a note to the closed case...{% else %}Provide details about this update...{% endif %}"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> {% if case.status == 'closed' %}Add Note{% else %}Add Update{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Case Updates -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Case Updates</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for update in updates %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker {% if update.type == 'creation' %}bg-primary{% elif update.type == 'officer_update' %}bg-info{% else %}bg-secondary{% endif %}"></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="mb-1">{{ update.by }}</h6>
+                                    <small class="text-muted">{{ update.date|date:"F j, Y g:i A" }}</small>
+                                </div>
+                                <p class="mb-0">{{ update.description }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted text-center mb-0">No updates available</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status');
+    const foundFields = document.getElementById('foundFields');
+    const closedFields = document.getElementById('closedFields');
+
+    function updateFields() {
+        const selectedStatus = statusSelect.value;
+        foundFields.style.display = selectedStatus === 'found' ? 'flex' : 'none';
+        closedFields.style.display = selectedStatus === 'closed' ? 'flex' : 'none';
+    }
+
+    statusSelect.addEventListener('change', updateFields);
+    updateFields(); // Run once on page load
+});
+
+// Image modal functionality
+function openImageModal(imageUrl) {
+    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    document.getElementById('modalImage').src = imageUrl;
+    modal.show();
+}
+
+// Close modal when clicking outside
+document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        bootstrap.Modal.getInstance(this).hide();
+    }
+});
+
+// Preload images for smoother experience
+window.addEventListener('load', function() {
+    const images = document.querySelectorAll('.photo-item img');
+    images.forEach(img => {
+        const actualImage = new Image();
+        actualImage.src = img.src;
+    });
+});
+</script>
+{% endblock %} 

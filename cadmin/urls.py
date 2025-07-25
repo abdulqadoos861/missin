@@ -5,8 +5,6 @@ app_name = 'cadmin'
 
 urlpatterns = [
     path('', views.admin_dashboard, name='admin_dashboard'),
-    path('manage-cases/', views.manage_cases, name='manage_cases'),
-    path('case-details/<str:case_number>/', views.admin_case_details, name='admin_case_details'),
     path('manage-users/', views.manage_users, name='manage_users'),
     path('toggle-user-status/<int:user_id>/', views.toggle_user_status, name='toggle_user_status'),
     path('edit-officer/<int:officer_id>/', views.edit_officer, name='edit_officer'),
@@ -22,4 +20,8 @@ urlpatterns = [
     path('delete-message/<int:message_id>/', views.delete_message, name='delete_message'),
     path('feedback/', views.admin_feedback, name='admin_feedback'),
     path('reply-feedback/<int:feedback_id>/', views.reply_feedback, name='reply_feedback'),
+    path('activity-logs/', views.activity_logs, name='activity_logs'),
+    path('manage-cases/', views.case_list, name='manage_cases'),
+    path('case-details/<int:case_id>/', views.case_detail, name='admin_case_details'),
+    path('update-case-status/<int:case_id>/', views.case_update, name='update_case_status'),
 ]
